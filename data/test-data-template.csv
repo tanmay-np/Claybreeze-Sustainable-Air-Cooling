@@ -1,0 +1,1 @@
+test_id,date,start_time,end_time,location,mode,ambient_temp_C,ambient_RH_pct,inlet_temp_C,outlet_temp_C,inlet_RH_pct,outlet_RH_pct,fan_configuration,pump_configuration,air_velocity_m_s,water_initial_L,water_final_L,refill_L,leak_or_spillage_notes,fan_power_W,pump_power_W,total_power_W,sensor_models_accuracy,observations

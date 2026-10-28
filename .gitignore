@@ -1,0 +1,31 @@
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor / temporary files
+*.tmp
+*.temp
+*.bak
+*.old
+*~
+
+# SolidWorks temporary / lock / recovery files (keep real CAD source files unless intentionally excluded)
+~$*
+*.swar
+*.swp
+*.swt
+*.sws
+*.swj
+
+# Local environment / credentials
+.env
+.env.*
+!.env.example
+
+# Python caches if helper scripts are added later
+__pycache__/
+*.py[cod]
+
+# Local editor settings can be added intentionally if needed
+.vscode/
