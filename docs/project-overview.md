@@ -2,14 +2,14 @@
 
 > **Project status: Prototype assembled — testing pending.** The metal frame is fabricated, painted, fitted with the six 12 mm pot-retaining rods and the rear fan-mount extension, and 30 clay pots (5 × 6, observed in the assembly photographs) are fixed in place. An ESP32 + relay module + DHT11 sensor are wired; the fan rule is IMPLEMENTED (reported) — firmware not yet in the repository; not verified. The pump, reservoir and tubing are installed (reported by team; photo evidence pending); water circulation is PENDING — not yet commissioned or verified. Staged commissioning, control-behaviour verification, as-built measurement, performance testing and the SolidWorks update (PENDING) remain to be done.
 
-## Team
+## Student
 
-Group 17, Sanjivani University Makerspace:
+Group 17, Sanjivani University Makerspace.
 
-1. Tanmay Nilesh Pendbhaje
-2. Harshal Kotame
-3. Vedant Khairnar
-4. Tanmay Mhaske
+Tanmay Nilesh Pendbhaje  
+PRN 2126UMEM1002  
+FY B.Tech Mechanical Engineering  
+Sanjivani University
 
 ## 1. Introduction and Purpose
 
