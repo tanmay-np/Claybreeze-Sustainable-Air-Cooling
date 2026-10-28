@@ -2,9 +2,15 @@
 
 ## 1. Concept
 
-ClayBreeze is intended to investigate direct evaporative cooling using wetted, unglazed clay pots and fan-driven airflow. A pump is planned to move water from a bottom reservoir to a distribution arrangement above the pot array. Two rear-mounted fans are intended to move air through the assembly. Excess water should return to the reservoir, if the final drainage arrangement supports this.
+ClayBreeze investigates direct evaporative cooling using wetted, unglazed clay pots and fan-driven airflow. A pump is intended to move water from a bottom reservoir to a distribution arrangement above the pot array. Two exhaust fans on the rear extension frame, wired to an ESP32 + relay module and reported as programmed to switch on temperature, are mounted at the rear, blowing room air forward through and around the pot array. Excess water is intended to return to the reservoir, if the drainage arrangement supports this in practice.
 
-These are intended functions. Flow uniformity, bypass airflow, temperature change, humidity change and water consumption remain to be tested.
+The frame, rod attachment, fan mount, paint finish and pot installation are physically complete. The pump, reservoir and tubing are installed (reported by team; photo evidence pending), but water circulation is PENDING — not yet commissioned or verified. The fan rule is IMPLEMENTED (reported); the firmware is not yet in this repository and has not been verified (see `docs/electronics-and-control.md`). Commissioning, flow uniformity, bypass airflow, temperature change, humidity change and water consumption remain to be checked and measured — see `docs/testing-and-results.md`.
+
+### 1a. Clay-Pot Orientation and Intended Airflow Path
+
+Based on the assembled frame (see the project gallery) and the SolidWorks pot model, the pots are mounted in rows with their open mouths facing the front of the frame, and each row is threaded onto a horizontal retaining rod running through the pot body. The airflow path, confirmed by the team, is: room air is taken in behind the two exhaust fans on the rear extension frame, blown forward through and around the wetted pots, and leaves through the open front into the room.
+
+Because the pots do not form a sealed surface against the frame or against each other, some incoming air can bypass the pots rather than pass through or directly across their wetted surface. **This bypass has not yet been measured** and must be evaluated during commissioning — see the open design questions in `docs/design-and-dimensions.md` (whether a shroud or plenum is needed) and the verification plan in `docs/testing-and-results.md`.
 
 ## 2. Evaporative Cooling
 
@@ -17,7 +23,7 @@ Unglazed clay may absorb and transport water through connected pores, but the be
 1. The pump draws water from the bottom reservoir.
 2. Tubing carries water to a top distribution arrangement.
 3. Water is intended to wet the clay surfaces. Dry patches or excessive runoff should be recorded.
-4. Rear fans move air through or around the pot array. The final airflow path must be checked for bypass around the pot assembly.
+4. The rear fans blow room air forward through and around the pot array and out of the front. The final airflow path must be checked for bypass around the pot assembly.
 5. Unevaporated water should drain back to the reservoir if the return path is correctly designed.
 6. Inlet and outlet temperature and relative humidity are measured to evaluate the result.
 

@@ -1,10 +1,19 @@
 # ClayBreeze — A Sustainable Clay-Based Air-Cooling System
 
-> **Project status:** Prototype in progress. The metal frame has been fabricated; the pot-retaining rod attachments and rear fan mounts remain to be completed. Performance testing has not yet been completed.
+> **Project status: Prototype assembled — testing pending.** The metal frame is fabricated, painted, fitted with the six 12 mm pot-retaining rods and the rear fan-mount extension, and 30 clay pots (5 × 6, observed in the assembly photographs) are fixed in place. An ESP32 + relay module + DHT11 sensor are wired; the fan rule is IMPLEMENTED (reported) — firmware not yet in the repository; not verified. The pump, reservoir and tubing are installed (reported by team; photo evidence pending); water circulation is PENDING — not yet commissioned or verified. Staged commissioning, control-behaviour verification, as-built measurement, performance testing and the SolidWorks update (PENDING) remain to be done.
+
+## Team
+
+Group 17, Sanjivani University Makerspace:
+
+1. Tanmay Nilesh Pendbhaje
+2. Harshal Kotame
+3. Vedant Khairnar
+4. Tanmay Mhaske
 
 ## 1. Introduction and Purpose
 
-**ClayBreeze** is a Makerspace prototype exploring whether wetted, unglazed clay pots can act as an evaporative cooling medium in a mechanically ventilated air-cooling assembly. The project combines a fabricated metal frame, hollow clay pots, a planned recirculating water arrangement, and two rear-mounted exhaust fans. Its purpose is to build and test the concept, document the engineering decisions, and determine how the system behaves under measured operating conditions.
+**ClayBreeze** is a Makerspace prototype exploring whether wetted, unglazed clay pots can act as an evaporative cooling medium in a mechanically ventilated air-cooling assembly. The project combines a fabricated metal frame, hollow clay pots, a recirculating water arrangement (pump, reservoir and tubing installed — reported by team; circulation not yet commissioned), and two rear-mounted exhaust fans. Its purpose is to build and test the concept, document the engineering decisions, and determine how the system behaves under measured operating conditions.
 
 The project is motivated by an interest in practical cooling approaches that use accessible materials. Affordability, maintainability, water use, electricity use, and environmental considerations are therefore **evaluation goals**, not established benefits. No cooling performance, operating-cost reduction, or environmental advantage is claimed for ClayBreeze until it has been tested and compared fairly with a suitable baseline.
 
@@ -37,7 +46,7 @@ The project must also establish whether the pots can be wetted consistently, whe
 
 ## 5. Proposed Design and Architecture
 
-The current concept places the clay-pot array inside a fabricated square-pipe frame. A pump in a bottom reservoir is intended to deliver water through tubing to a distribution arrangement above the pots. Water will wet the clay surfaces; excess water is intended to drain back into the reservoir. Two exhaust fans mounted behind the pot array are intended to draw air through the assembly. The actual airflow path, water coverage, and return-flow behaviour must be verified during assembly and commissioning.
+The current concept places the clay-pot array inside a fabricated square-pipe frame. A pump in a bottom reservoir is intended to deliver water through tubing to a distribution arrangement above the pots. Water will wet the clay surfaces; excess water is intended to drain back into the reservoir. Two exhaust fans mounted at the rear, behind the pot array, take in room air and blow it forward through and around the pots, out of the front into the room. The actual airflow path, water coverage, and return-flow behaviour must be verified during assembly and commissioning.
 
 ### Current design information
 
@@ -46,20 +55,23 @@ The current concept places the clay-pot array inside a fabricated square-pipe fr
 | Frame outer dimensions | **480 mm wide × 560 mm high × 150 mm deep** | Updated design dimensions; verify against the fabricated frame before finalising the CAD model. |
 | Front inner opening | **440 × 520 mm** | Updated design dimension; verify after fabrication. |
 | Frame section | **20 mm square metal pipe** | Wall thickness: **To be confirmed**. |
-| Pot-retaining rods | **Six planned rods, 12 mm diameter** | Attachment details and final cut lengths: **To be confirmed** after fit-up. |
-| Pot arrangement | Provisionally **5 columns × 6 rows** | **Not final**; verify the actual pot count, spacing, orientation, and fit. |
-| Clay elements | Small hollow-through, unglazed clay pots | Pots are available. Dimensions, mass, porosity, and water absorption: **To be measured / confirmed**. |
-| Water delivery | Pump, tubing, and a top distribution arrangement are intended | Pump is available. Tubing and distribution arrangement procurement/installation: **Status to be confirmed**. |
-| Reservoir | Bottom tub intended to collect return water | Tub status, capacity, dimensions, and installation: **To be confirmed**. |
-| Air movement | Two exhaust fans mounted behind the pots | Fans are available. Model, dimensions, rated airflow, electrical rating, and final mounting: **To be confirmed**. |
+| Pot-retaining rods | **12 mm diameter rods** | Holes drilled and rods **attached to the frame — completed**. |
+| Frame finish | Spray-painted | **Completed**. |
+| Pot arrangement | **5 columns × 6 rows (30 pots)** | Clay pots are **fixed into the frame — completed**; layout observed in the assembly photographs. Spacing not yet measured. |
+| Clay elements | Small hollow-through, unglazed clay pots | Pots are fixed in place. Dimensions, mass, porosity, and water absorption: **To be measured / confirmed**. |
+| Fan mount | Rear extension frame | **Completed**; both exhaust fans are mounted on it. |
+| Electronics | ESP32, relay module, DHT11 sensor, breadboard and jumper wires | Wired; fan rule **IMPLEMENTED (reported)** — firmware not yet in repository; not verified. See `docs/electronics-and-control.md`. Humidity-based pump control is **PROPOSED**, not implemented. |
+| Water delivery | Pump, tubing, and a top distribution arrangement | Pump and tubing: **installed (reported by team; photo evidence pending)**. Water circulation: **PENDING** — not yet commissioned or verified. Tubing/distribution specifications still to be recorded. |
+| Reservoir | Bottom tub to collect return water | **Installed (reported by team; photo evidence pending)**; capacity, dimensions and removability still to be confirmed. |
+| Air movement | Two exhaust fans on the rear extension frame, behind the pots | Reported as switched by the ESP32 + relay on temperature (not verified); electrical ratings and model: **To be confirmed**. |
 
 ### Build status and CAD approach
 
-- **Completed:** the metal frame has been fabricated.
-- **Remaining mechanical work:** fabricate and attach the six planned pot-retaining rods, then complete the fan mounting.
-- **Available components:** clay pots, water pump, and two fans.
-- **Unconfirmed items:** the water tub, tubing, and final water-distribution hardware must be checked before the water circuit is described as installed.
-- **CAD update:** rod and fan attachments will be fabricated first. The SolidWorks model and engineering drawing will then be updated to reflect the **actual fabricated parts and measured dimensions**, rather than treating the current planned geometry as an as-built model.
+- **Completed:** the metal frame is fabricated and spray-painted; the six 12 mm pot-retaining rods are drilled and attached; the rear fan-mount extension is fabricated and both fans are mounted on it; 30 clay pots (5 × 6) are fixed into the frame. The pump, reservoir and tubing are installed (reported by team; photo evidence pending). The ESP32 + relay module + DHT11 are wired on a breadboard, with the fan rule reported as programmed (firmware not yet in repository; not verified).
+- **Remaining work:** secure and terminate the loose fan cable before powered testing; commission in stages (wiring, airflow direction, water distribution — PENDING); run performance tests; and implement/validate the planned and proposed control-logic refinements (see `docs/electronics-and-control.md`).
+- **Unconfirmed items:** tubing/reservoir specifications and a leak-check still need recording; pot spacing and the as-built frame dimensions have not been measured (visual inspection done; as-built measurements pending).
+- **CAD update (PENDING):** the SolidWorks model and engineering drawing are to be revised to match the **actual fabricated parts and measured dimensions**. This is a documentation task catching up to the build — it does not mean the physical prototype is incomplete.
+- **Electronics:** see `docs/electronics-and-control.md` for component roles, the currently programmed fan-control rule, the planned two-stage fan logic, and the proposed (untested) humidity-based pump-control logic.
 
 Photographs of the fabricated frame, the actual pots, the attachment process, and the revised SolidWorks model should be added to the repository as the work progresses. Images should show real project evidence and be labelled with dates or captions where practical.
 
@@ -71,9 +83,9 @@ Unglazed clay can contain connected pores that absorb and transport water by cap
 
 In the proposed ClayBreeze arrangement:
 
-1. The pump is intended to lift water from the bottom reservoir to a distribution arrangement at the top.
+1. The pump, reported as installed (circulation not yet commissioned), is intended to lift water from the bottom reservoir to a distribution arrangement at the top.
 2. Water is intended to spread over the exposed clay surfaces. The consistency of this distribution is a key item to inspect and test.
-3. The two rear-mounted exhaust fans are intended to pull air through or around the pots. The final assembly must be checked for airflow bypass, blocked openings, and uneven flow.
+3. The two exhaust fans, mounted at the rear on the extension frame, blow room air forward through and around the pots and out of the front. The final assembly must be checked for airflow bypass, blocked openings, and uneven flow.
 4. Water that does not evaporate is intended to drain back into the reservoir for recirculation.
 5. Evaporation and the fan-driven airflow are expected to affect outlet temperature and humidity, but the magnitude and stability of those changes are **pending testing**.
 
@@ -87,9 +99,9 @@ ClayBreeze's actual behaviour will also depend on the pot material and exposed a
 
 The project aims to:
 
-1. Complete a mechanically stable frame assembly with secured pot-retaining rods and rear-mounted fans.
+1. Complete a mechanically stable frame assembly with secured pot-retaining rods and rear-mounted fans. **(Frame, rods, fan mount, paint and pot installation are complete.)**
 2. Update the SolidWorks model and engineering drawing to match the as-built assembly.
-3. Build and inspect a water delivery and return arrangement, subject to confirming the reservoir and tubing requirements.
+3. Build and inspect a water delivery and return arrangement. **(Pump, reservoir and tubing installed — reported by team, photo evidence pending; circulation not yet commissioned; reservoir/tubing specifications and a leak-check still need recording.)** Integrate humidity-based pump control with the existing ESP32/relay/DHT11 system (PROPOSED, not implemented).
 4. Observe whether the chosen unglazed pots wet consistently and remain securely supported during operation.
 5. Measure inlet and outlet air temperature and relative humidity under documented conditions.
 6. Measure or estimate airflow and record fan and pump electrical input where suitable instruments are available.
@@ -101,8 +113,8 @@ The project aims to:
 
 ### Included in the current scope
 
-- Mechanical frame completion, rod retention, and fan mounting.
-- Installation and inspection of the proposed pump, tubing, top distribution, reservoir, and return-water path, once component availability is confirmed.
+- Mechanical frame completion, rod retention, and fan mounting. **(Complete.)**
+- Installation and inspection of the pump, tubing, top distribution, reservoir, and return-water path. **(Pump, reservoir and tubing installed — reported by team; commissioning, leak-check and tubing/reservoir specifications PENDING.)**
 - SolidWorks and drawing updates based on as-built measurements.
 - Controlled prototype testing of temperature, relative humidity, airflow, water use, and electrical input where measurement equipment is available.
 - Basic evaluation of assembly, operation, cleaning, durability, and practical constraints.
@@ -123,8 +135,8 @@ The expected outcome at this stage is a completed and documented prototype plus 
 
 | Measurement | Suggested method / record | Why it matters |
 |---|---|---|
-| Inlet air temperature | Place a temperature sensor upstream of the pot array, away from direct contact with wet clay and direct radiant heating. Record sensor type and position. | Establishes the incoming air condition. |
-| Outlet air temperature | Measure downstream of the array at a documented point; consider multiple points if outlet flow is uneven. | Allows calculation of the temperature difference across the assembly. |
+| Inlet air temperature | Place a temperature sensor upstream of the pot array (behind the rear fans, where room air enters), away from direct contact with wet clay and direct radiant heating. Record sensor type and position. | Establishes the incoming air condition. |
+| Outlet air temperature | Measure downstream of the array (in front of the pots, where air leaves into the room) at a documented point; consider multiple points if outlet flow is uneven. | Allows calculation of the temperature difference across the assembly. |
 | Inlet and outlet relative humidity | Measure alongside temperatures with suitable sensors; record model and resolution if known. | Indicates moisture change and helps interpret cooling performance. |
 | Ambient conditions | Record time, ambient temperature/RH, and whether the setup is indoors or outdoors; note sun exposure and wind when relevant. | Provides context for comparisons and the humidity effect. |
 | Air velocity / airflow | Use an anemometer at documented measurement points if available. A single velocity reading is not automatically the total volumetric flow rate. | Helps characterise fan-driven air movement and compare runs. |
@@ -162,4 +174,4 @@ The references below provide background on the inspiration project, the physics 
 
 ---
 
-*Documentation note: Update this overview when rod and fan attachments are complete, the water-system components and installation status are confirmed, and the SolidWorks model has been revised to match the as-built prototype. Replace pending-status notes only when measurements, inspections, or other evidence support the change.*
+*Documentation note: Update this overview when the SolidWorks model has been revised to match the as-built prototype, and when performance-testing results are available. Replace pending-status notes only when measurements, inspections, or other evidence support the change.*

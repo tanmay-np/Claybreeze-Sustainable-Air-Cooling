@@ -5,8 +5,9 @@ This document is a practical checklist for a small water-and-fan prototype. Foll
 ## Mechanical Safety
 
 - Inspect the frame, welds/joints and supports before loading the assembly.
-- Verify that rods retain the pots without point-loading or cracking the ceramic.
+- Verify that rods retain the pots without point-loading or cracking the ceramic. The rods are now attached and pots fixed in place — inspect this fit for secure retention and absence of cracking before further assembly.
 - Remove sharp edges and burrs after fabrication.
+- Ensure spray paint is fully cured, in a ventilated area, before the frame is handled extensively or electronics are fitted nearby.
 - Keep the frame stable and prevent tipping or movement during use.
 - Ensure the fans are securely mounted and accessible moving blades are guarded.
 - Switch off and isolate power before adjusting rods, fans, tubing or pots.
@@ -21,6 +22,15 @@ This document is a practical checklist for a small water-and-fan prototype. Foll
 - De-energize the system before refilling, cleaning, clearing blockages or repairing leaks.
 - Do not run a pump below its required water level or against a blocked outlet; follow the pump manual.
 - Do not operate the system unattended until it has been inspected and tested for leakage and electrical safety.
+
+## Control Electronics Safety
+
+- The breadboard, ESP32, relay module and DHT11 are not inherently water-resistant. Keep them physically separated from the pots, reservoir and any tubing, and out of the splash and drip path described above.
+- A relay module typically switches mains-side fan/pump power from a low-voltage logic signal — verify the specific module's input/output ratings and isolation from its documentation before wiring anything; this repository does not document GPIO pins, logic levels or wiring connections, so do not assume any until they are recorded from the actual hardware and code.
+- Fit an enclosure or secure mounting for the electronics once the layout is finalised, rather than leaving a bare breadboard exposed near a wet assembly.
+- Before changing any wiring, isolate power at the source, not just through software — software control (including the ESP32 program) should not be relied on as the sole safety isolation method.
+- When a water pump is eventually integrated with the relay/ESP32 system, apply the same isolation and enclosure precautions as for the fans, and re-check wiring before first use.
+- See `docs/electronics-and-control.md` for the current and planned control logic; it documents behaviour, not wiring — have the actual wiring reviewed by a competent person before energising it.
 
 ## Water Hygiene and Maintenance
 
