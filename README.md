@@ -1,5 +1,7 @@
 # ClayBreeze — A Sustainable Clay-Based Air-Cooling System
 
+**Live site:** https://tanmay-np.github.io/Claybreeze-Sustainable-Air-Cooling/
+
 > A Makerspace prototype exploring porous clay as a wetted medium for direct evaporative cooling.
 
 **Project status: Prototype assembled — testing pending.** The metal frame is fabricated and painted, the six 12 mm pot-retaining rods are attached, the rear fan-mount extension is fabricated with both exhaust fans mounted on it, and 30 clay pots (5 columns × 6 rows, observed in the assembly photographs) are fixed into the frame. The pump, reservoir and tubing are installed (reported by team; photo evidence pending); water circulation is **PENDING** — not yet commissioned or verified. An ESP32 + relay module + DHT11 sensor are wired on a breadboard, and the fan rule is IMPLEMENTED (reported) — the firmware is not yet in this repository and the behaviour has not been verified. Remaining work: staged commissioning, control-behaviour verification, as-built measurement, performance testing, and updating the SolidWorks model (PENDING). No cooling-performance result is claimed until the prototype is tested.
