@@ -18,7 +18,7 @@ window.CLAYBREEZE_PROJECT = {
   group: "Group 17",
   institution: "Sanjivani University",
   subject: "Makerspace",
-  student: { name: "Tanmay Nilesh Pendbhaje", prn: "2126UMEM1002", programme: "FY B.Tech Mechanical Engineering", institution: "Sanjivani University" },
+  student: { name: "Tanmay Nilesh Pendbhaje", programme: "FY B.Tech Mechanical Engineering", institution: "Sanjivani University" },
 
   // SolidWorks GLB export of the assembly (frame incl. rear extension, six rods,
   // 30 pots; no fans). The hero crossfades to it once loaded and the explorer

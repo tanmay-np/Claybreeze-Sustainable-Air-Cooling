@@ -7,7 +7,6 @@
 Group 17, Sanjivani University Makerspace.
 
 Tanmay Nilesh Pendbhaje  
-PRN 2126UMEM1002  
 FY B.Tech Mechanical Engineering  
 Sanjivani University
 
