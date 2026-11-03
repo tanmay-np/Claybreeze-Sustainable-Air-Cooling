@@ -29,8 +29,8 @@ This document is a practical checklist for a small water-and-fan prototype. Foll
 - A relay module typically switches mains-side fan/pump power from a low-voltage logic signal — verify the specific module's input/output ratings and isolation from its documentation before wiring anything; this repository does not document GPIO pins, logic levels or wiring connections, so do not assume any until they are recorded from the actual hardware and code.
 - Fit an enclosure or secure mounting for the electronics once the layout is finalised, rather than leaving a bare breadboard exposed near a wet assembly.
 - Before changing any wiring, isolate power at the source, not just through software — software control (including the ESP32 program) should not be relied on as the sole safety isolation method.
-- When a water pump is eventually integrated with the relay/ESP32 system, apply the same isolation and enclosure precautions as for the fans, and re-check wiring before first use.
-- See `docs/electronics-and-control.md` for the current and planned control logic; it documents behaviour, not wiring — have the actual wiring reviewed by a competent person before energising it.
+- The water pump is switched by the same relay/ESP32 system as the fans: apply the same isolation and enclosure precautions, and re-check wiring before each powered test.
+- See `docs/electronics-and-control.md` for the implemented control logic; it documents behaviour, not wiring — have the actual wiring reviewed by a competent person before energising it.
 
 ## Water Hygiene and Maintenance
 

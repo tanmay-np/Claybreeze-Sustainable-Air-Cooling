@@ -227,7 +227,8 @@ export function buildAssembly() {
     groups.fans.add(fan);
   }
 
-  // ---- Water system: schematic ghost (positions NOT documented) -----------
+  // ---- Water system: approximate geometry (pump, tubing and reservoir are
+  // installed, but are not in the SolidWorks export and were not measured) ----
   const tankW = 520, tankH = 110, tankD = 230, tankY = -H / 2 - tankH / 2 - 15;
   const tank = new THREE.Mesh(cached("tank", () => new THREE.BoxGeometry(tankW * MM, tankH * MM, tankD * MM)), M.water);
   tank.position.set(0, tankY * MM, -10 * MM);
@@ -270,7 +271,8 @@ export function buildAssembly() {
   }
 
   // Build-up stages used by the journey inset:
-  // 1 frame (raw) · 2 frame (holes marked) · 3 + rods · 4 + extension · 5 painted + fans · 6 + pots · 7 electronics (not modelled)
+  // 1 frame (raw) · 2 frame (holes marked) · 3 + rods · 4 + extension · 5 painted + fans · 6 + pots ·
+  // 7 water system (approximate) + electronics (not modelled)
   const raw = new THREE.Color(APPROX.rawSteel), painted = new THREE.Color(APPROX.paint);
   function setStage(stage) {
     groups.frame.visible = stage >= 1;
@@ -278,6 +280,7 @@ export function buildAssembly() {
     groups.fanMount.visible = stage >= 4;
     groups.fans.visible = stage >= 5;
     groups.pots.visible = stage >= 6;
+    groups.water.visible = stage >= 7;
     const c = stage >= 5 ? painted : raw;
     M.frame.color.copy(c);
     M.fanMount.color.copy(c);

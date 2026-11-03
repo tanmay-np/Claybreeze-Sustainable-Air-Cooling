@@ -8,12 +8,12 @@
 - Fan mount: rear extension frame fabricated; both exhaust fans mounted on it.
 - Frame finish: spray-painted.
 - Clay pots: 30 pots (5 columns × 6 rows, observed in the assembly photographs) fixed into the frame.
-- Electronics: ESP32 + relay module + DHT11 wired on a breadboard; fan rule **IMPLEMENTED (reported)** — firmware not yet in this repository; not verified (see `docs/electronics-and-control.md`).
-- Pump, reservoir and tubing: **installed (reported by team; photo evidence pending)**.
-- Water circulation: **PENDING** — not yet commissioned or verified.
-- Commissioning: **PENDING**.
-- CAD update to the as-built assembly: **PENDING**.
-- Observed in the assembly photographs: the fan supply cable is loose at the top of the frame with unterminated ends. Secure and terminate it before any powered testing.
+- Water system: water pump (motor) with tubing, plus reservoir — **installed**.
+- Electronics: ESP32, DHT11 and 3-channel relay module — **integrated**; control logic **IMPLEMENTED** and running (see `docs/electronics-and-control.md`).
+- Prototype: **fully assembled**.
+- Next: performance testing and results.
+- CAD update to the as-built assembly: to do.
+- Observed in the earlier assembly photographs: the fan supply cable was loose at the top of the frame. Check that all fan and pump cables are secured and terminated before powered testing.
 
 ## Recommended Assembly Sequence
 
@@ -37,22 +37,22 @@ The frame has been spray-painted. Allow the finish to cure fully, in a ventilate
 
 Arrange the actual pots without forcing them into place. Check spacing, alignment, opening clearance and access for cleaning. Ceramic pots can crack if point-loaded or clamped too tightly; use suitable support or padding where necessary. 30 pots are fixed into the frame in 5 columns × 6 rows (observed in the assembly photographs); record the measured spacing.
 
-### 6. Wire and Program the Control Electronics — reported done (fan control only); not verified
+### 6. Integrate the Control Electronics — done
 
-Wire the DHT11 to the ESP32, and the ESP32 to the relay module driving the two fans, on the breadboard. The fan rule reported as programmed switches both fans on above 35 °C and off below it; behaviour at exactly 35.0 °C is unconfirmed (see `docs/electronics-and-control.md`). The firmware source is not yet in this repository. Keep breadboard and connections away from any splash or runoff path.
+The DHT11, ESP32 and 3-channel relay module are integrated and drive the two fans and the water pump. The control logic running on the ESP32 switches the fans in two temperature stages (28 °C / 35 °C) and runs the pump below 60 % RH (see `docs/electronics-and-control.md`). Firmware source will be added to this repository. Keep breadboard and connections away from any splash or runoff path.
 
-### 7. Update CAD to Match the As-Built Assembly — pending
+### 7. Update CAD to Match the As-Built Assembly — to do
 
 Measure the actual components (frame, rods, fan mount, pot layout) and update the SolidWorks model and drawing. Mark provisional features as revised and do not represent unmeasured attachment geometry as final. Save dated versions or use Git commits to record significant revisions.
 
-### 8. Install the Water Circuit — installed (reported by team; photo evidence pending)
+### 8. Install the Water Circuit — done
 
-The pump, tubing and reservoir are reported as installed. Water circulation has not been commissioned or verified. Record the tub, tubing and pump specifications, photograph the installation, and leak-check the circuit during commissioning (step 9). Integrate pump switching with the ESP32/relay system only once the PROPOSED humidity-based logic in `docs/electronics-and-control.md` has been reviewed and implemented.
+The water pump (motor) with tubing and the reservoir are installed, and the pump is switched by the ESP32 + relay on humidity. Record the tub, tubing and pump specifications, photograph the installation, and leak-check the circuit during testing (step 9).
 
-### 9. Commission in Stages — pending
+### 9. Performance Testing — next
 
 1. With electrical equipment off, inspect mechanical assembly and all connections, including the breadboard wiring. Secure and terminate the loose fan cable.
-2. Test the fan-control electronics on their own (pump disconnected), checking that fans switch at the programmed temperature threshold and that there is no rapid relay chatter near the boundary.
+2. Check the fan stages on their own (pump disconnected) at the 28 °C and 35 °C thresholds, and watch for rapid relay switching near either threshold.
 3. Test the water circuit in a controlled manner, checking every distribution outlet, leakage and return flow, with fans off.
 4. Switch off and isolate power before adjusting tubing or handling the wet assembly.
 5. Test airflow with the water pump off and check fan direction, vibration, obstructions and bypass paths.
@@ -69,6 +69,7 @@ The pump, tubing and reservoir are reported as installed. Water circulation has 
 | To record | Rods and fan-mount extension attached | Final layout/cut length to be measured | To record | To record | `media/photos/Frame_Rod_Assembled_1.jpeg`, `Frame_Rod_assembled_With_Fan_Extension1.jpeg` |
 | To record | Frame spray-painted; fans mounted on the rear extension frame | — | To record | To record | `media/photos/Frame_with_Rod_And_Exhaust_Fan_Colourd.jpeg` |
 | To record | 30 clay pots fixed into frame (5 × 6) | Spacing to be measured | Loose, unterminated fan cable visible in photo | To record | `media/photos/Frame_Completely_Assembled_Front_View.jpeg`, `Frame_Completely_Assembled_Side_View.jpeg` |
-| To record | ESP32/relay/DHT11 wired; fan rule programmed (reported) | Firmware not yet in repository | To record | To record | Add real photo |
+| To record | Water pump, tubing and reservoir installed | Specifications to be recorded | To record | To record | No photo in repository yet |
+| To record | ESP32, DHT11 and 3-channel relay module integrated; control logic running | Firmware source to be added | To record | To record | No photo in repository yet |
 
 No dates are recorded yet: the photo filenames contain no dates and the image files carry no date metadata. Fill in dates only from a real record (phone gallery, workshop register, messages). "Issue observed" and "Action taken" are still to record for most rows. Do not record planned work as completed work.

@@ -1,6 +1,6 @@
 # Materials and Components
 
-This document separates confirmed or reported items from specifications that still need to be checked. Quantities and specifications should be updated after physical fit-up and before final testing.
+This document separates confirmed items from specifications that still need to be recorded. Quantities and specifications should be updated after physical fit-up and before final testing.
 
 | Item | Current information | Status / required confirmation |
 |---|---|---|
@@ -8,11 +8,11 @@ This document separates confirmed or reported items from specifications that sti
 | Pot-retaining rods | 12 mm diameter | **Completed** — holes drilled and rods attached to the frame |
 | Fan mount | Rear extension frame welded behind the main frame; carries both fans | **Completed** |
 | Clay pots | Small hollow-through, unglazed pots | **Fixed into the frame** — 30 pots, 5 × 6 (observed in photographs); measure spacing, dimensions, mass and fit |
-| Electronics (control) | ESP32, relay module, DHT11 sensor, breadboard, jumper wires | Wired; fan rule IMPLEMENTED (reported) — firmware not yet in repository; not verified. See `docs/electronics-and-control.md` for roles and logic; GPIO assignments, relay ratings and wiring details not documented here |
-| Water pump / motor | Installed (reported by team; photo evidence pending) | Circulation PENDING. Record manufacturer/model, rated voltage, power, flow rate, maximum head and outlet size from label/manual |
-| Rear fans | Two exhaust fans on the rear extension frame, blowing room air forward through the pot array | Reported as switched by the relay on temperature (not verified). Record model, dimensions, voltage, power, rated airflow and mounting details from label/manual. Secure the loose supply cable before powered testing |
-| Reservoir/tub | Installed (reported by team; photo evidence pending) | Dimensions, capacity, pump clearance and removability to be confirmed |
-| Main tubing | Pump-to-distributor path; installed (reported by team; photo evidence pending) | Record length, inner diameter, material and pressure suitability |
+| Electronics (control) | ESP32, 3-channel relay module, DHT11 sensor, breadboard, jumper wires | Integrated; control logic IMPLEMENTED and running. See `docs/electronics-and-control.md` for roles and logic; GPIO assignments, relay ratings and wiring details not documented here |
+| Water pump / motor | Installed; switched on humidity by the ESP32 + relay | Record manufacturer/model, rated voltage, power, flow rate, maximum head and outlet size from label/manual |
+| Rear fans | Two exhaust fans on the rear extension frame, blowing room air forward through the pot array | Switched in two temperature stages by the relay. Record model, dimensions, voltage, power, rated airflow and mounting details from label/manual. Secure the supply cables before powered testing |
+| Reservoir/tub | Installed | Dimensions, capacity, pump clearance and removability to be recorded |
+| Main tubing | Pump-to-distributor path; installed | Record length, inner diameter, material and pressure suitability |
 | Distribution header/branches | Intended to wet pot array | Final layout and outlet count to be decided after wetting tests |
 | Connectors and clamps | Needed as applicable | Match to selected tubing and pump outlet; avoid leaks and accidental release |
 | Flow-control valve | Potentially useful | Select only if needed to control flow after testing |
@@ -34,14 +34,14 @@ For each component, record make/model (if present), rated voltage, rated power, 
 | Spray paint | To record | To record | To record | To record | Frame finish |
 | Clay pots | To record | To record | To record | To record | Record any spare/broken pots separately |
 | ESP32 | 1 | To record | To record | To record | Record actual model/board |
-| Relay module | To record | To record | To record | To record | Record channel count and rating |
+| Relay module | 1 (3-channel) | To record | To record | To record | Record rating |
 | DHT11 sensor | 1 | To record | To record | To record | — |
 | Breadboard | To record | To record | To record | To record | — |
 | Jumper wires | To record | To record | To record | To record | — |
-| Pump | 1 | To record | To record | To record | Installed (reported by team) |
+| Pump | 1 | To record | To record | To record | Installed |
 | Fans | 2 | To record | To record | To record | Record actual model |
-| Reservoir/tub | To record | To record | To record | To record | Final specification pending |
-| Tubing and fittings | To record | To record | To record | To record | Final layout pending |
+| Reservoir/tub | 1 | To record | To record | To record | Installed; specification to record |
+| Tubing and fittings | To record | To record | To record | To record | Installed; layout to record |
 | Other consumables | To record | To record | To record | To record | Welding/finishing/fasteners etc. |
 
 A project cost comparison should use actual receipts or recorded prices and define what is included. Do not claim the prototype is cheaper than a commercial system until the scope and cost basis are comparable.

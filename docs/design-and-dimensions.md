@@ -12,15 +12,15 @@
 | Pot-retaining rods | 12 mm diameter | Holes drilled and rods attached — **completed** |
 | Frame finish | Spray-painted | **Completed** |
 | Pot arrangement | 5 columns × 6 rows (30 pots) | Clay pots are fixed into the frame — **completed**; layout observed in the assembly photographs. Spacing not yet measured |
-| Fans | Two exhaust fans on the rear extension frame, blowing room air forward through the pot array | Fan-mount extension fabricated — **completed**; reported as switched by ESP32 + relay on temperature (firmware not yet in repository; not verified — see `docs/electronics-and-control.md`). Model, size, rated airflow and electrical rating still to be recorded |
-| Reservoir | Bottom tub | **Installed (reported by team; photo evidence pending)**; capacity, dimensions and mounting still to be confirmed |
+| Fans | Two exhaust fans on the rear extension frame, blowing room air forward through the pot array | Fan-mount extension fabricated and both fans mounted — **completed**; switched in two temperature stages by the ESP32 + relay (see `docs/electronics-and-control.md`). Model, size, rated airflow and electrical rating still to be recorded |
+| Reservoir | Bottom tub | **Installed**; capacity, dimensions and mounting still to be recorded |
 | Rear extension (from drawing) | Overall side-view depth 270 mm; extension members 132.5 mm in from each side | Read from the dimensioned SolidWorks drawing; not yet measured on the fabricated frame |
 
 All dimensions should be labelled as design or measured values. Do not describe a design dimension as an as-built measurement until the fabricated part has been measured.
 
 ## 2. Design Status
 
-The physical prototype is assembled: the metal frame is fabricated, spray-painted, fitted with the six drilled-and-attached 12 mm pot-retaining rods and the rear fan-mount extension, and 30 clay pots are fixed in place. The pump, reservoir and tubing are installed (reported by team; photo evidence pending); water circulation is PENDING. An ESP32 + relay module + DHT11 sensor are wired, with the fan rule reported as programmed (firmware not yet in repository; not verified). The frame has had a visual inspection; as-built measurements are pending. The remaining work is commissioning, performance testing and control-behaviour verification (see `docs/testing-and-results.md`). Updating the SolidWorks model and engineering drawing to the as-built parts is PENDING — a documentation task, not unfinished construction.
+The physical prototype is assembled: the metal frame is fabricated, spray-painted, fitted with the six drilled-and-attached 12 mm pot-retaining rods and the rear fan-mount extension, and 30 clay pots are fixed in place. The water pump with tubing and the reservoir are installed. An ESP32, a DHT11 sensor and a 3-channel relay module are integrated, and the control logic is running (see `docs/electronics-and-control.md`). The frame has had a visual inspection; as-built measurements are pending. The next stage is performance testing (see `docs/testing-and-results.md`). Updating the SolidWorks model and engineering drawing to the as-built parts is still to do — a documentation task, not unfinished construction.
 
 ## 3. CAD and Drawing Workflow
 

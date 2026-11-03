@@ -189,16 +189,26 @@
 
   // ---------------- 11 Status ----------------
   const statusGroups = $("#status-groups");
+  function statusList(items) {
+    const ul = el("ul");
+    items.forEach((item) => ul.append(el("li", "", item)));
+    return ul;
+  }
   (project.statusGroups || []).forEach((group) => {
     const box = el("article", `status-group tone-${group.tone}`);
-    box.append(el("h3", "", group.heading));
-    const ul = el("ul");
-    group.items.forEach((item) => ul.append(el("li", "", item)));
-    box.append(ul);
+    const head = el("div", "status-group-head");
+    if (group.badge) head.append(el("span", `status-chip status-${group.badge.toLowerCase()}`, group.badge));
+    head.append(el("h3", "", group.heading));
+    box.append(head);
+    if (Array.isArray(group.subgroups)) {
+      group.subgroups.forEach((sub) => {
+        box.append(el("h4", "status-subhead", sub.label), statusList(sub.items));
+      });
+    } else {
+      box.append(statusList(group.items || []));
+    }
     statusGroups?.append(box);
   });
-  const nextSteps = $("#next-steps");
-  (project.nextSteps || []).forEach((s) => nextSteps?.append(el("li", "", s)));
 
   // ---------------- Navigation, progress, presentation ----------------
   const menuToggle = $("#menu-toggle");
@@ -243,126 +253,94 @@
     }, 6000);
   });
 
-  // ---------------- Control Logic Lab (unchanged behaviour) ----------------
-  // A SOFTWARE SIMULATION of the thresholds in docs/electronics-and-control.md.
-  // It has no connection to the real ESP32, DHT11 or relay hardware.
-  const CONTROL = window.CLAYBREEZE_CONTROL || {};
-  const simTabs = $$(".sim-mode");
-  const tempRow = $("#sim-temp-row");
-  const rhRow = $("#sim-rh-row");
+  // ---------------- Control Logic Lab ----------------
+  // A SOFTWARE SIMULATION of the logic running on the ESP32 (thresholds from
+  // window.CLAYBREEZE_CONTROL). It has no connection to the real ESP32, DHT11
+  // or relay hardware.
+  const CONTROL = window.CLAYBREEZE_CONTROL || { oneFanAboveC: 28, bothFansAboveC: 35, pumpOnBelowRH: 60 };
   const tempSlider = $("#sim-temp-slider");
   const tempNumber = $("#sim-temp-number");
   const rhSlider = $("#sim-rh-slider");
   const rhNumber = $("#sim-rh-number");
-  const simOutputs = $("#sim-outputs");
-  const simExplain = $("#sim-explain");
-  const simStatusBadge = $("#sim-status-badge");
+  const fanOutputs = $("#sim-fan-outputs");
+  const pumpOutputs = $("#sim-pump-outputs");
+  const fanTable = $("#sim-fan-table");
+  const pumpTable = $("#sim-pump-table");
+  const fanExplain = $("#sim-fan-explain");
+  const pumpExplain = $("#sim-pump-explain");
   const simRuleNote = $("#sim-rule-note");
   const simReset = $("#sim-reset");
-  const simPanel = $(".sim-panel");
 
-  if (simTabs.length && simOutputs) {
-    let mode = "currentFan";
-    let pumpPrevOn = false; // hysteresis memory for the proposed pump logic
+  if (tempSlider && fanOutputs && pumpOutputs) {
+    const LOW = CONTROL.oneFanAboveC;
+    const HIGH = CONTROL.bothFansAboveC;
+    const RH = CONTROL.pumpOnBelowRH;
+    const state = { t: 25, rh: 50 };
 
-    function badgeClass(status) {
-      if (/IMPLEMENTED/i.test(status)) return "badge-implemented";
-      if (/PLANNED/i.test(status)) return "badge-planned";
-      return "badge-proposed";
+    // Exactly the implemented comparisons: <= LOW off, > LOW one fan, > HIGH both; RH < RH_ON pump on.
+    function evaluateFans(t) {
+      if (t > HIGH) return { stage: 2, fan1: true, fan2: true };
+      if (t > LOW) return { stage: 1, fan1: true, fan2: false };
+      return { stage: 0, fan1: false, fan2: false };
     }
+    function evaluatePump(rh) {
+      return rh < RH;
+    }
+    window.__claybreezeControl = { evaluateFans, evaluatePump };
 
     function chip(label, isOn) {
       const c = el("div", `sim-chip ${isOn ? "is-on" : "is-off"}`);
       c.append(el("span", "sim-chip-label", label), el("span", "sim-chip-value", isOn ? "ON" : "OFF"));
       return c;
     }
-
-    function evaluateCurrentFan(tempC) {
-      const cfg = CONTROL.currentFan || { thresholdC: 35 };
-      const on = tempC > cfg.thresholdC;
-      return { fan1: on, fan2: on };
+    function buildTable(table, head, rows) {
+      const thead = el("thead");
+      const tr = el("tr");
+      head.forEach((h) => { const th = el("th", "", h); th.scope = "col"; tr.append(th); });
+      thead.append(tr);
+      const tbody = el("tbody");
+      rows.forEach((r) => { const row = el("tr"); r.forEach((c) => row.append(el("td", "", c))); tbody.append(row); });
+      table.append(thead, tbody);
+      return [...tbody.rows];
     }
-    function evaluatePlannedFan(tempC) {
-      const cfg = CONTROL.plannedFan || { lowC: 28, highC: 35 };
-      if (tempC <= cfg.lowC) return { fan1: false, fan2: false };
-      if (tempC <= cfg.highC) return { fan1: true, fan2: false };
-      return { fan1: true, fan2: true };
-    }
-    function evaluatePump(rh) {
-      const cfg = CONTROL.proposedPump || { onAtOrBelow: 60, offAtOrAbove: 70 };
-      if (rh <= cfg.onAtOrBelow) pumpPrevOn = true;
-      else if (rh >= cfg.offAtOrAbove) pumpPrevOn = false;
-      return pumpPrevOn;
-    }
+    const fanRows = buildTable(fanTable, ["Temperature", "Fans"], [[`≤ ${LOW}\u00a0°C`, "Both OFF"], [`> ${LOW}\u00a0°C and ≤ ${HIGH}\u00a0°C`, "One fan ON"], [`> ${HIGH}\u00a0°C`, "Both ON"]]);
+    const pumpRows = buildTable(pumpTable, ["Relative humidity", "Pump"], [[`< ${RH}\u00a0%`, "ON"], [`≥ ${RH}\u00a0%`, "OFF"]]);
+    if (simRuleNote) simRuleNote.textContent = CONTROL.note || "";
 
     function render() {
-      simOutputs.replaceChildren();
-      const cfg = CONTROL[mode] || {};
-      simStatusBadge.textContent = (cfg.status || "").split(" — ")[0] || "";
-      simStatusBadge.className = `sim-status-badge ${badgeClass(cfg.status || "")}`;
-      simRuleNote.textContent = cfg.note || "";
+      const { t, rh } = state;
+      const fans = evaluateFans(t);
+      fanOutputs.replaceChildren(chip("Fan stage 1", fans.fan1), chip("Fan stage 2", fans.fan2));
+      fanRows.forEach((row, i) => row.classList.toggle("is-active", i === fans.stage));
+      const tt = `${t.toFixed(1)}\u00a0°C`;
+      if (fans.stage === 0) fanExplain.textContent = `${tt} is at or below ${LOW}\u00a0°C, so both fans are OFF.`;
+      else if (fans.stage === 1) fanExplain.textContent = `${tt} is above ${LOW}\u00a0°C and at or below ${HIGH}\u00a0°C, so one fan is ON.`;
+      else fanExplain.textContent = `${tt} is above ${HIGH}\u00a0°C, so both fans are ON.`;
 
-      if (mode === "currentFan") {
-        tempRow.hidden = false; rhRow.hidden = true;
-        const t = parseFloat(tempSlider.value);
-        const { fan1, fan2 } = evaluateCurrentFan(t);
-        simOutputs.append(chip("Fan 1", fan1), chip("Fan 2", fan2));
-        const cmp = t > cfg.thresholdC ? "above" : (t < cfg.thresholdC ? "below" : "exactly at");
-        simExplain.textContent = `${t.toFixed(1)}°C is ${cmp} the ${cfg.thresholdC}°C threshold, so both fans are ${fan1 ? "ON" : "OFF"}.`;
-      } else if (mode === "plannedFan") {
-        tempRow.hidden = false; rhRow.hidden = true;
-        const t = parseFloat(tempSlider.value);
-        const { fan1, fan2 } = evaluatePlannedFan(t);
-        simOutputs.append(chip("Fan 1", fan1), chip("Fan 2", fan2));
-        let reason;
-        if (t <= cfg.lowC) reason = `${t.toFixed(1)}°C is at or below ${cfg.lowC}°C, so both fans are OFF.`;
-        else if (t <= cfg.highC) reason = `${t.toFixed(1)}°C is above ${cfg.lowC}°C and at or below ${cfg.highC}°C, so Fan 1 is ON and Fan 2 is OFF.`;
-        else reason = `${t.toFixed(1)}°C is above ${cfg.highC}°C, so both fans are ON.`;
-        simExplain.textContent = reason;
-      } else if (mode === "proposedPump") {
-        tempRow.hidden = true; rhRow.hidden = false;
-        const rh = parseFloat(rhSlider.value);
-        const on = evaluatePump(rh);
-        simOutputs.append(chip("Water pump", on));
-        let reason;
-        if (rh <= cfg.onAtOrBelow) reason = `${rh.toFixed(0)}% RH is at or below ${cfg.onAtOrBelow}%, so the pump is ON.`;
-        else if (rh >= cfg.offAtOrAbove) reason = `${rh.toFixed(0)}% RH is at or above ${cfg.offAtOrAbove}%, so the pump is OFF.`;
-        else reason = `${rh.toFixed(0)}% RH is between ${cfg.onAtOrBelow}% and ${cfg.offAtOrAbove}%, so the pump keeps its previous state (${on ? "ON" : "OFF"}) — this is the hysteresis band.`;
-        simExplain.textContent = reason;
-      }
+      const pumpOn = evaluatePump(rh);
+      pumpOutputs.replaceChildren(chip("Water pump", pumpOn));
+      pumpRows.forEach((row, i) => row.classList.toggle("is-active", i === (pumpOn ? 0 : 1)));
+      const rr = `${rh.toFixed(1)}\u00a0% RH`;
+      pumpExplain.textContent = pumpOn ? `${rr} is below ${RH}\u00a0%, so the pump is ON.` : `${rr} is at or above ${RH}\u00a0%, so the pump is OFF.`;
     }
 
-    simTabs.forEach((tab) => tab.addEventListener("click", () => {
-      mode = tab.dataset.mode;
-      simTabs.forEach((t) => {
-        const selected = t === tab;
-        t.classList.toggle("is-active", selected);
-        t.setAttribute("aria-selected", String(selected));
-      });
-      if (simPanel) simPanel.setAttribute("aria-labelledby", tab.id);
-      render();
-    }));
-
-    if (tempSlider && tempNumber) {
-      tempSlider.addEventListener("input", () => { tempNumber.value = tempSlider.value; render(); });
-      tempNumber.addEventListener("input", () => {
-        const clamped = Math.min(45, Math.max(15, parseFloat(tempNumber.value) || 0));
-        tempSlider.value = String(clamped);
+    function bind(slider, number, key, min, max) {
+      slider.addEventListener("input", () => { state[key] = parseFloat(slider.value); number.value = slider.value; render(); });
+      number.addEventListener("input", () => {
+        const v = parseFloat(number.value);
+        if (Number.isNaN(v)) return;
+        state[key] = Math.min(max, Math.max(min, v));
+        slider.value = String(state[key]);
         render();
       });
+      number.addEventListener("change", () => { number.value = String(state[key]); });
     }
-    if (rhSlider && rhNumber) {
-      rhSlider.addEventListener("input", () => { rhNumber.value = rhSlider.value; render(); });
-      rhNumber.addEventListener("input", () => {
-        const clamped = Math.min(90, Math.max(30, parseFloat(rhNumber.value) || 0));
-        rhSlider.value = String(clamped);
-        render();
-      });
-    }
+    bind(tempSlider, tempNumber, "t", 15, 45);
+    bind(rhSlider, rhNumber, "rh", 30, 90);
     if (simReset) simReset.addEventListener("click", () => {
+      state.t = 25; state.rh = 50;
       tempSlider.value = "25"; tempNumber.value = "25";
       rhSlider.value = "50"; rhNumber.value = "50";
-      pumpPrevOn = false;
       render();
     });
 

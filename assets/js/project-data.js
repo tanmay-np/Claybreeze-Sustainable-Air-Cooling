@@ -4,17 +4,14 @@
  * Do not mark a task complete or add measured results without real evidence.
  *
  * Status vocabulary used everywhere on the site:
- *   COMPLETED   — physically done, visible in photographs
- *   REPORTED    — reported by the team, evidence not yet in this repository
- *   IMPLEMENTED (reported) — firmware reported as programmed; not in repo, not verified
- *   PLANNED     — intended next revision, not implemented
- *   PROPOSED    — a starting idea to evaluate, not implemented or tested
- *   PENDING     — not yet done
+ *   COMPLETED   — physically built and installed
+ *   IMPLEMENTED — control logic running on the ESP32
+ *   NEXT        — the next stage of work
  */
 window.CLAYBREEZE_PROJECT = {
   title: "ClayBreeze",
   fullTitle: "A Sustainable Clay-Based Air-Cooling System",
-  statusHeadline: "Prototype assembled — testing pending",
+  statusHeadline: "Build complete — control logic running",
   group: "Group 17",
   institution: "Sanjivani University",
   subject: "Makerspace",
@@ -38,65 +35,50 @@ window.CLAYBREEZE_PROJECT = {
 
   // Component list for the Electronics section — purpose only, no GPIO pins, ratings or wiring.
   components: [
-    { name: "ESP32 microcontroller", status: "WIRED", tone: "reported", role: "Reads the DHT11 sensor, runs the control logic and drives the relay module. Wired on a breadboard. Firmware not yet in this repository." },
-    { name: "DHT11 sensor", status: "WIRED", tone: "reported", role: "Measures ambient temperature and relative humidity for the ESP32. Sensor placement has not been documented." },
-    { name: "Relay module", status: "WIRED", tone: "reported", role: "Switches the two exhaust fans under ESP32 control. Switching the water pump is PROPOSED, not implemented." },
-    { name: "Breadboard + jumper wires", status: "WIRED", tone: "reported", role: "Current prototyping platform connecting the ESP32, relay module and DHT11. Not water-resistant; needs an enclosure." },
-    { name: "Two exhaust fans", status: "COMPLETED", role: "Physically mounted on the rear extension frame (photographed), blowing room air forward through the pot array. Temperature switching is IMPLEMENTED — not yet verified by testing. The supply cable is loose in the photographs — secure it before powered testing." },
-    { name: "Water pump", status: "INSTALLED", tone: "reported", role: "Installed — photo evidence pending. Not switched by the relay; automatic humidity-based control is PROPOSED. Water circulation is PENDING." }
+    { name: "ESP32 microcontroller", status: "COMPLETED", role: "Reads the DHT11 sensor, runs the control logic and drives the relay module. Integrated on a breadboard." },
+    { name: "DHT11 sensor", status: "COMPLETED", role: "Measures temperature and relative humidity for the ESP32. Sensor placement has not been documented." },
+    { name: "3-channel relay module", status: "COMPLETED", role: "Switches the two exhaust fans and the water pump under ESP32 control. Which channel drives which load is not documented here." },
+    { name: "Two exhaust fans", status: "COMPLETED", role: "Mounted on the rear extension frame, blowing room air forward through the pot array. Switched in two temperature stages by the ESP32 and relay." },
+    { name: "Water pump, tubing and reservoir", status: "COMPLETED", role: "The water motor (pump) and its tubing are installed with the reservoir. The pump is switched on humidity by the ESP32 and relay." },
+    { name: "Control logic", status: "IMPLEMENTED", role: "Running on the ESP32. Temperature ≤ 28 °C: both fans OFF. Above 28 °C: one fan ON. Above 35 °C: both fans ON. Relative humidity below 60 %: pump ON; at or above 60 %: pump OFF." }
   ],
 
   // Current status, grouped in plain English (Section 11). Do not repeat the journey here.
+  // A group either lists items directly or splits them into labelled subgroups.
   statusGroups: [
     {
-      heading: "Physically completed",
+      heading: "Completed build",
+      badge: "COMPLETED",
+      tone: "done",
+      subgroups: [
+        { label: "Structure", items: ["Frame cut, welded and spray-painted (20 mm square pipe).", "Six ⌀12 mm pot-retaining rods and the rear fan-mount extension.", "30 clay pots, 5 columns × 6 rows."] },
+        { label: "Air and water", items: ["Two exhaust fans on the rear extension.", "Water pump (motor) with tubing, plus reservoir."] },
+        { label: "Electronics", items: ["ESP32, DHT11 sensor and 3-channel relay module integrated.", "Prototype fully assembled."] }
+      ]
+    },
+    {
+      heading: "Control logic running",
+      badge: "IMPLEMENTED",
       tone: "done",
       items: [
-        "Frame cut, welded and spray-painted (20 mm square pipe).",
-        "Six ⌀12 mm pot-retaining rods drilled and attached.",
-        "Rear fan-mount extension fabricated; both exhaust fans mounted on it.",
-        "30 clay pots fitted, 5 columns × 6 rows (observed in photographs).",
-        "Frame visual inspection done — as-built measurements pending.",
-        "Pump, reservoir and tubing: installed (reported by team; photo evidence pending)."
+        "Temperature at or below 28 °C: both fans OFF.",
+        "Above 28 °C: one fan ON.",
+        "Above 35 °C: both fans ON.",
+        "Relative humidity below 60 %: pump ON. At or above 60 %: pump OFF."
       ]
     },
     {
-      heading: "Programmed (reported, unverified)",
-      tone: "reported",
+      heading: "Next: performance testing and results",
+      badge: "NEXT",
+      tone: "next",
       items: [
-        "ESP32 + relay module + DHT11 wired on a breadboard.",
-        "Fan rule: both fans ON above 35 °C, OFF below it — IMPLEMENTED (reported). Firmware not yet in this repository; not verified.",
-        "Behaviour at exactly 35.0 °C: unconfirmed."
-      ]
-    },
-    {
-      heading: "Planned or proposed",
-      tone: "proposed",
-      items: [
-        "Two-stage fan logic (28 °C / 35 °C) — PLANNED, not implemented.",
-        "Automatic humidity-based pump control (60 % / 70 % RH hysteresis) — PROPOSED, not implemented or tested."
-      ]
-    },
-    {
-      heading: "Testing still outstanding",
-      tone: "pending",
-      items: [
-        "Secure and terminate the loose fan cable before powered testing.",
-        "Staged commissioning — PENDING.",
-        "Water circulation — PENDING: not yet commissioned or verified.",
-        "As-built measurement of the frame, then the SolidWorks/CAD update — PENDING.",
-        "Performance tests: temperature, humidity, airflow, water use, power — PENDING. No results recorded."
+        "Secure and terminate all fan and pump cables before powered testing.",
+        "Run a dry-pot baseline and wetted-pot runs: inlet and outlet temperature and humidity, airflow and water use.",
+        "Record the raw readings in the CSV template and publish the measured results.",
+        "Measure the as-built frame and update the SolidWorks model and drawing.",
+        "Add the ESP32 firmware source to this repository."
       ]
     }
-  ],
-
-  nextSteps: [
-    "Secure and terminate the loose fan cable before powered testing.",
-    "Photograph the pump, reservoir and tubing, and record their specifications.",
-    "Add the ESP32 firmware source to this repository and confirm the 35 °C rule, including exactly 35.0 °C.",
-    "Commission in stages: fans alone, water circuit alone (leaks, distribution, return flow), then the combined system.",
-    "Measure the as-built frame and update the SolidWorks model and drawing.",
-    "Run the baseline (dry pots) and wetted-pot tests and record raw data in the CSV template."
   ],
 
   // Engineering journey, in chronological order. photos[] holds exact src values
@@ -163,11 +145,11 @@ window.CLAYBREEZE_PROJECT = {
     },
     {
       number: "07",
-      title: "Wire the control electronics",
+      title: "Water system & electronics integration",
       buildStage: 7,
-      insetNote: "electronics not modelled",
+      insetNote: "water parts approximate; electronics not modelled",
       photos: [],
-      text: "An ESP32, a relay module and a DHT11 sensor were wired on a breadboard. The team reports that the fans are programmed to switch on above 35 °C. The firmware is not yet in this repository and the behaviour has not been verified. No photograph of the electronics has been added yet, and the 3D model does not include them."
+      text: "The water motor (pump) and its tubing were installed with the reservoir, and an ESP32, a DHT11 sensor and a 3-channel relay module were integrated to switch the fans and the pump. The control logic now runs on the ESP32: both fans off at or below 28 °C, one fan above 28 °C, both above 35 °C, and the pump on whenever relative humidity is below 60 %. With this step the prototype is fully assembled."
     }
   ],
 
@@ -192,14 +174,14 @@ window.CLAYBREEZE_PROJECT = {
       ["Fan size", "190 mm square plate, ⌀118 mm duct", "Photos (approximate; fans not in CAD export)"],
       ["Fan positions", "Stacked, upper and middle of extension, blowing forward", "Photos (approximate)"],
       ["Frame colour", "Light grey paint", "Photos"],
-      ["Water system", "All positions and sizes", "Schematic only — not documented"]
+      ["Water system", "Pump, tubing and reservoir positions and sizes", "Approximate geometry — not in the SolidWorks export"]
     ]
   }
 };
 
 /*
- * Control Logic Lab — single source of truth for the fan/pump threshold
- * simulation. The simulator (assets/js/site.js) reads these values rather
+ * Control Logic Lab — single source of truth for the implemented fan/pump
+ * thresholds. The simulator (assets/js/site.js) reads these values rather
  * than hard-coding them, so the displayed thresholds and the simulated
  * behaviour can never drift apart.
  *
@@ -207,24 +189,12 @@ window.CLAYBREEZE_PROJECT = {
  * actual ESP32, DHT11 or relay hardware.
  */
 window.CLAYBREEZE_CONTROL = {
-  currentFan: {
-    label: "Current fan-control logic",
-    status: "IMPLEMENTED — not yet verified by testing; firmware not yet in this repository",
-    thresholdC: 35,
-    note: "Not yet verified by testing; the firmware is not yet in this repository. Behaviour at exactly 35.0 °C is unconfirmed; this simulator shows exactly 35 °C as OFF for demonstration only."
-  },
-  plannedFan: {
-    label: "Planned two-stage fan logic",
-    status: "PLANNED — not implemented on the hardware",
-    lowC: 28,
-    highC: 35,
-    note: "Hysteresis around 28 °C and 35 °C should be evaluated before implementing this, to avoid rapid relay switching near a boundary. No specific hysteresis band has been decided."
-  },
-  proposedPump: {
-    label: "Proposed humidity-based pump logic",
-    status: "PROPOSED — not implemented or tested; pump installed but not relay-controlled",
-    onAtOrBelow: 60,
-    offAtOrAbove: 70,
-    note: "Provisional bench-testing starting values, not validated thresholds. Direct evaporative cooling has less potential at high incoming humidity, and stopping the pump does not instantly dry the clay pots."
-  }
+  label: "Implemented control logic",
+  status: "IMPLEMENTED",
+  // Fans: temp <= oneFanAboveC → both OFF; > oneFanAboveC → one fan; > bothFansAboveC → both fans.
+  oneFanAboveC: 28,
+  bothFansAboveC: 35,
+  // Pump: RH < pumpOnBelowRH → ON; RH >= pumpOnBelowRH → OFF.
+  pumpOnBelowRH: 60,
+  note: "The same thresholds as the logic running on the ESP32."
 };

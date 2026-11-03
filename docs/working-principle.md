@@ -2,9 +2,9 @@
 
 ## 1. Concept
 
-ClayBreeze investigates direct evaporative cooling using wetted, unglazed clay pots and fan-driven airflow. A pump is intended to move water from a bottom reservoir to a distribution arrangement above the pot array. Two exhaust fans on the rear extension frame, wired to an ESP32 + relay module and reported as programmed to switch on temperature, are mounted at the rear, blowing room air forward through and around the pot array. Excess water is intended to return to the reservoir, if the drainage arrangement supports this in practice.
+ClayBreeze investigates direct evaporative cooling using wetted, unglazed clay pots and fan-driven airflow. A pump moves water from a bottom reservoir to a distribution arrangement above the pot array. Two exhaust fans on the rear extension frame, switched in two temperature stages by an ESP32 + relay module, are mounted at the rear, blowing room air forward through and around the pot array. Excess water is intended to return to the reservoir, if the drainage arrangement supports this in practice.
 
-The frame, rod attachment, fan mount, paint finish and pot installation are physically complete. The pump, reservoir and tubing are installed (reported by team; photo evidence pending), but water circulation is PENDING — not yet commissioned or verified. The fan rule is IMPLEMENTED (reported); the firmware is not yet in this repository and has not been verified (see `docs/electronics-and-control.md`). Commissioning, flow uniformity, bypass airflow, temperature change, humidity change and water consumption remain to be checked and measured — see `docs/testing-and-results.md`.
+The prototype is fully assembled: frame, rods, fan mount, paint, 30 pots, two fans, the water pump with tubing and reservoir, and the ESP32 + DHT11 + 3-channel relay module. The control logic is running (see `docs/electronics-and-control.md`). Flow uniformity, bypass airflow, temperature change, humidity change and water consumption remain to be checked and measured — see `docs/testing-and-results.md`.
 
 ### 1a. Clay-Pot Orientation and Intended Airflow Path
 

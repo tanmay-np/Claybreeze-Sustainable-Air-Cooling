@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f6f2ea">
-  <meta name="description" content="ClayBreeze (Group 17, Sanjivani University Makerspace): an engineering journal for a prototype that tests whether wetted, unglazed clay pots and fan-assisted airflow can cool air. Prototype assembled — testing pending; no cooling results yet.">
+  <meta name="description" content="ClayBreeze (Group 17, Sanjivani University Makerspace): an engineering journal for a prototype that tests whether wetted, unglazed clay pots and fan-assisted airflow can cool air. Build complete and control logic running; performance testing is next, so no cooling results yet.">
   <title>ClayBreeze — Engineering Journal</title>
   <link rel="stylesheet" href="./assets/css/site.css">
   <script type="importmap">
@@ -57,10 +57,10 @@
         <div class="hero-copy">
           <p class="eyebrow">Group 17 · Sanjivani University · Makerspace</p>
           <h1 id="hero-title">ClayBreeze <span class="h1-sub">— A Sustainable Clay-Based Air-Cooling System</span></h1>
-          <p class="hero-lede">A student prototype testing whether wetted, unglazed clay pots and two rear-mounted fans can measurably cool the room air the fans blow forward through them. The prototype is assembled; testing is pending, so no cooling results are claimed.</p>
+          <p class="hero-lede">A student prototype testing whether wetted, unglazed clay pots and two rear-mounted fans can measurably cool the room air the fans blow forward through them. The prototype is fully built and its control logic is running on an ESP32. Performance testing is next, so no cooling results are claimed yet.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#journey">Explore the build <span aria-hidden="true">↓</span></a>
-            <a class="button button-quiet" href="#status">Current status</a>
+            <a class="button button-quiet" href="#status">Build status</a>
           </div>
           <p class="hero-team"><span class="hero-team-label">Student</span> Tanmay&nbsp;Nilesh&nbsp;Pendbhaje · FY&nbsp;B.Tech Mechanical&nbsp;Engineering · Sanjivani&nbsp;University</p>
         </div>
@@ -94,7 +94,7 @@
         <aside class="callout" aria-labelledby="vaayu-title">
           <h3 id="vaayu-title">Inspiration: Project Vaayu</h3>
           <p>Reporting on <strong>Project Vaayu</strong> — a separate student initiative in Delhi that used clay tea cups (<em>kulhads</em>), scrap wood and metal, and water circulation to build cooling units for government-school classrooms — helped inspire our clay-pot approach.</p>
-          <p><strong>Project Vaayu is not our work, and its reported outcomes are not evidence of how ClayBreeze performs.</strong> Our own measurements will be recorded independently.</p>
+          <p><strong>Project Vaayu is not our work, and its outcomes are not evidence of how ClayBreeze performs.</strong> Our own measurements will be recorded independently.</p>
           <p><a class="text-link" href="https://timesofindia.indiatimes.com/etimes/trending/inside-project-vayu-delhi-students-turn-kulhads-and-scrap-wood-into-eco-coolers-for-underprivileged-government-school-kids/articleshow/130960612.cms" target="_blank" rel="noopener">Read the report in The Times of India ↗</a></p>
         </aside>
         <blockquote class="question">
@@ -113,11 +113,11 @@
           <p>When water evaporates from a wet surface it absorbs heat. If the clay pots stay wet and air is blown across them, the air leaving the assembly can be cooler — and it is always more humid. The two fans are mounted at the rear on the extension frame: they take in room air from behind and blow it forward through and around the pots, out of the front into the room. Because the pots do not seal against each other or the frame, some air bypasses them; that has not been measured.</p>
         </div>
         <figure class="schematic">
-          <figcaption class="figure-label"><span class="label-chip label-chip-warn">Conceptual — not measured or verified</span> FIG. 2 — Intended air and water paths, side view</figcaption>
+          <figcaption class="figure-label"><span class="label-chip label-chip-warn">Conceptual — not measured</span> FIG. 2 — Intended air and water paths, side view</figcaption>
           <div class="schematic-scroll" tabindex="0" role="region" aria-label="Conceptual schematic, scrollable on small screens">
             <svg class="schematic-svg" viewBox="0 0 960 540" width="960" height="540" role="img" aria-labelledby="schem-title schem-desc">
               <title id="schem-title">Conceptual air and water paths through ClayBreeze</title>
-              <desc id="schem-desc">Side view. A pump in a bottom reservoir lifts water through tubing to a distribution tube above the pots; water wets the pots and drains back to the reservoir. Two fans on the rear extension frame take in room air from behind and blow it forward through and around the pots; it leaves through the front into the room. Not measured or verified.</desc>
+              <desc id="schem-desc">Side view. A pump in a bottom reservoir lifts water through tubing to a distribution tube above the pots; water wets the pots and drains back to the reservoir. Two fans on the rear extension frame take in room air from behind and blow it forward through and around the pots; it leaves through the front into the room. Not measured.</desc>
               <defs>
                 <marker id="arr-air" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="fill-air"></path></marker>
                 <marker id="arr-water" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="fill-water"></path></marker>
@@ -178,7 +178,7 @@
               <text x="596" y="80" class="s-label s-small" text-anchor="end">Rear</text>
             </svg>
           </div>
-          <p class="figure-caption">Airflow direction confirmed by the team: the two fans on the rear extension blow room air forward through and around the pots and out of the front. Pump, reservoir and tubing are installed (reported by team; photo evidence pending). Their positions here are illustrative. Water circulation is <strong>PENDING</strong> — not yet commissioned or verified.</p>
+          <p class="figure-caption">Airflow direction confirmed by the team: the two fans on the rear extension blow room air forward through and around the pots and out of the front. The pump, tubing and reservoir are installed and the pump is switched on humidity by the ESP32; their positions here are illustrative.</p>
         </figure>
         <div class="note-block">
           <h3>Why humidity matters</h3>
@@ -256,7 +256,7 @@
               <button type="button" class="tool" data-layer="rods" aria-pressed="true">Rods</button>
               <button type="button" class="tool" data-layer="pots" aria-pressed="true">Pots</button>
               <button type="button" class="tool" data-layer="fans" aria-pressed="true">Fans</button>
-              <button type="button" class="tool" data-layer="water" aria-pressed="false">Water schematic</button>
+              <button type="button" class="tool" data-layer="water" aria-pressed="false">Water system</button>
             </div>
             <div class="tool-group" role="group" aria-label="Overlays">
               <button type="button" class="tool" data-toggle="dims" aria-pressed="false">Dimensions</button>
@@ -267,7 +267,7 @@
           <div class="explorer-stage" tabindex="0" aria-label="3D assembly viewer. Drag to orbit, scroll to zoom, click a part for details. Arrow keys orbit, plus and minus zoom.">
             <div class="explorer-overlay" aria-hidden="true"></div>
             <div class="stage-notes">
-              <p class="stage-note water-note" hidden>Water system: schematic — positions not documented</p>
+              <p class="stage-note water-note" hidden>Water system (pump, tubing, reservoir): approximate geometry — not in the SolidWorks export</p>
               <p class="stage-note airflow-note" hidden>Conceptual airflow — not measured. Rear fans blow room air forward through and around the pots.</p>
               <p class="stage-note cad-note" hidden>SolidWorks export: frame, rods and pots. Fans are not in the export and are shown from the approximate model. Explode, layers and part details use the interactive model.</p>
             </div>
@@ -293,36 +293,43 @@
       <div class="shell">
         <p class="section-number">07</p>
         <h2 id="electronics-title">Electronics and control</h2>
-        <p class="section-intro">What the team has wired and programmed, and what is planned or proposed. The firmware is not yet in this repository, and the control behaviour will be verified during testing. Full detail: <a class="text-link" href="https://github.com/tanmay-np/Claybreeze-Sustainable-Air-Cooling/blob/main/docs/electronics-and-control.md">electronics-and-control.md</a>.</p>
+        <p class="section-intro">The ESP32, DHT11 and 3-channel relay module are integrated, and the control logic below is running on the ESP32. Firmware source will be added to this repository. Full detail: <a class="text-link" href="https://github.com/tanmay-np/Claybreeze-Sustainable-Air-Cooling/blob/main/docs/electronics-and-control.md">electronics-and-control.md</a>.</p>
         <div class="component-list" id="component-list"></div>
 
         <h3 class="subhead" id="control-lab">Control Logic Lab</h3>
         <div class="sim-banner" role="note"><strong>Simulator — not connected to hardware.</strong> Moving the sliders does not read or control anything physical.</div>
-        <div class="sim-modes" role="tablist" aria-label="Choose which control logic to simulate">
-          <button class="sim-mode is-active" role="tab" type="button" aria-selected="true" data-mode="currentFan" id="sim-tab-currentFan">Current fan rule</button>
-          <button class="sim-mode" role="tab" type="button" aria-selected="false" data-mode="plannedFan" id="sim-tab-plannedFan">Planned two-stage fans</button>
-          <button class="sim-mode" role="tab" type="button" aria-selected="false" data-mode="proposedPump" id="sim-tab-proposedPump">Proposed humidity pump</button>
-        </div>
-        <div class="sim-panel" role="tabpanel" aria-labelledby="sim-tab-currentFan">
-          <div class="sim-status-line"><span class="sim-status-badge" id="sim-status-badge"></span><span id="sim-rule-note"></span></div>
-          <div class="sim-control-row" id="sim-temp-row">
-            <label for="sim-temp-slider">Simulated temperature</label>
-            <div class="sim-input-pair">
-              <input type="range" id="sim-temp-slider" min="15" max="45" step="0.5" value="25">
-              <input type="number" id="sim-temp-number" min="15" max="45" step="0.5" value="25" aria-label="Simulated temperature in degrees Celsius">
-              <span class="sim-unit">°C</span>
+        <div class="sim-panel" role="group" aria-labelledby="control-lab">
+          <div class="sim-status-line"><span class="sim-status-badge badge-implemented" id="sim-status-badge">IMPLEMENTED</span><span id="sim-rule-note"></span></div>
+          <div class="sim-grid">
+            <div class="sim-block">
+              <p class="sim-block-title">Fans · temperature</p>
+              <div class="sim-control-row" id="sim-temp-row">
+                <label for="sim-temp-slider">Simulated temperature</label>
+                <div class="sim-input-pair">
+                  <input type="range" id="sim-temp-slider" min="15" max="45" step="0.5" value="25">
+                  <input type="number" id="sim-temp-number" min="15" max="45" step="0.1" value="25" aria-label="Simulated temperature in degrees Celsius">
+                  <span class="sim-unit">°C</span>
+                </div>
+              </div>
+              <div class="sim-outputs" id="sim-fan-outputs" aria-live="polite"></div>
+              <table class="logic-table" id="sim-fan-table"><caption class="visually-hidden">Fan logic</caption></table>
+              <p class="sim-explain" id="sim-fan-explain" aria-live="polite"></p>
+            </div>
+            <div class="sim-block">
+              <p class="sim-block-title">Pump · humidity</p>
+              <div class="sim-control-row" id="sim-rh-row">
+                <label for="sim-rh-slider">Simulated relative humidity</label>
+                <div class="sim-input-pair">
+                  <input type="range" id="sim-rh-slider" min="30" max="90" step="1" value="50">
+                  <input type="number" id="sim-rh-number" min="30" max="90" step="0.1" value="50" aria-label="Simulated relative humidity in percent">
+                  <span class="sim-unit">% RH</span>
+                </div>
+              </div>
+              <div class="sim-outputs" id="sim-pump-outputs" aria-live="polite"></div>
+              <table class="logic-table" id="sim-pump-table"><caption class="visually-hidden">Pump logic</caption></table>
+              <p class="sim-explain" id="sim-pump-explain" aria-live="polite"></p>
             </div>
           </div>
-          <div class="sim-control-row" id="sim-rh-row" hidden>
-            <label for="sim-rh-slider">Simulated relative humidity</label>
-            <div class="sim-input-pair">
-              <input type="range" id="sim-rh-slider" min="30" max="90" step="1" value="50">
-              <input type="number" id="sim-rh-number" min="30" max="90" step="1" value="50" aria-label="Simulated relative humidity in percent">
-              <span class="sim-unit">% RH</span>
-            </div>
-          </div>
-          <div class="sim-outputs" id="sim-outputs" aria-live="polite"></div>
-          <p class="sim-explain" id="sim-explain" aria-live="polite"></p>
           <div class="sim-actions"><button class="button button-outline" id="sim-reset" type="button">Reset simulation</button></div>
         </div>
       </div>
@@ -333,7 +340,7 @@
       <div class="shell">
         <p class="section-number">08</p>
         <h2 id="testing-title">Testing plan</h2>
-        <p class="result-flag"><strong>No results yet.</strong> Nothing below has been measured. This is the plan for testing the assembled prototype after staged commissioning.</p>
+        <p class="result-flag"><strong>No results yet.</strong> Measured temperature-drop and humidity results will be published here after testing. Below is the test plan for the completed prototype.</p>
         <div class="test-grid">
           <article><h3>Temperature drop</h3><p>Inlet air temperature behind the fans and outlet air temperature in front of the pots, at documented positions. ΔT = inlet − outlet.</p></article>
           <article><h3>Relative humidity</h3><p>Inlet and outlet RH measured at the same time as temperature, because RH depends on temperature.</p></article>
@@ -353,7 +360,7 @@
         <p class="section-number">09</p>
         <h2 id="safety-title">Safety and maintenance</h2>
         <ul class="check-list">
-          <li>Secure and terminate the loose fan cable before any powered testing (it is visible in the assembly photographs).</li>
+          <li>Secure and terminate all fan and pump cables before powered testing (a loose fan cable is visible in the earlier assembly photographs).</li>
           <li>Keep the breadboard, ESP32 and relay away from water, splashes and runoff; fit an enclosure.</li>
           <li>Have any mains wiring and protection checked by a qualified person; isolate power at the source before touching wiring, tubing or pots.</li>
           <li>Guard the fan blades and check the frame, welds and rods hold the pots without cracking them.</li>
@@ -389,16 +396,12 @@
     </section>
 
     <!-- ============ 11 STATUS & NEXT STEPS ============ -->
-    <section class="section section-dark" id="status" aria-labelledby="status-title">
+    <section class="section section-tinted section-status" id="status" aria-labelledby="status-title">
       <div class="shell">
         <p class="section-number">11</p>
-        <h2 id="status-title">Current status and next steps</h2>
-        <p class="status-headline">Prototype assembled — testing pending</p>
+        <h2 id="status-title">Build status</h2>
+        <p class="status-headline">Build complete — control logic running</p>
         <div class="status-groups" id="status-groups"></div>
-        <div class="next-steps">
-          <h3>Next steps, in order</h3>
-          <ol id="next-steps"></ol>
-        </div>
       </div>
     </section>
 

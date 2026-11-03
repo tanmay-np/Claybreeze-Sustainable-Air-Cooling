@@ -1,6 +1,8 @@
 # Testing and Results
 
-> **Results status: Pending testing.** The physical prototype (frame, rods, fan mount, finish and 30 pots) is assembled. The pump, reservoir and tubing are installed (reported by team; photo evidence pending); water circulation and commissioning are PENDING. The fan rule is IMPLEMENTED (reported) — firmware not yet in repository; not verified. This file defines the proposed test plan. It contains no measured ClayBreeze performance data.
+> **Results status: Next — performance testing.** The prototype is fully assembled: frame, rods, fan mount, paint, 30 clay pots, two fans, water pump with tubing and reservoir, and the ESP32 + DHT11 + 3-channel relay module. The control logic is running on the ESP32 (see `docs/electronics-and-control.md`). This file defines the test plan. It contains no measured ClayBreeze performance data.
+>
+> Measured temperature-drop and humidity results will be published here after testing.
 
 ## 1. Test Objectives
 
@@ -10,18 +12,17 @@
 - Measure or estimate airflow and record pump/fan electrical input where suitable instruments are available.
 - Estimate water use over a defined operating period.
 - Compare operating modes only when setup and ambient conditions are sufficiently similar.
-- Verify the programmed fan-control electronics against their intended behaviour (see Section 1a) before relying on them during cooling tests.
+- Check the control electronics against the implemented logic (see Section 1a) before relying on them during cooling tests.
 
-## 1a. Electronics and Control Verification (planned, not yet performed)
+## 1a. Control-Logic Checks
 
-These checks have not been performed yet; this is the plan, not a result. See `docs/electronics-and-control.md` for full details of the current, planned and proposed control logic.
+These checks belong to the performance-testing stage. See `docs/electronics-and-control.md` for the implemented logic.
 
 - Compare DHT11 readings against a separate reference thermometer/hygrometer at the same location, to characterise sensor accuracy.
-- Add the firmware source to the repository, then confirm that both fans switch on above 35 °C and off below it, as reported; behaviour at exactly 35.0 °C is unconfirmed — check it against the actual code and on the bench.
-- Watch for relay chatter (rapid on/off switching) when the temperature sits close to the 35 °C threshold, and note whether hysteresis is needed.
-- Once implemented, verify the planned two-stage fan logic (28 °C and 35 °C thresholds) the same way.
-- Once the proposed humidity-based control is implemented on the installed pump, verify the 60 %/70 % switching band and its hysteresis behaviour, and record whether the chosen thresholds give a usable result — they are starting values, not validated ones.
-- Check sensor placement (whether the DHT11 reads representative inlet or outlet air), startup behaviour, switching delay, and whether a manual override exists and works.
+- Record the fan stages observed at the DHT11 reading: both off at or below 28 °C, one fan above 28 °C, both above 35 °C.
+- Record the pump state observed at the DHT11 reading: on below 60 % RH, off at or above 60 % RH.
+- Watch for rapid relay switching when a reading sits close to 28 °C, 35 °C or 60 % RH.
+- Record sensor placement (whether the DHT11 reads ambient, inlet or outlet air) and startup behaviour.
 
 ## 2. Suggested Operating Conditions
 
@@ -88,17 +89,19 @@ Report all relevant conditions and limitations alongside results. Include repeat
 
 ## 8. Commissioning Checklist
 
-- [x] Frame, rods, fan mount, paint and pot installation mechanically complete
+- [x] Frame, rods, fan mount, paint and 30 pots
+- [x] Two fans mounted
+- [x] Water pump with tubing, plus reservoir, installed
+- [x] ESP32, DHT11 and 3-channel relay module integrated
+- [x] Control logic running on the ESP32 (fan stages and humidity-based pump)
 - [ ] As-built frame measurements recorded (visual inspection done)
-- [ ] Loose fan cable secured and terminated before powered testing
+- [ ] Fan and pump cables secured and terminated before powered testing
 - [ ] Fans secure and guarded
-- [ ] Pump, reservoir and tubing photographed and specifications recorded
-- [ ] Fan-control electronics (ESP32/relay/DHT11) verified against the programmed rule
+- [ ] Pump, reservoir and tubing specifications recorded
 - [ ] Pump and tubing secured
 - [ ] No leaks or uncontrolled splashing
 - [ ] Distribution outlets wet the intended areas
 - [ ] Return water flows into the reservoir
-- [ ] Humidity-based pump control implemented and checked against the proposed thresholds
 - [ ] Airflow direction verified
 - [ ] Bypass and blocked openings inspected
 - [ ] Sensors placed and identified

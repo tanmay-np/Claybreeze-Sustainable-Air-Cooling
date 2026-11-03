@@ -512,8 +512,8 @@ function init() {
       fanMount: { name: "Rear fan-mount extension", status: "COMPLETED", text: "Extension frame welded behind the main frame; carries both fans. Overall side depth 270 mm on the SolidWorks drawing." },
       rods: { name: "Pot-retaining rods", status: "COMPLETED", text: "Six ⌀12 mm rods, drilled and attached across the frame width: 90 mm apart, on the centre plane of the frame (from the SolidWorks export)." },
       pots: { name: "Clay pots", status: "COMPLETED", text: "30 unglazed clay pots, 5 columns × 6 rows, mouths facing the front (observed in photographs). Size from the SolidWorks export (⌀80 × 80 mm, ⌀40 openings); the profile curve is approximate." },
-      fans: { name: "Exhaust fans", status: "COMPLETED · CONTROL REPORTED", text: "Two exhaust fans mounted at the rear, blowing room air forward through the pot array. Temperature switching above 35 °C: IMPLEMENTED (reported) — firmware not in repository; not verified. Fan size is approximate." },
-      water: { name: "Water system (schematic)", status: "INSTALLED (REPORTED) · CIRCULATION PENDING", text: "Pump, reservoir and tubing are installed (reported by team; photo evidence pending). Circulation not yet commissioned. Positions and sizes shown are NOT documented." }
+      fans: { name: "Exhaust fans", status: "COMPLETED · CONTROL IMPLEMENTED", text: "Two exhaust fans mounted at the rear, blowing room air forward through the pot array. Switched by the ESP32 and relay: both OFF at or below 28 °C, one fan ON above 28 °C, both ON above 35 °C. Fan size is approximate." },
+      water: { name: "Water system", status: "COMPLETED · CONTROL IMPLEMENTED", text: "Water pump (motor) with tubing, plus reservoir — installed. The pump runs while relative humidity is below 60 % and stops at or above 60 %. Shown with approximate geometry; see Model notes." }
     };
     const infoPanel = host.querySelector(".part-info");
     const infoName = infoPanel.querySelector(".part-name");

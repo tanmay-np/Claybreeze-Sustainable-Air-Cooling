@@ -1,6 +1,6 @@
 # ClayBreeze — A Sustainable Clay-Based Air-Cooling System
 
-> **Project status: Prototype assembled — testing pending.** The metal frame is fabricated, painted, fitted with the six 12 mm pot-retaining rods and the rear fan-mount extension, and 30 clay pots (5 × 6, observed in the assembly photographs) are fixed in place. An ESP32 + relay module + DHT11 sensor are wired; the fan rule is IMPLEMENTED (reported) — firmware not yet in the repository; not verified. The pump, reservoir and tubing are installed (reported by team; photo evidence pending); water circulation is PENDING — not yet commissioned or verified. Staged commissioning, control-behaviour verification, as-built measurement, performance testing and the SolidWorks update (PENDING) remain to be done.
+> **Project status: Build complete — control logic running; next: performance testing.** The metal frame is fabricated, painted, fitted with the six 12 mm pot-retaining rods and the rear fan-mount extension, both fans are mounted, and 30 clay pots (5 × 6) are fixed in place. The water pump with tubing and the reservoir are installed. An ESP32, a DHT11 sensor and a 3-channel relay module are integrated, and the control logic is running (see `docs/electronics-and-control.md`). Performance testing, as-built measurement and the SolidWorks update remain to be done.
 
 ## Student
 
@@ -12,7 +12,7 @@ Sanjivani University
 
 ## 1. Introduction and Purpose
 
-**ClayBreeze** is a Makerspace prototype exploring whether wetted, unglazed clay pots can act as an evaporative cooling medium in a mechanically ventilated air-cooling assembly. The project combines a fabricated metal frame, hollow clay pots, a recirculating water arrangement (pump, reservoir and tubing installed — reported by team; circulation not yet commissioned), and two rear-mounted exhaust fans. Its purpose is to build and test the concept, document the engineering decisions, and determine how the system behaves under measured operating conditions.
+**ClayBreeze** is a Makerspace prototype exploring whether wetted, unglazed clay pots can act as an evaporative cooling medium in a mechanically ventilated air-cooling assembly. The project combines a fabricated metal frame, hollow clay pots, a recirculating water arrangement (pump, tubing and reservoir installed), and two rear-mounted exhaust fans. Its purpose is to build and test the concept, document the engineering decisions, and determine how the system behaves under measured operating conditions.
 
 The project is motivated by an interest in practical cooling approaches that use accessible materials. Affordability, maintainability, water use, electricity use, and environmental considerations are therefore **evaluation goals**, not established benefits. No cooling performance, operating-cost reduction, or environmental advantage is claimed for ClayBreeze until it has been tested and compared fairly with a suitable baseline.
 
@@ -27,7 +27,7 @@ These approaches serve different needs and cannot be ranked fairly without consi
 | **Traditional grass- or natural-fibre evaporative coolers** | May use locally available media; construction can be relatively straightforward; uses evaporation rather than a refrigeration compressor. | Performance and service life depend on the fibre, packing, water distribution, air velocity, water quality, and cleaning. Organic media can deteriorate if kept wet and poorly maintained, but this is not true of every grass-based design. Cooling is limited by ambient humidity and adds moisture to the air. Published comparisons of natural fibres and manufactured pads show that performance and degradation vary with the exact media and test conditions; they do not establish that all grass-based pads are inferior or inherently riskier. [3][11][12] |
 | **Cellulose / honeycomb-pad evaporative coolers** | Engineered pad geometry can provide repeatable air passages and a large wetted area; established designs are available. | Pads need even wetting and periodic cleaning or replacement. Mineral deposits and dirt can obstruct airflow and reduce performance. Water is consumed through evaporation and possibly bleed-off or drainage. As with other direct evaporative systems, humid incoming air reduces the available cooling potential. Performance comparisons depend on pad geometry, packing, airflow, water distribution, and test conditions; it is not accurate to claim that cellulose pads always cool less than natural fibres. [3][8][11][12] |
 | **Vapour-compression air conditioners** | Can provide controlled cooling across a wider range of outdoor humidity conditions and can remove moisture from indoor air. Performance varies with equipment efficiency, sizing, settings, climate, and building conditions. | Uses a compressor and refrigeration circuit, so its electrical demand and maintenance requirements differ from a simple fan-and-pump arrangement. Actual energy use and operating cost depend on equipment efficiency, sizing, runtime, climate, and local energy prices. Installation, filters, coils, and refrigerant-system maintenance matter. Refrigerant climate impact depends on the refrigerant and leakage control; lower-global-warming-potential options are available. An air conditioner is not inherently environmentally unsafe, and a fair comparison must include efficiency and refrigerant choice. [9][10] |
-| **ClayBreeze (proposed)** | Tests whether readily available hollow unglazed clay pots can serve as the wetted medium in a fabricated frame. The build also provides an opportunity to study water distribution, airflow, and maintainability. | Performance is unknown. Pot porosity, wetting uniformity, fan operating point, bypass airflow, water use, leakage, material cost, cleaning needs, and service life must be measured or assessed. It remains a prototype and is not yet a validated alternative to other cooling systems. |
+| **ClayBreeze (this prototype)** | Tests whether readily available hollow unglazed clay pots can serve as the wetted medium in a fabricated frame. The build also provides an opportunity to study water distribution, airflow, and maintainability. | Performance is unknown. Pot porosity, wetting uniformity, fan operating point, bypass airflow, water use, leakage, material cost, cleaning needs, and service life must be measured or assessed. It remains a prototype and is not yet a validated alternative to other cooling systems. |
 
 Direct evaporative cooling generally has greater potential when the incoming air is relatively dry, because more water can evaporate before the air approaches its wet-bulb condition. When relative humidity is high, the wet-bulb temperature is closer to the dry-bulb temperature, so the theoretical temperature-reduction opportunity is smaller. Direct evaporative devices also increase the moisture content of the air. [3]
 
@@ -35,7 +35,7 @@ Direct evaporative cooling generally has greater potential when the incoming air
 
 ClayBreeze was also inspired by reporting about **Project Vaayu**, a student initiative described in *The Times of India* as using clay tea cups (*kulhads*), scrap wood and metal, water circulation, and evaporative cooling to develop cooling units for government-school classrooms. The report explains how the project was motivated by unequal access to classroom cooling and discusses a recirculating water arrangement. [1] The initiative is also listed by the environmental education organisation Action For Nature. [2]
 
-Project Vaayu is an **inspiration and reference project**, not evidence of ClayBreeze performance. The article reports results for that separate project, but the geometry, clay material, airflow, test conditions, installation, and measurement methods may differ from this prototype. Those reported outcomes are not used as a prediction or performance target for ClayBreeze. Our own temperature, humidity, water-use, airflow, and power measurements will be recorded independently.
+Project Vaayu is an **inspiration and reference project**, not evidence of ClayBreeze performance. The article describes results for that separate project, but the geometry, clay material, airflow, test conditions, installation, and measurement methods may differ from this prototype. Those outcomes are not used as a prediction or performance target for ClayBreeze. Our own temperature, humidity, water-use, airflow, and power measurements will be recorded independently.
 
 ## 4. Problem Statement
 
@@ -43,7 +43,7 @@ Can a frame containing hollow, unglazed clay pots, supplied with recirculating w
 
 The project must also establish whether the pots can be wetted consistently, whether excess water returns safely to the reservoir, whether the frame and attachments remain stable when loaded and wet, and whether the system can be operated and maintained safely. The answer is not yet known; it will be based on testing rather than assumption.
 
-## 5. Proposed Design and Architecture
+## 5. Design and Architecture
 
 The current concept places the clay-pot array inside a fabricated square-pipe frame. A pump in a bottom reservoir is intended to deliver water through tubing to a distribution arrangement above the pots. Water will wet the clay surfaces; excess water is intended to drain back into the reservoir. Two exhaust fans mounted at the rear, behind the pot array, take in room air and blow it forward through and around the pots, out of the front into the room. The actual airflow path, water coverage, and return-flow behaviour must be verified during assembly and commissioning.
 
@@ -59,18 +59,18 @@ The current concept places the clay-pot array inside a fabricated square-pipe fr
 | Pot arrangement | **5 columns × 6 rows (30 pots)** | Clay pots are **fixed into the frame — completed**; layout observed in the assembly photographs. Spacing not yet measured. |
 | Clay elements | Small hollow-through, unglazed clay pots | Pots are fixed in place. Dimensions, mass, porosity, and water absorption: **To be measured / confirmed**. |
 | Fan mount | Rear extension frame | **Completed**; both exhaust fans are mounted on it. |
-| Electronics | ESP32, relay module, DHT11 sensor, breadboard and jumper wires | Wired; fan rule **IMPLEMENTED (reported)** — firmware not yet in repository; not verified. See `docs/electronics-and-control.md`. Humidity-based pump control is **PROPOSED**, not implemented. |
-| Water delivery | Pump, tubing, and a top distribution arrangement | Pump and tubing: **installed (reported by team; photo evidence pending)**. Water circulation: **PENDING** — not yet commissioned or verified. Tubing/distribution specifications still to be recorded. |
-| Reservoir | Bottom tub to collect return water | **Installed (reported by team; photo evidence pending)**; capacity, dimensions and removability still to be confirmed. |
-| Air movement | Two exhaust fans on the rear extension frame, behind the pots | Reported as switched by the ESP32 + relay on temperature (not verified); electrical ratings and model: **To be confirmed**. |
+| Electronics | ESP32, relay module, DHT11 sensor, breadboard and jumper wires | Integrated (with a 3-channel relay module); two-stage fan control and humidity-based pump control **IMPLEMENTED** and running. See `docs/electronics-and-control.md`. |
+| Water delivery | Pump, tubing, and a top distribution arrangement | Pump and tubing: **installed**. Pump ON below 60 % RH, OFF at or above 60 %. Tubing/distribution specifications still to be recorded. |
+| Reservoir | Bottom tub to collect return water | **Installed**; capacity, dimensions and removability still to be recorded. |
+| Air movement | Two exhaust fans on the rear extension frame, behind the pots | Switched in two temperature stages (28 °C / 35 °C) by the ESP32 + relay; electrical ratings and model: **To be recorded**. |
 
 ### Build status and CAD approach
 
-- **Completed:** the metal frame is fabricated and spray-painted; the six 12 mm pot-retaining rods are drilled and attached; the rear fan-mount extension is fabricated and both fans are mounted on it; 30 clay pots (5 × 6) are fixed into the frame. The pump, reservoir and tubing are installed (reported by team; photo evidence pending). The ESP32 + relay module + DHT11 are wired on a breadboard, with the fan rule reported as programmed (firmware not yet in repository; not verified).
-- **Remaining work:** secure and terminate the loose fan cable before powered testing; commission in stages (wiring, airflow direction, water distribution — PENDING); run performance tests; and implement/validate the planned and proposed control-logic refinements (see `docs/electronics-and-control.md`).
-- **Unconfirmed items:** tubing/reservoir specifications and a leak-check still need recording; pot spacing and the as-built frame dimensions have not been measured (visual inspection done; as-built measurements pending).
-- **CAD update (PENDING):** the SolidWorks model and engineering drawing are to be revised to match the **actual fabricated parts and measured dimensions**. This is a documentation task catching up to the build — it does not mean the physical prototype is incomplete.
-- **Electronics:** see `docs/electronics-and-control.md` for component roles, the currently programmed fan-control rule, the planned two-stage fan logic, and the proposed (untested) humidity-based pump-control logic.
+- **Completed:** the metal frame is fabricated and spray-painted; the six 12 mm pot-retaining rods are drilled and attached; the rear fan-mount extension is fabricated and both fans are mounted on it; 30 clay pots (5 × 6) are fixed into the frame. The water pump with tubing and the reservoir are installed. The ESP32, DHT11 and 3-channel relay module are integrated, and the control logic is running on the ESP32.
+- **Next:** performance testing and results — temperature, humidity, airflow and water use (see `docs/testing-and-results.md`). Secure and terminate all fan and pump cables before powered testing.
+- **Still to record:** tubing/reservoir specifications and a leak-check; pot spacing and the as-built frame dimensions have not been measured (visual inspection done; as-built measurements pending).
+- **CAD update (to do):** the SolidWorks model and engineering drawing are to be revised to match the **actual fabricated parts and measured dimensions**. This is a documentation task catching up to the build — it does not mean the physical prototype is incomplete.
+- **Electronics:** see `docs/electronics-and-control.md` for component roles and the implemented two-stage fan and humidity-based pump control logic.
 
 Photographs of the fabricated frame, the actual pots, the attachment process, and the revised SolidWorks model should be added to the repository as the work progresses. Images should show real project evidence and be labelled with dates or captions where practical.
 
@@ -80,9 +80,9 @@ Evaporative cooling uses the energy absorbed when liquid water changes into wate
 
 Unglazed clay can contain connected pores that absorb and transport water by capillary action. Research on porous ceramic evaporative walls and pottery-based cooling pads shows that porous ceramic media can be investigated as wetted evaporative surfaces. However, water absorption and surface wetting depend on the clay body, firing, porosity, geometry, and operating arrangement; those properties must not be assumed for the pots used in ClayBreeze. [4][5][6]
 
-In the proposed ClayBreeze arrangement:
+In the ClayBreeze arrangement:
 
-1. The pump, reported as installed (circulation not yet commissioned), is intended to lift water from the bottom reservoir to a distribution arrangement at the top.
+1. The pump lifts water from the bottom reservoir to a distribution arrangement at the top.
 2. Water is intended to spread over the exposed clay surfaces. The consistency of this distribution is a key item to inspect and test.
 3. The two exhaust fans, mounted at the rear on the extension frame, blow room air forward through and around the pots and out of the front. The final assembly must be checked for airflow bypass, blocked openings, and uneven flow.
 4. Water that does not evaporate is intended to drain back into the reservoir for recirculation.
@@ -100,7 +100,7 @@ The project aims to:
 
 1. Complete a mechanically stable frame assembly with secured pot-retaining rods and rear-mounted fans. **(Frame, rods, fan mount, paint and pot installation are complete.)**
 2. Update the SolidWorks model and engineering drawing to match the as-built assembly.
-3. Build and inspect a water delivery and return arrangement. **(Pump, reservoir and tubing installed — reported by team, photo evidence pending; circulation not yet commissioned; reservoir/tubing specifications and a leak-check still need recording.)** Integrate humidity-based pump control with the existing ESP32/relay/DHT11 system (PROPOSED, not implemented).
+3. Build and inspect a water delivery and return arrangement. **(Pump, reservoir and tubing installed; humidity-based pump control running on the ESP32. Reservoir/tubing specifications and a leak-check still need recording.)**
 4. Observe whether the chosen unglazed pots wet consistently and remain securely supported during operation.
 5. Measure inlet and outlet air temperature and relative humidity under documented conditions.
 6. Measure or estimate airflow and record fan and pump electrical input where suitable instruments are available.
@@ -113,7 +113,7 @@ The project aims to:
 ### Included in the current scope
 
 - Mechanical frame completion, rod retention, and fan mounting. **(Complete.)**
-- Installation and inspection of the pump, tubing, top distribution, reservoir, and return-water path. **(Pump, reservoir and tubing installed — reported by team; commissioning, leak-check and tubing/reservoir specifications PENDING.)**
+- Installation and inspection of the pump, tubing, top distribution, reservoir, and return-water path. **(Pump, reservoir and tubing installed; leak-check and tubing/reservoir specifications still to record.)**
 - SolidWorks and drawing updates based on as-built measurements.
 - Controlled prototype testing of temperature, relative humidity, airflow, water use, and electrical input where measurement equipment is available.
 - Basic evaluation of assembly, operation, cleaning, durability, and practical constraints.
@@ -149,7 +149,7 @@ Useful calculated quantities, once reliable measurements exist, include:
 
 - **Air-temperature difference:** `ΔT = inlet temperature − outlet temperature`. A positive value indicates that the measured outlet air is cooler than the measured inlet air for that run; it does not, by itself, establish whole-room cooling performance.
 - **Relative-humidity difference:** `ΔRH = outlet RH − inlet RH`, expressed in percentage points. Interpret this with the simultaneous temperature readings because relative humidity changes with temperature.
-- **Water-use rate:** measured net water loss divided by the test duration, with leaks and other losses reported separately where possible.
+- **Water-use rate:** measured net water loss divided by the test duration, with leaks and other losses recorded separately where possible.
 - **Electrical energy per test:** measured average electrical power multiplied by operating time, if suitable power measurements are available.
 
 **Results status:** Cooling performance, water consumption, airflow, electrical energy use, cost comparison, and environmental impacts are **Pending testing**. No ClayBreeze test results have been recorded in this overview. Add a dated results table and plots only when the underlying data are available; retain raw measurements and explain uncertainty, sensor accuracy, test conditions, and repeatability.

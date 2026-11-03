@@ -4,7 +4,7 @@
 
 > A Makerspace prototype exploring porous clay as a wetted medium for direct evaporative cooling.
 
-**Project status: Prototype assembled — testing pending.** The metal frame is fabricated and painted, the six 12 mm pot-retaining rods are attached, the rear fan-mount extension is fabricated with both exhaust fans mounted on it, and 30 clay pots (5 columns × 6 rows, observed in the assembly photographs) are fixed into the frame. The pump, reservoir and tubing are installed (reported by team; photo evidence pending); water circulation is **PENDING** — not yet commissioned or verified. An ESP32 + relay module + DHT11 sensor are wired on a breadboard, and the fan rule is IMPLEMENTED (reported) — the firmware is not yet in this repository and the behaviour has not been verified. Remaining work: staged commissioning, control-behaviour verification, as-built measurement, performance testing, and updating the SolidWorks model (PENDING). No cooling-performance result is claimed until the prototype is tested.
+**Project status: Build complete — control logic running; next: performance testing.** The metal frame is fabricated and painted, the six 12 mm pot-retaining rods are attached, the rear fan-mount extension carries both exhaust fans, and 30 clay pots (5 columns × 6 rows) are fixed into the frame. The water pump with tubing and the reservoir are installed. An ESP32, a DHT11 sensor and a 3-channel relay module are integrated, and the control logic is running on the ESP32: both fans off at or below 28 °C, one fan above 28 °C, both fans above 35 °C, and the pump on below 60 % relative humidity (off at or above 60 %). Next: performance testing and results. No cooling-performance result is claimed until the prototype is tested.
 
 ## Student
 
@@ -31,9 +31,9 @@ Affordability, maintainability, water use, electricity use, and environmental co
 | Pot layout | 5 columns × 6 rows (30 pots), observed in the assembly photographs; spacing not yet measured |
 | Frame finish | Spray-painted |
 | Fan mount | Rear extension frame, fabricated; both exhaust fans mounted on it |
-| Electronics | ESP32 + relay module + DHT11, wired on breadboard; fan rule IMPLEMENTED (reported) — firmware not yet in repository; not verified (see `docs/electronics-and-control.md`) |
-| Water circuit | Pump, reservoir and tubing: installed (reported by team; photo evidence pending). Water circulation: **PENDING** — not yet commissioned or verified |
-| Airflow | Two exhaust fans on the rear extension frame, blowing room air forward through and around the pots and out of the front (direction confirmed by the team); reported as switched on temperature by the ESP32 + relay (not verified) |
+| Electronics | ESP32 + DHT11 + 3-channel relay module, integrated; control logic running (see `docs/electronics-and-control.md`) |
+| Water circuit | Water pump with tubing, plus reservoir: installed. Pump ON below 60 % RH, OFF at or above 60 % |
+| Airflow | Two exhaust fans on the rear extension frame, blowing room air forward through and around the pots and out of the front (direction confirmed by the team); switched in two temperature stages (28 °C / 35 °C) by the ESP32 + relay |
 
 ## Repository Guide
 
@@ -42,7 +42,7 @@ Affordability, maintainability, water use, electricity use, and environmental co
 - [`docs/design-and-dimensions.md`](docs/design-and-dimensions.md) — dimensions, design assumptions and CAD update plan.
 - [`docs/materials-and-components.md`](docs/materials-and-components.md) — components, known specifications and confirmation checklist.
 - [`docs/fabrication-and-assembly.md`](docs/fabrication-and-assembly.md) — build sequence and assembly inspection points.
-- [`docs/electronics-and-control.md`](docs/electronics-and-control.md) — ESP32/relay/DHT11 roles, current fan-control logic, and planned/proposed control logic.
+- [`docs/electronics-and-control.md`](docs/electronics-and-control.md) — ESP32/relay/DHT11 roles and the implemented fan and pump control logic.
 - [`docs/testing-and-results.md`](docs/testing-and-results.md) — test protocol, record sheet and calculation guidance.
 - [`docs/safety-and-maintenance.md`](docs/safety-and-maintenance.md) — practical safety and maintenance considerations.
 - [`docs/references.md`](docs/references.md) — research and background sources.
@@ -56,16 +56,15 @@ Affordability, maintainability, water use, electricity use, and environmental co
 - [x] Fan mount fabricated
 - [x] Frame spray-painted
 - [x] Clay pots fixed into the frame
-- [x] ESP32 + relay + DHT11 wired; fan rule programmed (reported — firmware not yet in repository, not verified)
-- [x] Pump, reservoir and tubing installed (reported by team; photo evidence pending)
-- [ ] Loose fan cable secured and terminated before powered testing
+- [x] Two exhaust fans mounted
+- [x] Water pump with tubing, plus reservoir, installed
+- [x] ESP32, DHT11 and 3-channel relay module integrated
+- [x] Prototype fully assembled
+- [x] Control logic running on the ESP32 (two-stage fans at 28 °C / 35 °C; pump below 60 % RH)
+- [ ] Firmware source added to this repository
 - [ ] As-built measurements of the frame recorded (visual inspection done)
-- [ ] CAD model updated to match the as-built assembly (pending)
-- [ ] Staged commissioning completed (pending)
-- [ ] Water circulation commissioned: distribution and return path leak-checked and verified
-- [ ] Airflow direction and bypass checked
-- [ ] Humidity-based pump control implemented and validated (currently only proposed)
-- [ ] Baseline and wetted-pot testing completed
+- [ ] CAD model updated to match the as-built assembly
+- [ ] Performance testing: baseline and wetted-pot runs (temperature, humidity, airflow, water use)
 - [ ] Test data analysed and results documented
 
 Checkboxes are project tracking notes and should be updated only when the relevant step is completed.
@@ -84,7 +83,7 @@ Real workshop photographs are in `media/photos/`, and real SolidWorks screenshot
 
 ## Research Context
 
-ClayBreeze was inspired in part by reporting on Project Vaayu, a separate student initiative using upcycled clay cups and recirculating water. That project's reported results are not evidence of ClayBreeze performance. Refer to [`docs/project-overview.md`](docs/project-overview.md) and [`docs/references.md`](docs/references.md) for sources.
+ClayBreeze was inspired in part by reporting on Project Vaayu, a separate student initiative using upcycled clay cups and recirculating water. That project's results are not evidence of ClayBreeze performance. Refer to [`docs/project-overview.md`](docs/project-overview.md) and [`docs/references.md`](docs/references.md) for sources.
 
 ## License
 
