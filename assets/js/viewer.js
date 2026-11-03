@@ -43,10 +43,36 @@ function makeRenderer() {
   return renderer;
 }
 
+// Scene colours per page theme (data-theme on <html>; dark is the default).
+const currentTheme = () => (root.getAttribute("data-theme") === "light" ? "light" : "dark");
+const THEME = {
+  dark: { sky: 0xcfd8e6, groundSky: 0x10141b, hemi: 0.7, rim: 1.8, glow: 0x5d6f8c, glowOpacity: 0.42, shadow: 0.55, potGlow: 0.38, dim: 0xc9d1db, opening: 0xe0703a, air: 0x4fb8e0 },
+  light: { sky: 0xffffff, groundSky: 0xb9c0c9, hemi: 1.15, rim: 0.9, glow: 0x0d1117, glowOpacity: 0.07, shadow: 0.16, potGlow: 0.1, dim: 0x0d1117, opening: 0xb8501f, air: 0x1a8bc0 }
+};
+
+// Soft radial floor patch so the model has a visible ground on the dark page.
+let glowTexture = null;
+function floorGlowTexture() {
+  if (glowTexture) return glowTexture;
+  const c = document.createElement("canvas");
+  c.width = c.height = 256;
+  const g = c.getContext("2d");
+  const grad = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+  grad.addColorStop(0, "rgba(255,255,255,1)");
+  grad.addColorStop(0.55, "rgba(255,255,255,0.35)");
+  grad.addColorStop(1, "rgba(255,255,255,0)");
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 256, 256);
+  glowTexture = new THREE.CanvasTexture(c);
+  glowTexture.colorSpace = THREE.SRGBColorSpace;
+  return glowTexture;
+}
+
 function makeScene() {
   const scene = new THREE.Scene();
-  scene.add(new THREE.HemisphereLight(0xfffaf2, 0xb8ad9a, 1.15));
-  const key = new THREE.DirectionalLight(0xfff4e6, 2.1);
+  const hemi = new THREE.HemisphereLight(0xcfd8e6, 0x10141b, 0.7);
+  scene.add(hemi);
+  const key = new THREE.DirectionalLight(0xfff1e2, 2.1);
   key.position.set(1.1, 1.9, 1.5);
   key.castShadow = true;
   key.shadow.mapSize.set(1024, 1024);
@@ -55,22 +81,50 @@ function makeScene() {
   key.shadow.camera.near = 0.5; key.shadow.camera.far = 5;
   key.shadow.bias = -0.0005;
   scene.add(key);
-  const fill = new THREE.DirectionalLight(0xe8eef2, 0.55);
+  const fill = new THREE.DirectionalLight(0xe8eef2, 0.45);
   fill.position.set(-1.6, 0.7, -0.4);
   scene.add(fill);
-  const ground = new THREE.Mesh(new THREE.PlaneGeometry(4, 4), new THREE.ShadowMaterial({ opacity: 0.12 }));
-  ground.rotation.x = -Math.PI / 2;
-  ground.position.y = -DIM.height / 2 * 0.001 - 0.001;
-  ground.receiveShadow = true;
+  // Cool rim light from behind, so the light-grey frame edges separate from the background.
+  const rim = new THREE.DirectionalLight(0x9fd8f5, 1.8);
+  rim.position.set(-1.3, 1.2, -1.9);
+  scene.add(rim);
+  const ground = new THREE.Group();
   ground.userData.ground = true;
+  const glow = new THREE.Mesh(new THREE.CircleGeometry(0.85, 48), new THREE.MeshBasicMaterial({ map: floorGlowTexture(), transparent: true, depthWrite: false }));
+  glow.rotation.x = -Math.PI / 2;
+  glow.scale.set(1, 0.7, 1);
+  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(4, 4), new THREE.ShadowMaterial({ opacity: 0.5 }));
+  shadow.rotation.x = -Math.PI / 2;
+  shadow.position.y = 0.0005;
+  shadow.receiveShadow = true;
+  ground.add(glow, shadow);
+  ground.position.y = -DIM.height / 2 * 0.001 - 0.001;
   scene.add(ground);
+  scene.userData.theme = { hemi, rim, glow, shadow };
   return scene;
+}
+
+// Retint lights, floor and the warm pot emission for the page theme.
+function applySceneTheme(scene, theme) {
+  const t = THEME[theme];
+  const { hemi, rim, glow, shadow } = scene.userData.theme;
+  hemi.color.setHex(t.sky);
+  hemi.groundColor.setHex(t.groundSky);
+  hemi.intensity = t.hemi;
+  rim.intensity = t.rim;
+  glow.material.color.setHex(t.glow);
+  glow.material.opacity = t.glowOpacity;
+  shadow.material.opacity = t.shadow;
+  scene.traverse((o) => {
+    if (!o.isMesh) return;
+    (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => { if (m.userData.warm) m.emissiveIntensity = t.potGlow; });
+  });
 }
 
 // ---------------------------------------------------------------------------
 // SolidWorks GLB export (project.modelGLB): frame incl. rear extension, six rods
-// and 30 pots — no fans. It is loaded once, given restrained materials matching
-// the photographs (the export has a single glossy grey), and aligned to the
+// and 30 pots — no fans. It is loaded once, given materials matching the site
+// theme and the photographs (the export has a single glossy grey), and aligned to the
 // procedural origin (centre of the 150 mm main frame). Its nodes do not map
 // cleanly to the explorer's part groups (frame and fan mount are one mesh, no
 // fans), so explode, layers and part-click stay on the procedural model.
@@ -98,9 +152,13 @@ function loadCad() {
     wrap.add(src);
     const terracotta = new THREE.Color(APPROX.terracotta);
     const mats = {
-      frame: new THREE.MeshStandardMaterial({ color: APPROX.paint, roughness: 0.62, metalness: 0.18 }),
-      rods: new THREE.MeshStandardMaterial({ color: 0x3d3f42, roughness: 0.55, metalness: 0.45 }),
-      pots: [0, 1, 2, 3].map((i) => new THREE.MeshStandardMaterial({ color: terracotta.clone().offsetHSL((i - 1.5) * 0.006, 0, (i - 1.5) * 0.018), roughness: 0.96, metalness: 0, side: THREE.DoubleSide }))
+      frame: new THREE.MeshStandardMaterial({ color: APPROX.paint, roughness: 0.55, metalness: 0.25 }),
+      rods: new THREE.MeshStandardMaterial({ color: 0x8a939e, roughness: 0.45, metalness: 0.6 }),
+      pots: [0, 1, 2, 3].map((i) => {
+        const m = new THREE.MeshStandardMaterial({ color: terracotta.clone().offsetHSL((i - 1.5) * 0.006, 0, (i - 1.5) * 0.018), roughness: 0.92, metalness: 0, side: THREE.DoubleSide, emissive: APPROX.potGlow, emissiveIntensity: 0.38 });
+        m.userData.warm = true;
+        return m;
+      })
     };
     let potIndex = 0;
     wrap.traverse((o) => {
@@ -138,6 +196,7 @@ function attachCad(view, template) {
   });
   group.visible = false;
   view.spin.children[0].add(group);
+  applySceneTheme(view.scene, currentTheme());
   const procMats = new Set();
   for (const name of ["frame", "fanMount", "rods", "pots"]) {
     view.assembly.groups[name].traverse((o) => { if (o.isMesh) procMats.add(o.material); });
@@ -204,6 +263,7 @@ function init() {
   function stop() { if (rafId) cancelAnimationFrame(rafId); rafId = null; }
   document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
   motionQuery.addEventListener?.("change", (e) => { reduceMotion = e.matches || params.has("reducedmotion"); views.forEach((v) => v.onMotionChange?.()); });
+  window.addEventListener("claybreeze-theme", () => views.forEach((v) => v.applyTheme(currentTheme())));
 
   function claimRoaming(view) {
     if (!roamRenderer) roamRenderer = makeRenderer();
@@ -234,8 +294,7 @@ function init() {
   // ---- shared view base --------------------------------------------------
   function createView({ host, canvasSlot, label, roaming, cameraPos, fov = 30 }) {
     const scene = makeScene();
-    scene.children.find((o) => o.userData.ground).position.y = -DIM.height / 2 * 0.001 - BOUNDS.center.y - 0.001;
-    const assembly = buildAssembly();
+    scene.children.find((o) => o.userData.ground).position.y = -DIM.height / 2 * 0.001 - BOUNDS.center.y - 0.001;    const assembly = buildAssembly();
     const pivot = new THREE.Group();
     pivot.add(assembly.root);
     pivot.position.copy(BOUNDS.center).multiplyScalar(-1);
@@ -258,6 +317,11 @@ function init() {
         if (this.renderer && (!this.roaming || roamOwner === this)) this.renderer.setSize(this.width, this.height, false);
         this.dirty = true;
       },
+      applyTheme(theme) {
+        applySceneTheme(this.scene, theme);
+        this.onTheme?.(theme);
+        this.dirty = true;
+      },
       draw() {
         if (!this.renderer || (this.roaming && roamOwner !== this)) return;
         this.renderer.render(this.scene, this.camera);
@@ -265,6 +329,7 @@ function init() {
         this.dirty = false;
       }
     };
+    applySceneTheme(scene, currentTheme());
     views.push(view);
     io.observe(host);
     ro.observe(view.canvasSlot);
@@ -399,7 +464,7 @@ function init() {
 
     // --- dimension overlay (documented values only) ---
     const dims = new THREE.Group();
-    const dimMat = new THREE.LineBasicMaterial({ color: 0x2c2a26 });
+    const dimMat = new THREE.LineBasicMaterial({ color: THEME[currentTheme()].dim });
     const mm = 0.001, hw = DIM.width / 2 * mm, hh = DIM.height / 2 * mm, hd = DIM.depth / 2 * mm;
     function seg(a, b) { const g = new THREE.BufferGeometry().setFromPoints([a, b]); dims.add(new THREE.Line(g, dimMat)); }
     function dimLine(a, b, tickDir) {
@@ -413,7 +478,7 @@ function init() {
     dimLine(new THREE.Vector3(hw + 0.035, -hh, hd), new THREE.Vector3(hw + 0.035, -hh, -hd), new THREE.Vector3(0, 1, 0));
     const ow = DIM.openingW / 2 * mm, oh = DIM.openingH / 2 * mm, oz = hd + 0.002;
     const openingPts = [[-ow, -oh], [ow, -oh], [ow, oh], [-ow, oh], [-ow, -oh]].map(([x, y]) => new THREE.Vector3(x, y, oz));
-    const openingLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints(openingPts), new THREE.LineDashedMaterial({ color: 0xb5633f, dashSize: 0.012, gapSize: 0.008 }));
+    const openingLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints(openingPts), new THREE.LineDashedMaterial({ color: THEME[currentTheme()].opening, dashSize: 0.012, gapSize: 0.008 }));
     openingLine.computeLineDistances();
     dims.add(openingLine);
     dims.visible = false;
@@ -472,7 +537,12 @@ function init() {
     for (let i = 0; i < N; i += 1) respawn(i, spawnZ + Math.random() * (exitZ - spawnZ));
     const pGeo = new THREE.BufferGeometry();
     pGeo.setAttribute("position", new THREE.BufferAttribute(pPos, 3));
-    const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ color: 0x2f6479, size: 0.012, transparent: true, opacity: 0.85, depthWrite: false }));
+    const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ color: THEME[currentTheme()].air, size: 0.012, transparent: true, opacity: 0.9, depthWrite: false }));
+    view.onTheme = (theme) => {
+      dimMat.color.setHex(THEME[theme].dim);
+      openingLine.material.color.setHex(THEME[theme].opening);
+      particles.material.color.setHex(THEME[theme].air);
+    };
     particles.visible = false;
     particles.frustumCulled = false;
     view.spin.children[0].add(particles);

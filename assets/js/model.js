@@ -48,9 +48,10 @@ export const APPROX = {
   fanDuctDia: 118,
   fanDuctLen: 70,
   fanY: [150, -45],       // centres of upper and lower fan
-  paint: 0xa9aeb0,
+  paint: 0xc3c9d1,       // light grey paint (photos), tuned for the dark scene
   rawSteel: 0x7d6a4c,
-  terracotta: 0xb8673f
+  terracotta: 0xc4612e,
+  potGlow: 0x7a2a0a       // warm emissive so the pots read against the dark background
 };
 
 const W = DIM.width, H = DIM.height, D = DIM.depth, P = DIM.pipe;
@@ -108,12 +109,12 @@ function potGeometry() {
 
 function makeMaterials() {
   return {
-    frame: new THREE.MeshStandardMaterial({ color: APPROX.paint, roughness: 0.62, metalness: 0.18 }),
-    fanMount: new THREE.MeshStandardMaterial({ color: APPROX.paint, roughness: 0.62, metalness: 0.18 }),
-    rods: new THREE.MeshStandardMaterial({ color: 0x3d3f42, roughness: 0.55, metalness: 0.45 }),
-    fanBody: new THREE.MeshStandardMaterial({ color: 0xeceae4, roughness: 0.7, metalness: 0 }),
-    fanBlade: new THREE.MeshStandardMaterial({ color: 0xe2dfd8, roughness: 0.75, metalness: 0, side: THREE.DoubleSide }),
-    water: new THREE.MeshStandardMaterial({ color: 0x5f8496, roughness: 0.4, metalness: 0, transparent: true, opacity: 0.22, depthWrite: false })
+    frame: new THREE.MeshStandardMaterial({ color: APPROX.paint, roughness: 0.55, metalness: 0.25 }),
+    fanMount: new THREE.MeshStandardMaterial({ color: APPROX.paint, roughness: 0.55, metalness: 0.25 }),
+    rods: new THREE.MeshStandardMaterial({ color: 0x8a939e, roughness: 0.45, metalness: 0.6 }),
+    fanBody: new THREE.MeshStandardMaterial({ color: 0xdfe3e8, roughness: 0.7, metalness: 0 }),
+    fanBlade: new THREE.MeshStandardMaterial({ color: 0xd3d8de, roughness: 0.75, metalness: 0, side: THREE.DoubleSide }),
+    water: new THREE.MeshStandardMaterial({ color: 0x4fb8e0, roughness: 0.35, metalness: 0, transparent: true, opacity: 0.3, depthWrite: false })
   };
 }
 
@@ -182,7 +183,9 @@ export function buildAssembly() {
   const base = new THREE.Color(APPROX.terracotta);
   const potMats = [0, 1, 2, 3].map((i) => {
     const c = base.clone().offsetHSL((i - 1.5) * 0.006, 0, (i - 1.5) * 0.018);
-    return new THREE.MeshStandardMaterial({ color: c, roughness: 0.96, metalness: 0, side: THREE.DoubleSide });
+    const m = new THREE.MeshStandardMaterial({ color: c, roughness: 0.92, metalness: 0, side: THREE.DoubleSide, emissive: APPROX.potGlow, emissiveIntensity: 0.35 });
+    m.userData.warm = true;
+    return m;
   });
   const ys = rodYs(), xs = potXs();
   ys.forEach((y, r) => xs.forEach((x, c) => {

@@ -232,6 +232,28 @@
   window.addEventListener("scroll", updateScrollProgress, { passive: true });
   updateScrollProgress();
 
+  // Dark (default) / light theme, remembered per browser.
+  const themeButton = $("#theme-toggle");
+  const themeMeta = $('meta[name="theme-color"]');
+  function currentTheme() {
+    return document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+  }
+  function applyTheme(theme, save) {
+    document.documentElement.setAttribute("data-theme", theme);
+    if (themeMeta) themeMeta.setAttribute("content", theme === "light" ? "#ffffff" : "#0d1117");
+    if (themeButton) {
+      const other = theme === "light" ? "dark" : "light";
+      themeButton.setAttribute("aria-label", `Switch to ${other} theme`);
+      $(".theme-toggle-text", themeButton).textContent = other === "light" ? "Light" : "Dark";
+    }
+    if (save) {
+      try { localStorage.setItem("claybreeze-theme", theme); } catch { /* storage unavailable */ }
+    }
+    window.dispatchEvent(new CustomEvent("claybreeze-theme", { detail: { theme } }));
+  }
+  applyTheme(currentTheme(), false);
+  themeButton?.addEventListener("click", () => applyTheme(currentTheme() === "light" ? "dark" : "light", true));
+
   const presentationButton = $("#presentation-toggle");
   let presentationMode = false;
   function setPresentationMode(enabled) {
