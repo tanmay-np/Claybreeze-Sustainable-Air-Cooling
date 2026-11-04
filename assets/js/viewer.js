@@ -19,6 +19,8 @@ const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 let reduceMotion = motionQuery.matches || params.has("reducedmotion");
 const project = window.CLAYBREEZE_PROJECT || {};
 const PIXEL_RATIO = Math.min(window.devicePixelRatio || 1, 1.75);
+// Below 768 px or with Save-Data on, the GLB is fetched only when "SolidWorks model" is tapped.
+const deferCad = window.innerWidth < 768 || Boolean(navigator.connection && navigator.connection.saveData);
 
 function webglAvailable() {
   if (params.has("nowebgl")) return false;
@@ -129,7 +131,7 @@ function applySceneTheme(scene, theme) {
 // cleanly to the explorer's part groups (frame and fan mount are one mesh, no
 // fans), so explode, layers and part-click stay on the procedural model.
 // On any load error the procedural model is used everywhere.
-const cadInfo = { requested: Boolean(project.modelGLB), loaded: false, loadMs: null, triangles: 0, meshes: 0, error: null };
+const cadInfo = { requested: Boolean(project.modelGLB), deferred: deferCad, loaded: false, loadMs: null, triangles: 0, meshes: 0, error: null };
 window.__claybreezeGLB = cadInfo;
 let cadPromise = null;
 function loadCad() {
@@ -385,7 +387,8 @@ function init() {
     view.onMotionChange = function () { this.dirty = true; };
     view.resize();
     // Procedural model first; crossfade to the SolidWorks export once it has loaded.
-    loadCad().then((template) => {
+    // Small screens and Save-Data keep the procedural model (no 4.9 MB download).
+    if (!deferCad) loadCad().then((template) => {
       if (!template) return;
       view.cad = attachCad(view, template);
       setModelMode(view, view.cad, "cad", reduceMotion);
@@ -681,7 +684,10 @@ function init() {
     const cadButton = modelButtons.find((b) => b.dataset.model === "cad");
     const cadNote = host.querySelector(".cad-note");
     function setMode(mode) {
-      if (mode === "cad" && !view.cad) return;
+      if (mode === "cad" && !view.cad) {
+        if (project.modelGLB) requestCad(true);
+        return;
+      }
       if (mode === "cad") {
         select(null);
         explodeTarget = 0;
@@ -698,20 +704,42 @@ function init() {
       view.dirty = true;
     }
     modelButtons.forEach((b) => b.addEventListener("click", () => setMode(b.dataset.model)));
-    if (cadButton) {
-      cadButton.disabled = true;
-      cadButton.title = project.modelGLB ? "Loading the SolidWorks export…" : "No SolidWorks export configured";
-    }
-    loadCad().then((template) => {
-      if (!template || !cadButton) {
-        if (cadButton && project.modelGLB) cadButton.title = "The SolidWorks export could not be loaded";
-        return;
+    // Fetch the SolidWorks export (once). With switchTo, show it as soon as it is ready.
+    let cadLoading = null;
+    function requestCad(switchTo) {
+      if (!cadLoading) {
+        if (cadButton) {
+          cadButton.disabled = true;
+          cadButton.title = "Loading the SolidWorks export…";
+          if (deferCad) cadButton.textContent = "Loading SolidWorks model…";
+        }
+        cadLoading = loadCad().then((template) => {
+          if (!cadButton) return;
+          if (!template) {
+            cadButton.title = "The SolidWorks export could not be loaded";
+            cadButton.textContent = "SolidWorks model";
+            return;
+          }
+          view.cad = attachCad(view, template);
+          setModelMode(view, view.cad, "interactive", true);
+          cadButton.disabled = false;
+          cadButton.title = "";
+          cadButton.textContent = "SolidWorks model";
+        });
       }
-      view.cad = attachCad(view, template);
-      setModelMode(view, view.cad, "interactive", true);
-      cadButton.disabled = false;
-      cadButton.title = "";
-    });
+      if (switchTo) cadLoading.then(() => { if (view.cad) setMode("cad"); });
+    }
+    if (!project.modelGLB) {
+      if (cadButton) { cadButton.disabled = true; cadButton.title = "No SolidWorks export configured"; }
+    } else if (deferCad) {
+      // Small screens / Save-Data: nothing is downloaded until the visitor asks for it.
+      if (cadButton) {
+        cadButton.textContent = `SolidWorks model${project.modelGLBSize ? ` (${project.modelGLBSize})` : ""}`;
+        cadButton.title = "Downloads the SolidWorks export";
+      }
+    } else {
+      requestCad(false);
+    }
 
     function reset() {
       setMode("interactive");

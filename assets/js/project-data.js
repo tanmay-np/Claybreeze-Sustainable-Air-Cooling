@@ -22,6 +22,7 @@ window.CLAYBREEZE_PROJECT = {
   // offers it as "SolidWorks model". Set to null to use only the procedural model;
   // on any load error the procedural model is used.
   modelGLB: "assets/models/claybreeze-assembly.glb",
+  modelGLBSize: "4.9 MB", // shown on the button when the download is deferred (small screens, Save-Data)
 
   specifications: [
     { label: "Frame outer size", value: "480 W × 560 H × 150 D mm", note: "Design value (SolidWorks drawing); as-built measurement pending" },

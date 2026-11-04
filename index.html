@@ -4,15 +4,32 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0d1117">
-  <meta name="description" content="ClayBreeze (Group 17, Sanjivani University Makerspace): an engineering journal for a prototype that tests whether wetted, unglazed clay pots and fan-assisted airflow can cool air. Build complete and control logic running; performance testing is next, so no cooling results yet.">
-  <title>ClayBreeze — Engineering Journal</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%230d1117%27/%3E%3Crect x=%273.5%27 y=%273.5%27 width=%2725%27 height=%2725%27 fill=%27none%27 stroke=%27%23e0703a%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%23e0703a%27/%3E%3C/svg%3E">
+  <meta name="description" content="Group 17, Sanjivani University Makerspace: a student prototype testing whether wetted, unglazed clay pots and two fans can cool air. Build complete, control logic running on an ESP32; performance testing next.">
+  <title>ClayBreeze — Clay-Pot Evaporative Cooler | Engineering Journal</title>
+  <link rel="canonical" href="https://tanmay-np.github.io/Claybreeze-Sustainable-Air-Cooling/">
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+  <!-- Link previews (chat apps, social): the image URL must be absolute. -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ClayBreeze">
+  <meta property="og:title" content="ClayBreeze — A Sustainable Clay-Based Air-Cooling System">
+  <meta property="og:description" content="Group 17, Sanjivani University Makerspace: a student prototype testing whether wetted, unglazed clay pots and two fans can cool air. Build complete, control logic running on an ESP32; performance testing next.">
+  <meta property="og:url" content="https://tanmay-np.github.io/Claybreeze-Sustainable-Air-Cooling/">
+  <meta property="og:image" content="https://tanmay-np.github.io/Claybreeze-Sustainable-Air-Cooling/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ClayBreeze website hero: 3D model of the clay-pot cooler frame with 30 terracotta pots, next to the project title">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ClayBreeze — A Sustainable Clay-Based Air-Cooling System">
+  <meta name="twitter:description" content="Group 17, Sanjivani University Makerspace: a student prototype testing whether wetted, unglazed clay pots and two fans can cool air. Build complete, control logic running on an ESP32; performance testing next.">
+  <meta name="twitter:image" content="https://tanmay-np.github.io/Claybreeze-Sustainable-Air-Cooling/assets/og-image.jpg">
   <script>
     // Apply the saved theme before first paint (default: dark).
-    try { var t = localStorage.getItem("claybreeze-theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch (e) {}
+    try { var t = localStorage.getItem("claybreeze-theme"); if (t === "light" || t === "dark") { document.documentElement.setAttribute("data-theme", t); document.querySelector('meta[name="theme-color"]').setAttribute("content", t === "light" ? "#ffffff" : "#0d1117"); } } catch (e) {}
   </script>
   <link rel="preload" href="./assets/fonts/space-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="./assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./assets/fonts/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="./assets/css/site.css">
   <script type="importmap">
     {
@@ -48,6 +65,7 @@
       <a href="#status">Status</a>
     </nav>
     <div class="header-actions">
+      <button class="share-button" id="share-button" type="button" aria-label="Share this page"><svg class="share-mark" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 1.5v8.5M4.8 4.6 8 1.5l3.2 3.1M3 7.5v6.5h10V7.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg><span class="share-text">Share</span></button>
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light theme"><span class="theme-toggle-mark" aria-hidden="true"></span><span class="theme-toggle-text">Light</span></button>
       <button class="presentation-toggle" id="presentation-toggle" type="button" aria-pressed="false">Presentation mode</button>
       <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Open navigation"><span aria-hidden="true"></span></button>
@@ -59,7 +77,7 @@
     <!-- ============ 01 HERO ============ -->
     <section class="hero" id="top" aria-labelledby="hero-title">
       <div class="hero-model model-host" id="hero-model">
-        <img class="model-fallback" src="media/cad-screenshots/Assembly_Isometric_View.png" width="1917" height="1021" loading="lazy" alt="SolidWorks isometric view of the ClayBreeze assembly: frame, rear extension, rods and 30 pots">
+        <img class="model-fallback" data-src="media/cad-screenshots/Assembly_Isometric_View.png" width="1917" height="1021" loading="lazy" alt="SolidWorks isometric view of the ClayBreeze assembly: frame, rear extension, rods and 30 pots">
       </div>
       <div class="hero-inner shell">
         <div class="hero-copy">
@@ -71,6 +89,7 @@
             <a class="button button-quiet" href="#status">Build status</a>
           </div>
           <p class="hero-team"><span class="hero-team-label">Student</span> Tanmay&nbsp;Nilesh&nbsp;Pendbhaje · FY&nbsp;B.Tech Mechanical&nbsp;Engineering · Sanjivani&nbsp;University</p>
+          <p class="hero-team hero-guide"><span class="hero-team-label">Project Guide:</span> Dr.&nbsp;Kiran&nbsp;Wakchaure</p>
         </div>
         <p class="hero-figure-note"><span class="label-chip">3D visualisation</span> SolidWorks export and documented dimensions; fans approximate. Not a photograph.</p>
       </div>
@@ -231,7 +250,10 @@
         <p class="section-intro">The SolidWorks drawing is the source of the design dimensions. These are design values; the fabricated frame has had a visual inspection, but its as-built measurements are still pending.</p>
         <figure class="fig-primary">
           <button class="image-button" type="button" data-gallery-src="media/cad-screenshots/Drawing Sheet_With_Dimensions.png" aria-label="Open the dimensioned SolidWorks drawing in the zoomable viewer">
-            <img src="media/cad-screenshots/Drawing Sheet_With_Dimensions.png" width="1917" height="1018" loading="lazy" alt="SolidWorks dimensioned engineering drawing of the 20mm_frame: 480 by 560 millimetre outer frame, 440 millimetre opening, 150 millimetre depth, 270 millimetre overall side depth, 12 millimetre rod hole">
+            <picture>
+              <source type="image/webp" srcset="media/web/Drawing-Sheet_With_Dimensions-800.webp 800w, media/web/Drawing-Sheet_With_Dimensions-1600.webp 1600w" sizes="(min-width: 1180px) 1180px, 100vw">
+              <img src="media/cad-screenshots/Drawing Sheet_With_Dimensions.png" width="1917" height="1018" loading="lazy" decoding="async" alt="SolidWorks dimensioned engineering drawing of the 20mm_frame: 480 by 560 millimetre outer frame, 440 millimetre opening, 150 millimetre depth, 270 millimetre overall side depth, 12 millimetre rod hole">
+            </picture>
           </button>
           <figcaption><span class="label-chip">CAD drawing</span> FIG. 1 — Dimensioned SolidWorks drawing (20mm_frame). Click to open and zoom.</figcaption>
         </figure>
@@ -289,7 +311,7 @@
               <p class="stage-note airflow-note" hidden>Conceptual airflow — not measured. Rear fans blow room air forward through and around the pots.</p>
               <p class="stage-note cad-note" hidden>SolidWorks export: frame, rods and pots. Fans are not in the export and are shown from the approximate model. Explode, layers and part details use the interactive model.</p>
             </div>
-            <img class="model-fallback" src="media/cad-screenshots/Assembly_Isometric_View.png" width="1917" height="1021" loading="lazy" alt="SolidWorks isometric view of the full ClayBreeze assembly concept">
+            <img class="model-fallback" data-src="media/cad-screenshots/Assembly_Isometric_View.png" width="1917" height="1021" loading="lazy" alt="SolidWorks isometric view of the full ClayBreeze assembly concept">
             <p class="fallback-note">3D view unavailable in this browser — showing the real SolidWorks assembly screenshot instead.</p>
           </div>
           <div class="part-info" hidden>
@@ -476,10 +498,14 @@
       <div class="footer-team">
         <h2>Student</h2>
         <p>Tanmay Nilesh Pendbhaje<br>FY B.Tech Mechanical Engineering<br>Sanjivani University</p>
+        <p class="footer-guide">Project Guide: Dr. Kiran Wakchaure</p>
       </div>
-      <p>Cooling performance: <strong>not yet measured</strong>. 3D views use three.js (MIT licence, bundled locally). <a href="https://github.com/tanmay-np/Claybreeze-Sustainable-Air-Cooling#readme">Repository README</a></p>
+      <p>Cooling performance: <strong>not yet measured</strong>. 3D views use three.js (MIT licence, bundled locally).</p>
+      <p class="footer-meta">Last updated <time datetime="2026-11-04">4 November 2026</time> · <a href="https://github.com/tanmay-np/Claybreeze-Sustainable-Air-Cooling">View source on GitHub</a> · <a href="https://github.com/tanmay-np/Claybreeze-Sustainable-Air-Cooling#readme">Repository README</a></p>
     </div>
   </footer>
+
+  <p class="toast" id="toast" role="status" aria-live="polite" hidden></p>
 
   <dialog class="photo-dialog" id="photo-dialog" aria-labelledby="dialog-title">
     <div class="dialog-bar">
@@ -488,7 +514,7 @@
       <button type="button" class="dialog-btn" id="dialog-zoom" aria-pressed="false">Zoom</button>
       <button type="button" class="dialog-btn" id="dialog-close" aria-label="Close viewer">Close ×</button>
     </div>
-    <div class="dialog-image-wrap" id="dialog-image-wrap"><img id="dialog-image" src="" alt=""></div>
+    <div class="dialog-image-wrap" id="dialog-image-wrap"><img id="dialog-image" alt=""></div>
     <p class="dialog-caption" id="dialog-description"></p>
   </dialog>
 </body>

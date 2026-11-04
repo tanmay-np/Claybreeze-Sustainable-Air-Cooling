@@ -14,6 +14,8 @@ Tanmay Nilesh Pendbhaje
 FY B.Tech Mechanical Engineering  
 Sanjivani University
 
+Project Guide: Dr. Kiran Wakchaure
+
 ## Overview
 
 ClayBreeze investigates whether hollow, unglazed clay pots, supplied with recirculating water and ventilated by two rear-mounted fans, can reduce the temperature of air passing through the assembly. The project focuses on practical fabrication, water distribution, airflow, measurement, and evidence-based evaluation.

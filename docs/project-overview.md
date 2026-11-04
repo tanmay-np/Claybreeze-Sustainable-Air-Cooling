@@ -10,6 +10,8 @@ Tanmay Nilesh Pendbhaje
 FY B.Tech Mechanical Engineering  
 Sanjivani University
 
+Project Guide: Dr. Kiran Wakchaure
+
 ## 1. Introduction and Purpose
 
 **ClayBreeze** is a Makerspace prototype exploring whether wetted, unglazed clay pots can act as an evaporative cooling medium in a mechanically ventilated air-cooling assembly. The project combines a fabricated metal frame, hollow clay pots, a recirculating water arrangement (pump, tubing and reservoir installed), and two rear-mounted exhaust fans. Its purpose is to build and test the concept, document the engineering decisions, and determine how the system behaves under measured operating conditions.

@@ -15,6 +15,15 @@
     return element;
   }
 
+  // WebP copies made by tools/make-web-images.py: media/web/<name>-<width>.webp at
+  // 800 px and up to 1600 px (never upscaled). The original file stays as the fallback.
+  function webSrcset(item) {
+    const m = /^media\/(?:photos|cad-screenshots)\/(.+)\.(?:jpe?g|png)$/i.exec(item.src);
+    if (!m || !item.width) return "";
+    const base = `media/web/${m[1].replace(/ /g, "-")}`;
+    return [...new Set([Math.min(800, item.width), Math.min(1600, item.width)])].map((w) => `${base}-${w}.webp ${w}w`).join(", ");
+  }
+
   function imageFor(item, { lazy = true, sizes } = {}) {
     const img = document.createElement("img");
     img.src = item.src;
@@ -23,8 +32,15 @@
     if (item.height) img.height = item.height;
     if (lazy) img.loading = "lazy";
     img.decoding = "async";
-    if (sizes) img.sizes = sizes;
-    return img;
+    const srcset = webSrcset(item);
+    if (!srcset) return img;
+    const picture = document.createElement("picture");
+    const source = document.createElement("source");
+    source.type = "image/webp";
+    source.srcset = srcset;
+    source.sizes = sizes || "100vw";
+    picture.append(source, img);
+    return picture;
   }
 
   // ---------------- Image viewer (shared) ----------------
@@ -77,7 +93,7 @@
         const [main, ...rest] = items;
         if (main.width > main.height) li.classList.add("step-landscape");
         const figure = el("figure", "step-figure");
-        figure.append(viewerButton(main, "step-photo"));
+        figure.append(viewerButton(main, "step-photo", { sizes: main.width > main.height ? "(min-width: 1200px) 990px, 100vw" : "(min-width: 1200px) 580px, (min-width: 900px) 55vw, 100vw" }));
         const cap = el("figcaption", "step-caption");
         cap.append(el("span", "label-chip", KIND_LABEL[main.kind] || "Photo"), document.createTextNode(` ${main.description}`));
         figure.append(cap);
@@ -86,7 +102,7 @@
           const strip = el("div", "step-more");
           rest.forEach((item) => {
             const wrap = el("div", "step-more-item");
-            wrap.append(viewerButton(item, "step-thumb"), el("span", "step-thumb-caption", item.title));
+            wrap.append(viewerButton(item, "step-thumb", { sizes: "(min-width: 900px) 220px, 50vw" }), el("span", "step-thumb-caption", item.title));
             strip.append(wrap);
           });
           li.append(strip);
@@ -113,7 +129,7 @@
   const cadGrid = $("#cad-grid");
   galleryItems.filter((g) => g.category === "cad" && g.src !== "media/cad-screenshots/Drawing Sheet_With_Dimensions.png").forEach((item) => {
     const fig = el("figure", "cad-item");
-    fig.append(viewerButton(item, "cad-thumb"));
+    fig.append(viewerButton(item, "cad-thumb", { sizes: "(min-width: 1180px) 380px, (min-width: 700px) 50vw, 100vw" }));
     const cap = el("figcaption", "");
     cap.append(el("span", "label-chip", KIND_LABEL[item.kind]), document.createTextNode(` ${item.title}`));
     fig.append(cap);
@@ -125,11 +141,11 @@
   if (notesBody && project.modelNotes) {
     const n = project.modelNotes;
     notesBody.append(el("p", "", n.summary));
-    notesBody.append(el("h4", "", "Documented or confirmed"));
+    notesBody.append(el("h3", "", "Documented or confirmed"));
     const ul = el("ul");
     n.documented.forEach((d) => ul.append(el("li", "", d)));
     notesBody.append(ul);
-    notesBody.append(el("h4", "", "Values used in the interactive model, and their source"));
+    notesBody.append(el("h3", "", "Values used in the interactive model, and their source"));
     const table = el("table", "notes-table");
     table.innerHTML = "<thead><tr><th scope=\"col\">Item</th><th scope=\"col\">Value used</th><th scope=\"col\">Source</th></tr></thead>";
     const tbody = el("tbody");
@@ -162,7 +178,7 @@
     galleryCount.textContent = `${visible.length} ${visible.length === 1 ? "image" : "images"}`;
     visible.forEach((item) => {
       const card = el("figure", "gallery-card");
-      card.append(viewerButton(item, "gallery-thumb"));
+      card.append(viewerButton(item, "gallery-thumb", { sizes: "(min-width: 1180px) 280px, (min-width: 600px) 33vw, 100vw" }));
       const cap = el("figcaption");
       cap.append(el("span", "label-chip", KIND_LABEL[item.kind] || "Image"), el("strong", "gallery-title", item.title));
       card.append(cap);
@@ -254,6 +270,34 @@
   applyTheme(currentTheme(), false);
   themeButton?.addEventListener("click", () => applyTheme(currentTheme() === "light" ? "dark" : "light", true));
 
+  // Share: the native share sheet where available, otherwise copy the link.
+  const toast = $("#toast");
+  let toastTimer = null;
+  function showToast(message) {
+    if (!toast) return;
+    toast.textContent = message;
+    toast.hidden = false;
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => { toast.hidden = true; }, 2600);
+  }
+  async function copyLink(url) {
+    try {
+      await navigator.clipboard.writeText(url);
+      showToast("Link copied");
+    } catch {
+      showToast(`Copy this link: ${url}`);
+    }
+  }
+  $("#share-button")?.addEventListener("click", async () => {
+    const url = (document.querySelector('link[rel="canonical"]') || {}).href || location.href;
+    const data = { title: document.title, text: "ClayBreeze — a clay-pot evaporative cooling prototype", url };
+    if (navigator.share && (!navigator.canShare || navigator.canShare(data))) {
+      try { await navigator.share(data); } catch (err) { if (err && err.name !== "AbortError") copyLink(url); }
+    } else {
+      copyLink(url);
+    }
+  });
+
   const presentationButton = $("#presentation-toggle");
   let presentationMode = false;
   function setPresentationMode(enabled) {
@@ -265,6 +309,20 @@
   presentationButton?.addEventListener("click", () => setPresentationMode(!presentationMode));
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && presentationMode && !(dialog && dialog.open)) setPresentationMode(false);
+  });
+
+  // The CAD screenshots behind the 3D views (data-src) are only downloaded when they can be
+  // seen: without WebGL, or when printing.
+  function loadFallbackImages() {
+    $$("img.model-fallback[data-src]").forEach((img) => { img.src = img.dataset.src; img.removeAttribute("data-src"); });
+  }
+  if (document.documentElement.classList.contains("no-webgl")) loadFallbackImages();
+  new MutationObserver(() => {
+    if (document.documentElement.classList.contains("no-webgl")) loadFallbackImages();
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+  window.addEventListener("beforeprint", () => {
+    loadFallbackImages();
+    $$('img[loading="lazy"]').forEach((img) => { img.loading = "eager"; });
   });
 
   // If the 3D module never starts (old browser, blocked module), show the CAD fallback.
