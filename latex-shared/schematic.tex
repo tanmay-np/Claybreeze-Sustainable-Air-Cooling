@@ -1,0 +1,47 @@
+% ClayBreeze working-principle schematic (side view), shared by the poster and the report.
+% Conceptual — not measured. Coordinates follow the website SVG (x right, y down), 760 x 330 units.
+% Use inside \resizebox{<width>}{!}{\input{.../schematic.tex}}.
+\begin{tikzpicture}[x=1pt, y=-1pt, font=\sffamily\bfseries\fontsize{21}{24}\selectfont,
+    air/.style={line width=3pt, -{Latex[length=14pt,width=12pt]}, black},
+    bypass/.style={line width=2.2pt, dash pattern=on 9pt off 7pt, -{Latex[length=12pt,width=10pt]}, black!60},
+    water/.style={line width=4pt, cbwater},
+    lbl/.style={anchor=base west, inner sep=0pt}]
+  % frame (main) and rear extension
+  \draw[line width=3pt] (300,52) rectangle (380,266);
+  \draw[line width=2.5pt, black!60] (380,52) rectangle (444,266);
+  % pots on six rods
+  \foreach \y in {74,108,142,176,210,244}
+    \fill[cbclay, draw=white, line width=1.5pt] (310,\y) -- (332,\y-13) -- (348,\y-13) -- (361,\y) -- (348,\y+13) -- (332,\y+13) -- cycle;
+  % fans
+  \draw[line width=2pt, fill=black!8] (428,88) rectangle (439,148);
+  \draw[line width=2pt, fill=black!8] (428,166) rectangle (439,226);
+  % air path
+  \draw[air] (600,118) -- (446,118);
+  \draw[air] (600,196) -- (446,196);
+  \draw[air] (424,118) .. controls (400,118) and (390,108) .. (364,108);
+  \draw[air] (424,196) .. controls (400,196) and (390,176) .. (364,176);
+  \draw[air] (300,108) -- (150,108);
+  \draw[air] (300,176) -- (150,176);
+  \draw[bypass] (424,92) .. controls (380,70) and (350,44) .. (300,44) .. controls (260,44) and (220,64) .. (150,64);
+  \node[lbl] at (608,112) {Room air};
+  \node[lbl] at (608,136) {in};
+  \node[lbl] at (608,190) {Rear fans};
+  \node[lbl] at (608,214) {blow forward};
+  \node[lbl] at (4,100) {Out of};
+  \node[lbl] at (4,124) {the front};
+  \node[lbl] at (4,168) {More humid};
+  \node[lbl, black!60] at (4,58) {Bypass};
+  \node[anchor=base east, inner sep=0pt, black!60] at (272,264) {Front};
+  \node[lbl, black!60] at (452,264) {Rear};
+  % water path: tub -> pump -> tubing -> top of pots -> back to tub
+  \draw[line width=3pt, cbwater, fill=cbwater!12] (250,276) rectangle (500,316);
+  \draw[line width=3pt, cbwater, fill=white] (282,296) circle (13);
+  \node[cbwater] at (282,296) {P};
+  \draw[water, -{Latex[length=14pt,width=12pt]}] (282,283) -- (282,22) -- (330,22);
+  \draw[water] (340,22) -- (372,22);
+  \foreach \x in {318,340,362} \draw[cbwater, line width=2.5pt, dash pattern=on 4pt off 6pt] (\x,28) -- (\x,48);
+  \draw[water, -{Latex[length=12pt,width=10pt]}] (371,262) -- (371,274);
+  \node[lbl, cbwater] at (510,292) {Tub};
+  \node[lbl, cbwater] at (510,314) {+ pump};
+  \node[anchor=base east, inner sep=0pt, cbwater] at (272,226) {Tubing};
+\end{tikzpicture}

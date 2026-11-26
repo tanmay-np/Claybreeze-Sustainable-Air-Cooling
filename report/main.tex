@@ -1,0 +1,546 @@
+% ClayBreeze — Final Project Report
+% Build (from this folder): pdflatex main.tex (run twice). Output copied to ClayBreeze_Project_Report.pdf
+\documentclass[11pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+\usepackage[a4paper, margin=25mm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{amsmath, amssymb}
+\usepackage{textcomp}
+\usepackage{float}
+\usepackage[font=small, labelfont=bf]{caption}
+\usepackage{subcaption}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
+
+\graphicspath{{../media/photos/}{../media/cad-screenshots/}{../latex-shared/}}
+
+\definecolor{cbclay}{RGB}{184,80,31}
+\definecolor{cbwater}{RGB}{26,111,148}
+\definecolor{cbok}{RGB}{27,122,79}
+\newcommand{\degC}{\,\textdegree C}
+\newcommand{\dia}{$\varnothing$}
+
+\setlist{itemsep=2pt, topsep=4pt}
+\titleclass{\chapter}{straight}
+\titleformat{\chapter}[hang]{\LARGE\bfseries\color{cbclay}}{\thechapter}{0.6em}{}
+\titlespacing*{\chapter}{0pt}{14pt}{10pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small ClayBreeze --- Final Project Report}
+\fancyhead[R]{\small Group 17, Makerspace}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\thepage}\renewcommand{\headrulewidth}{0pt}}
+
+\renewcommand{\bibname}{References}
+
+\begin{document}
+
+% ======================= TITLE PAGE =======================
+\begin{titlepage}
+\centering
+\vspace*{8mm}
+{\large\textsc{Sanjivani University, Kopargaon}\par}
+{\normalsize School of Engineering and Technology \textperiodcentered\ Department of Mechanical Engineering\par}
+\vspace{4mm}
+{\normalsize FY B.Tech Mechanical Engineering \textperiodcentered\ Makerspace \textperiodcentered\ Tinkerers' Lab\par}
+\vspace{12mm}
+{\color{cbclay}\rule{\linewidth}{1.2pt}\par}
+\vspace{6mm}
+{\fontsize{34}{40}\selectfont\bfseries ClayBreeze\par}
+\vspace{4mm}
+{\LARGE A Sustainable Clay-Based Air-Cooling System\par}
+\vspace{6mm}
+{\color{cbclay}\rule{\linewidth}{1.2pt}\par}
+\vspace{10mm}
+{\Large Final Project Report\par}
+\vspace{8mm}
+\includegraphics[height=58mm]{Water_System_Tub_Front_Right_View.jpeg}\par
+\vspace{8mm}
+
+{\large\textbf{Group 17}\par}
+\vspace{3mm}
+\begin{tabular}{l}
+Tanmay Nilesh Pendbhaje \textit{(Team Leader)}\\
+Harshal Kotame\\
+Vedant Khairnar\\
+Tanmay Mhaske\\
+\end{tabular}
+\vspace{8mm}
+
+{\large Project Guide: \textbf{Dr.\ Kiran Wakchaure}\par}
+\vfill
+{\normalsize November 2026\par}
+\end{titlepage}
+
+% ======================= ABSTRACT =======================
+\begin{abstract}
+\noindent Summer heat in Indian homes, classrooms and workshops is a real and growing problem, and affordable cooling is limited: the Government of India's \emph{India Cooling Action Plan} notes that India has one of the lowest levels of access to cooling in the world~\cite{icap}. Air conditioners are expensive to buy and run and use refrigerants with climate impact; evaporative coolers are cheaper but depend on honeycomb, cellulose or grass pads that clog, degrade, can harbour mould and must be replaced.
+
+\medskip\noindent ClayBreeze is a Makerspace prototype that replaces the consumable pad with \textbf{30 porous, unglazed terracotta pots} --- a natural, locally made, reusable and biodegradable material --- held in a welded 20\,mm square-pipe frame (480 $\times$ 560 $\times$ 150\,mm). A pump in a tub below the frame recirculates water through tubing to the top of the pots, and two rear-mounted exhaust fans blow room air through and around the wet pots. An ESP32 microcontroller reads a DHT11 temperature and humidity sensor and switches the fans and pump through a three-channel relay: both fans are off at or below 28\degC, one fan runs above 28\degC, both run above 35\degC, and the pump runs only while relative humidity is below 60\,\%.
+
+\medskip\noindent The prototype is fully built and its control logic is running. This report documents the problem, background, design and CAD, materials, fabrication, water system, electronics, safety and the planned tests. \textbf{No performance results are reported}: low cost, low power, no pad replacement and an eco-friendly build are the design aims, and they will be checked by the measurements described in Chapter~\ref{ch:testing}.
+\end{abstract}
+
+\tableofcontents
+\listoffigures
+\clearpage
+
+% ======================= 1 INTRODUCTION =======================
+\chapter{Introduction and Problem}
+
+\section{Summer heat and access to cooling}
+Summers in much of India are hot, and many homes, government-school classrooms and small workshops have little or no mechanical cooling. The \emph{India Cooling Action Plan} (Ministry of Environment, Forest \& Climate Change, 2019) states that India has one of the lowest levels of access to cooling in the world, and that cooling demand --- and with it refrigerant use and energy use for cooling --- is set to rise~\cite{icap}. The plan also emphasises passive and low-energy cooling strategies alongside efficient active equipment~\cite{icap}. Practical, affordable and low-energy cooling for ordinary buildings is therefore a real engineering need, not a theoretical one.
+
+\section{What households, schools and workshops can use today}
+Table~\ref{tab:options} summarises the options we examined during a summer internship at Tinkerers' Lab, Sanjivani University. Pad-type evaporative coolers \emph{do} cool, particularly in dry air~\cite{watson}; the problems we focus on are their consumable pads, upkeep and hygiene.
+
+\begin{table}[H]
+\centering
+\caption{Cooling options and their practical limitations (qualitative).}
+\label{tab:options}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Option} & \textbf{Strengths} & \textbf{Limitations} \\
+\midrule
+Air conditioner (vapour compression) & Controlled cooling over a wide humidity range; dehumidifies. & High purchase and running cost; high electrical demand; refrigerants with climate impact~\cite{epa,energystar,icap}. Out of reach for many households and schools. \\
+Honeycomb / cellulose pad cooler & Cheaper; large wetted area; established designs. & Pads clog with scale and dust, degrade and need periodic replacement; mineral deposits reduce performance~\cite{watson,doe}; plastic bodies. \\
+Grass (khus / wood-wool) pad cooler & Local, low-cost pad media; simple construction. & Damp organic pads can harbour mould and bacteria, cause odour and attract insects; combustible when dry; natural fibres degrade and need frequent replacement~\cite{alsulaiman,jain}. \\
+\textbf{ClayBreeze} (this work) & Terracotta pots: natural, locally made, reusable, biodegradable; no pad to replace; ESP32 runs loads only when needed. & Design aims only --- cooling, water use, power and service life are still to be measured. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Problem statement}
+\begin{quote}
+Summer heat in Indian homes, classrooms and workshops is a real problem, and affordable cooling is limited. Air conditioners are expensive to buy and run, draw high power and use refrigerants with climate impact. Pad-type coolers need their honeycomb or cellulose pads replaced as they clog with scale and dust, and grass pads can grow mould and bacteria, smell, attract insects, become a fire risk when dry and need frequent replacement.
+
+\textbf{Can a low-cost, low-power cooler that uses porous, unglazed terracotta pots --- with recirculating water and automatic fan and pump control --- replace the consumable pad and produce a measurable reduction in air temperature under defined conditions?}
+\end{quote}
+The project must also establish whether the pots wet consistently, whether excess water returns safely to the tub, whether the frame stays stable when loaded and wet, and whether the system can be operated and maintained safely.
+
+\section{Proposed solution}
+ClayBreeze replaces the pad with 30 porous, unglazed terracotta pots arranged 5 columns $\times$ 6 rows on six \dia12\,mm rods in a welded frame. A pump in a tub under the frame lifts water through tubing to the top of the pots; excess water drains back to the tub. Two exhaust fans on a rear extension frame blow room air forward through and around the wet pots and out of the front. An ESP32 with a DHT11 sensor and a three-channel relay stages the fans by temperature and runs the pump by humidity (Chapter~\ref{ch:electronics}). The design aims are:
+\begin{itemize}
+\item \textbf{Low cost:} common materials --- square pipe, rods, clay pots, a plastic tub, a small pump and two fans.
+\item \textbf{Low power:} two fans and a small pump, switched on only when the readings call for them.
+\item \textbf{No pad replacement:} the fired clay pots are the wetted medium and are reusable.
+\item \textbf{Eco-friendly:} terracotta is natural, locally made and biodegradable; no refrigerant is used.
+\end{itemize}
+These are aims, not results; they are tested by the plan in Chapter~\ref{ch:testing}.
+
+\section{Inspiration: Project Vaayu}
+ClayBreeze was inspired in part by reporting on \emph{Project Vaayu}, a separate student initiative in Delhi that used clay tea cups (kulhads), scrap wood and metal and water circulation to build cooling units for government-school classrooms~\cite{toi,afn}. Project Vaayu is \textbf{not our work}, and its reported outcomes are not evidence of how ClayBreeze performs; our measurements will be recorded independently.
+
+% ======================= 2 BACKGROUND =======================
+\chapter{Background and Literature}
+
+\section{Direct evaporative cooling}
+When water evaporates from a wet surface it absorbs latent heat from the water, the surface and the surrounding air. If air passes over a wetted medium, part of its sensible heat is converted into the latent energy of water vapour: the air's dry-bulb temperature can fall while its moisture content and relative humidity rise~\cite{watson}. The wet-bulb temperature is the theoretical lower limit for direct evaporative cooling. In dry air the gap between dry-bulb and wet-bulb temperature is larger, so the cooling potential is larger; in humid air it is smaller~\cite{watson}. Direct evaporative coolers always add moisture to the air, so outlet humidity must be measured alongside temperature.
+
+\section{Porous clay and ceramic media}
+Unglazed fired clay contains connected pores that absorb water and move it through the wall by capillary action, so the outer surface stays wet. Several studies have examined porous clay or ceramic media for evaporative cooling: a pottery-based direct evaporative cooling pad~\cite{laknizi}, a porous clay vessel under different ambient humidities~\cite{mittal}, a passive evaporative wall built from porous ceramics~\cite{hoyano} and an earth--air heat exchanger using porous clay vessels~\cite{elsaid}. These studies show that porous ceramics are a credible wetted medium, but their geometries, clay bodies and test conditions differ from ClayBreeze; \textbf{their results are not transferred to this prototype}.
+
+\section{Pad materials and maintenance}
+Comparative studies of pad materials --- including natural fibres such as khus and aspen and manufactured pads --- show that performance and degradation depend on the material, packing, airflow and water distribution~\cite{jain,alsulaiman}. Mineral deposits, dirt and biological growth obstruct airflow and require cleaning or pad replacement; evaporative coolers also consume water through evaporation and bleed-off~\cite{watson,doe}.
+
+\section{Air conditioning considerations}
+Room air conditioners use a compressor and refrigerant circuit. Their energy use depends on efficiency, sizing and climate~\cite{energystar}, and their climate impact depends on the refrigerant and on leakage; lower-global-warming-potential refrigerants are being adopted~\cite{epa,icap}. A fair comparison with ClayBreeze would need measured cooling, comfort and energy data, which this report does not claim.
+
+% ======================= 3 OBJECTIVES =======================
+\chapter{Objectives and Scope}
+
+\section{Objectives}
+\begin{enumerate}
+\item Design and build a clay-pot evaporative cooler from natural, locally available and reusable materials, with a stable frame, secured pot-retaining rods and rear-mounted fans. \textcolor{cbok}{\textbf{Complete.}}
+\item Build a recirculating water system --- tub, pump and tubing --- that wets the pots without a consumable pad. \textcolor{cbok}{\textbf{Installed}} (specifications and leak check to record).
+\item Add smart, low-power control: ESP32 + DHT11 + relay, staging the fans by temperature and running the pump only below 60\,\% RH. \textcolor{cbok}{\textbf{Implemented and running.}}
+\item Update the SolidWorks model and drawing to match the as-built assembly. \emph{To do.}
+\item Observe whether the pots wet consistently and stay securely supported in operation. \emph{To do.}
+\item Measure inlet and outlet temperature and RH, airflow, water use and electrical input against a dry-pot (fan-only) baseline. \emph{To do.}
+\item Evaluate cost, maintenance and safety from measurements and records before drawing conclusions about affordability or sustainability. \emph{To do.}
+\item Document design changes, trials and limitations so the work is reproducible.
+\end{enumerate}
+
+\section{Scope and limitations}
+\textbf{In scope:} frame, rods and fan mounting; the water circuit; the control electronics; CAD updates from as-built measurements; controlled prototype tests where instruments are available; basic assessment of operation, cleaning and safety.
+
+\noindent\textbf{Out of scope / not claimed:} replacing an air conditioner or a commercial cooler; any guaranteed temperature reduction, energy saving, payback or carbon reduction; whole-room comfort assessment; long-term durability and hygiene, which need extended use.
+
+% ======================= 4 DESIGN AND CAD =======================
+\chapter{Design and CAD}
+
+\section{Design dimensions}
+The frame was designed in SolidWorks. Table~\ref{tab:dims} lists the design dimensions from the dimensioned drawing (Figure~\ref{fig:drawing}). As-built dimensions have not yet been measured; the CAD model is to be revised once they are.
+
+\begin{table}[H]
+\centering
+\caption{Design dimensions (SolidWorks drawing and model).}
+\label{tab:dims}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Frame outer size (W $\times$ H $\times$ D) & 480 $\times$ 560 $\times$ 150\,mm \\
+Front opening & 440 $\times$ 520\,mm \\
+Frame section & 20\,mm square pipe (wall thickness to be confirmed) \\
+Overall depth with rear fan-mount extension & 270\,mm \\
+Pot-retaining rods & 6 $\times$ \dia12\,mm, 90\,mm pitch (CAD) \\
+Pot array & 30 pots, 5 columns $\times$ 6 rows \\
+Pot model size (CAD) & \dia80\,mm max, 80\,mm long, \dia40\,mm openings \\
+Fan-mount members & centred 132.5\,mm in from each side member \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\linewidth]{cad-drawing-full.png}
+\caption{SolidWorks engineering drawing of the frame (cropped from the drawing sheet): front view (480 $\times$ 560\,mm), side view (270\,mm overall depth, \dia12\,mm rod), top views (440 $\times$ 150\,mm) and isometric view.}
+\label{fig:drawing}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.56\linewidth}\centering
+\includegraphics[width=\linewidth, trim=780 40 560 120, clip]{Assembly_Isometric_View.png}
+\caption{Assembly, isometric view}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.4\linewidth}\centering
+\includegraphics[width=\linewidth, trim=700 40 520 160, clip]{Assebly_Front_View.png}
+\caption{Assembly, front view (5 $\times$ 6 pots)}
+\end{subfigure}
+\caption{SolidWorks assembly: frame, rear extension, rods and the 30-pot array.}
+\label{fig:assembly}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.32\linewidth}\centering
+\includegraphics[width=\linewidth, trim=700 120 500 160, clip]{Frame.png}
+\caption{Frame with extension}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\linewidth}\centering
+\includegraphics[width=\linewidth, trim=700 250 500 250, clip]{Rod.png}
+\caption{Retaining rod}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\linewidth}\centering
+\includegraphics[width=\linewidth, trim=750 200 550 200, clip]{Clay_Pot.png}
+\caption{Clay pot (kullad\_part)}
+\end{subfigure}
+\caption{SolidWorks part models. The rod file is named ``20mm\_rod'', but the drawing calls it out at \dia12\,mm, matching the physical rods.}
+\label{fig:parts}
+\end{figure}
+
+\section{Working principle}
+Figure~\ref{fig:schematic} shows the intended air and water paths. The two fans on the rear extension take in room air from behind and blow it forward through and around the pots and out of the front. Water goes from the tub to the pump, up the tubing to the top of the pots, and drains back to the tub. Because the pots do not seal against each other or the frame, some air bypasses them; this has not been measured.
+
+\begin{figure}[H]
+\centering
+\resizebox{0.9\linewidth}{!}{\input{../latex-shared/schematic.tex}}
+\caption{Working principle, side view (conceptual --- not measured). Air: room air $\rightarrow$ rear fans $\rightarrow$ through and around the pots $\rightarrow$ front. Water: tub $\rightarrow$ pump $\rightarrow$ tubing $\rightarrow$ pots $\rightarrow$ tub.}
+\label{fig:schematic}
+\end{figure}
+
+% ======================= 5 MATERIALS =======================
+\chapter{Materials and Components}
+
+Table~\ref{tab:materials} lists the materials and components. Makes, models and ratings that have not been recorded are marked as such rather than estimated. Costs are not reported because no cost record exists yet.
+
+\begin{table}[H]
+\centering
+\caption{Materials and components.}
+\label{tab:materials}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{3.6cm}>{\raggedright\arraybackslash}p{1.4cm}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Item} & \textbf{Qty} & \textbf{Notes} \\
+\midrule
+Square metal pipe, 20\,mm & as cut & Frame and rear fan-mount extension; welded and spray-painted grey. Wall thickness and grade to record. \\
+Steel rods, \dia12\,mm & 6 & Pot-retaining rods through drilled holes in the frame. \\
+Unglazed clay pots (kulhad type) & 30 & Hollow-through, 5 $\times$ 6. Size, mass and porosity to measure. \\
+Exhaust fans & 2 & On the rear extension, blowing forward. Model and rating to record. \\
+Plastic tub (reservoir) & 1 & Grey tub under the frame; collects return water. Size and capacity to record. \\
+Water pump & 1 & In the tub; switched by the relay. Model, flow and head to record. \\
+Clear tubing and connector & as fitted & From the pump up the frame to the top of the pots. Length and bore to record. \\
+ESP32 development board & 1 & Runs the control logic. \\
+DHT11 sensor & 1 & Temperature and relative humidity. \\
+3-channel relay module & 1 & Switches fan 1, fan 2 and the pump. \\
+Breadboard, jumper wires & -- & Prototype wiring; not water-resistant. \\
+Spray paint, welding consumables & -- & Frame finishing and fabrication. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ======================= 6 FABRICATION =======================
+\chapter{Fabrication Process}
+
+The prototype was fabricated in the university workshop. The steps below follow the photographs taken during the build; dates are not recorded because the photographs carry no date metadata.
+
+\section{Cutting and welding the frame}
+The 20\,mm square pipe was marked and cut to length on an abrasive chop saw, sorted by length and welded into a box frame (Figure~\ref{fig:fab1}).
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.24\linewidth}\includegraphics[width=\linewidth]{Frame_pipe_cutting_1.jpeg}\caption{Cutting pipe}\end{subfigure}\hfill
+\begin{subfigure}[b]{0.24\linewidth}\includegraphics[width=\linewidth]{Frame_pipe_cutting_3.jpeg}\caption{Marking length}\end{subfigure}\hfill
+\begin{subfigure}[b]{0.24\linewidth}\includegraphics[width=\linewidth]{Pipes_Cut_All_1.jpeg}\caption{Cut sections}\end{subfigure}\hfill
+\begin{subfigure}[b]{0.24\linewidth}\includegraphics[width=\linewidth]{Frame_Welded_1.jpeg}\caption{Welded frame}\end{subfigure}
+\caption{Cutting and welding the square-pipe frame.}
+\label{fig:fab1}
+\end{figure}
+
+\section{Marking and drilling the rod holes; fitting the rods}
+Rod-hole positions were centre-punched on the square-pipe members so the drill would start accurately. The holes were drilled and six \dia12\,mm rods were fitted across the width of the frame. A rear extension frame was then welded on to carry the fans (Figure~\ref{fig:fab2}).
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.3\linewidth}\includegraphics[width=\linewidth, trim=0 0 0 0]{Drill_Point_Marking_2.jpeg}\caption{Centre-punching}\end{subfigure}\hfill
+\begin{subfigure}[b]{0.3\linewidth}\includegraphics[width=\linewidth]{Frame_Rod_Assembled_1.jpeg}\caption{Rods fitted}\end{subfigure}\hfill
+\begin{subfigure}[b]{0.3\linewidth}\includegraphics[width=\linewidth]{Frame_Rod_assembled_With_Fan_Extension1.jpeg}\caption{Rear fan-mount extension}\end{subfigure}
+\caption{Rod holes, rods and the rear fan-mount extension.}
+\label{fig:fab2}
+\end{figure}
+
+\section{Painting, fans and pots}
+The frame was spray-painted grey and the two exhaust fans were mounted one above the other on the rear extension, facing forward. Thirty unglazed clay pots were then threaded onto the rods, mouths facing the front (Figure~\ref{fig:fab3}). The photographs show a loose fan cable at the top of the frame, which must be secured before powered testing.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.3\linewidth}\includegraphics[width=\linewidth]{Frame_with_Rod_And_Exhaust_Fan_Colourd.jpeg}\caption{Painted, fans fitted}\end{subfigure}\hfill
+\begin{subfigure}[b]{0.3\linewidth}\includegraphics[width=\linewidth]{Frame_Completely_Assembled_Front_View.jpeg}\caption{30 pots, front}\end{subfigure}\hfill
+\begin{subfigure}[b]{0.3\linewidth}\includegraphics[width=\linewidth]{Frame_Completely_Assembled_Side_View.jpeg}\caption{Pots and fans, side}\end{subfigure}
+\caption{Painted frame, fans and the 30-pot array.}
+\label{fig:fab3}
+\end{figure}
+
+% ======================= 7 WATER SYSTEM =======================
+\chapter{Water System}
+
+The assembled frame stands inside a grey plastic tub that acts as the reservoir. A small pump in the tub (visible as a green unit with a black power cable in the front-right corner) lifts water through clear tubing that runs up a front post of the frame, through a blue connector, and along the top of the frame so water can wet the pots from above. Water that does not evaporate drains back into the tub (Figure~\ref{fig:water}).
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.32\linewidth}\includegraphics[width=\linewidth]{Water_System_Tub_Front_Right_View.jpeg}\caption{Front-right: tub, tubing, pump}\end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\linewidth}\includegraphics[width=\linewidth]{Water_System_Tub_Front_Left_View.jpeg}\caption{Front-left: tubing and connector}\end{subfigure}\hfill
+\begin{subfigure}[b]{0.32\linewidth}\includegraphics[width=\linewidth]{Water_System_Tub_Side_View.jpeg}\caption{Side: fans, tubing into tub}\end{subfigure}
+\caption{The installed water system: the frame stands in the tub; tubing carries water from the pump to the top of the frame.}
+\label{fig:water}
+\end{figure}
+
+\noindent Still to be recorded: tub dimensions and capacity, pump make, rating, flow and head, tubing length and bore, the distribution layout at the top, and a leak check. The supply cables beside the tub must be secured and kept clear of water.
+
+% ======================= 8 ELECTRONICS =======================
+\chapter{Electronics and Control Logic}
+\label{ch:electronics}
+
+\section{Architecture}
+The ESP32 reads temperature and relative humidity from the DHT11 and drives a three-channel relay module that switches the two fans and the pump (Figure~\ref{fig:arch}). The figure is functional only; GPIO pins, relay channel mapping and wiring are not documented here and should be taken from the firmware and component datasheets.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=7mm and 12mm, every node/.style={font=\sffamily\small},
+  box/.style={draw, rounded corners=2pt, minimum width=30mm, minimum height=9mm, align=center, line width=0.8pt},
+  arr/.style={-{Latex[length=2.5mm]}, line width=0.8pt}]
+  \node[box] (dht) {DHT11\\temperature, RH};
+  \node[box, right=of dht, fill=cbclay!10] (esp) {ESP32\\control logic};
+  \node[box, right=of esp] (relay) {3-channel\\relay module};
+  \node[box, above right=4mm and 12mm of relay] (f1) {Fan 1};
+  \node[box, right=12mm of relay] (f2) {Fan 2};
+  \node[box, below right=4mm and 12mm of relay, fill=cbwater!10] (p) {Water pump};
+  \draw[arr] (dht) -- (esp);
+  \draw[arr] (esp) -- (relay);
+  \draw[arr] (relay) -- (f1);
+  \draw[arr] (relay) -- (f2);
+  \draw[arr] (relay) -- (p);
+\end{tikzpicture}
+\caption{Functional architecture of the control electronics (not a wiring diagram).}
+\label{fig:arch}
+\end{figure}
+
+\section{Implemented control logic}
+\begin{table}[H]
+\centering
+\begin{minipage}[t]{0.47\linewidth}\centering
+\caption{Fan control (temperature).}
+\label{tab:fans}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{DHT11 temperature} & \textbf{Fans} \\
+\midrule
+$\le 28$\degC & Both OFF \\
+$> 28$\degC and $\le 35$\degC & One fan ON \\
+$> 35$\degC & Both fans ON \\
+\bottomrule
+\end{tabular}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.47\linewidth}\centering
+\caption{Pump control (humidity).}
+\label{tab:pump}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{DHT11 relative humidity} & \textbf{Pump} \\
+\midrule
+$< 60$\,\% & ON \\
+$\ge 60$\,\% & OFF \\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\end{table}
+
+\noindent At exactly 28.0\degC both fans are off; at exactly 35.0\degC one fan is on; at exactly 60.0\,\% RH the pump is off. Two physical points matter when interpreting this logic:
+\begin{itemize}
+\item Direct evaporative cooling has less potential in humid air~\cite{watson}, so stopping the pump at high RH avoids pumping water for little benefit.
+\item Stopping the pump does not instantly dry the pots; their surfaces keep evaporating for some time, so humidity and cooling lag the pump's on/off state.
+\end{itemize}
+
+\section{Open engineering questions}
+Sensor placement (ambient, inlet or outlet air), start-up behaviour before the first valid reading, rapid relay switching near the thresholds (hysteresis is not yet implemented), and whether the chosen thresholds are useful are all to be settled by testing. A browser simulation of this logic is available on the project website; it is software only and is not connected to the hardware.
+
+% ======================= 9 SAFETY =======================
+\chapter{Safety and Maintenance}
+
+\section{Mechanical}
+Inspect welds and joints before loading; remove burrs and sharp edges; check that rods hold the pots without point-loading or cracking them; keep the frame stable; secure the fans and guard accessible blades; isolate power before adjusting rods, fans, tubing or pots.
+
+\section{Water and electrical}
+Keep water, splashes and runoff away from fan motors, connectors, the relay and the ESP32. The breadboard electronics are not water-resistant and must be kept out of the drip path and later enclosed. Have any mains wiring and protective devices checked by a qualified person; do not rely on software as the only means of isolation; never handle wiring with wet hands; de-energise before refilling, cleaning or repairing leaks; do not run the pump dry or against a blocked outlet.
+
+\section{Hygiene and maintenance}
+Use clean water and drain the tub when the cooler will be idle, so water does not stagnate. Inspect the tub, tubing and pots for deposits, slime, blockages, cracks and leaks, and clean them with methods compatible with the clay and pump~\cite{doe}. Record cracked pots, corrosion, loose fasteners and changes in flow or fan noise.
+
+% ======================= 10 TESTING =======================
+\chapter{Testing Plan}
+\label{ch:testing}
+
+\section{Test conditions}
+Two conditions will be compared, keeping fan settings, sensor positions and test duration the same: (1) a \textbf{fan-only / dry-pot baseline} with the pump off, and (2) a \textbf{wetted-pot condition} with the pump and fans running. Ambient temperature, relative humidity, location, sun and wind will be recorded for every run, and runs repeated where possible.
+
+\section{Measurements}
+\begin{table}[H]
+\centering
+\caption{Planned measurements.}
+\label{tab:measure}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{3.6cm}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Quantity} & \textbf{Method} \\
+\midrule
+Inlet temperature and RH & Behind the rear fans, where room air enters; away from wet clay. \\
+Outlet temperature and RH & In front of the pots at documented points; several points if flow is uneven. \\
+Ambient conditions & Near the setup, outside the wet airstream. \\
+Air velocity & Anemometer at documented points, if available (a point velocity is not total flow). \\
+Water use & Tub level or mass at start and end of a timed run; leaks and refills noted separately. \\
+Electrical input & Nameplate ratings, and measured power with a suitable meter if available and safe. \\
+Control behaviour & Fan stage and pump state against the DHT11 reading and a reference hygrometer/thermometer. \\
+Wetting and return flow & Photographs of wetting pattern, dry spots, leaks and return flow. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Calculations}
+Once reliable measurements exist:
+\begin{align*}
+\Delta T &= T_\text{inlet} - T_\text{outlet} \\
+\Delta RH &= RH_\text{outlet} - RH_\text{inlet} \quad \text{(percentage points)}\\
+\text{Water-use rate} &= \frac{\text{net water loss}}{\text{test duration}} \\
+\text{Electrical energy} &= \bar{P} \times t
+\end{align*}
+A positive $\Delta T$ shows that outlet air was cooler than inlet air for that run; it does not by itself establish room-wide cooling or superiority over another cooler. RH must be interpreted with the simultaneous temperatures.
+
+% ======================= 11 RESULTS =======================
+\chapter{Results}
+
+\begin{center}
+\fbox{\begin{minipage}{0.9\linewidth}\centering\vspace{3mm}
+\textbf{Results: to be measured.}\\[2mm]
+Performance testing is in progress. No temperature, humidity, airflow, water-use, power or cost results have been recorded, and none are reported here. Results will be added only from real measurements, with the raw data and the test conditions.
+\vspace{3mm}\end{minipage}}
+\end{center}
+
+\begin{table}[H]
+\centering
+\caption{Results template (to be filled from measurements).}
+\label{tab:results}
+\small
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+\textbf{Run} & \textbf{Mode} & $T_\text{in}$ & $T_\text{out}$ & $RH_\text{in}$ & $RH_\text{out}$ & \textbf{Water} & \textbf{Power} \\
+ & & (\textdegree C) & (\textdegree C) & (\%) & (\%) & (L/h) & (W) \\
+\midrule
+1 & Dry baseline & -- & -- & -- & -- & -- & -- \\
+2 & Wetted pots & -- & -- & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+What \emph{has} been verified is qualitative: the prototype is fully assembled, and the control logic is running on the ESP32, switching the fans and the pump.
+
+% ======================= 12 CHALLENGES =======================
+\chapter{Challenges}
+\begin{itemize}
+\item Cutting and welding the square pipe so the frame stays square and true to the design size.
+\item Marking and drilling rod holes in line on opposite members so the rods pass straight through.
+\item Supporting 30 fragile clay pots securely without cracking them.
+\item Routing tubing so water reaches the top of the pot array and drains back to the tub.
+\item Keeping the breadboard electronics and supply cables away from water.
+\item Choosing thresholds for the temperature-staged fans and the humidity-based pump.
+\item Keeping the CAD model in step with the physical build.
+\end{itemize}
+
+% ======================= 13 CONCLUSION =======================
+\chapter{Conclusion and Future Scope}
+
+\section{Conclusion}
+ClayBreeze addresses a real problem --- affordable cooling for hot Indian homes, classrooms and workshops --- by replacing the consumable cooler pad with porous, unglazed terracotta pots, kept wet by a recirculating water system and controlled by an ESP32. The frame, 30 pots, fans, tub, pump and tubing are complete, and the temperature-staged fan control and humidity-based pump control are running. The design aims of low cost, low power, no pad replacement and an eco-friendly build are \emph{plausible but unproven}: they will be confirmed or rejected by the tests in Chapter~\ref{ch:testing}.
+
+\section{Future scope}
+\begin{itemize}
+\item Run dry-baseline and wetted-pot tests: inlet/outlet temperature and RH, airflow, water use and electrical power.
+\item Add an even top water-distribution header and complete a leak check.
+\item Move the electronics to a PCB in a splash-proof enclosure; add fan guards.
+\item Add hysteresis to the thresholds, a water-level sensor in the tub and a dry-run cut-out for the pump.
+\item Study other pot sizes, spacings and clay bodies.
+\item Record costs from receipts; update the SolidWorks model and drawing to the as-built prototype.
+\end{itemize}
+
+\section*{Project links}
+\begin{itemize}
+\item Live website (3D model, photos, docs): \url{https://tanmay-np.github.io/Claybreeze-Sustainable-Air-Cooling/}
+\item GitHub repository: \url{https://github.com/tanmay-np/Claybreeze-Sustainable-Air-Cooling}
+\end{itemize}
+
+% ======================= REFERENCES =======================
+\begin{thebibliography}{99}
+\addcontentsline{toc}{chapter}{References}
+\bibitem{icap} Ministry of Environment, Forest \& Climate Change (Ozone Cell), Government of India. \emph{India Cooling Action Plan}. New Delhi, March 2019. \url{https://ozonecell.nic.in/india-cooling-action-plan}
+\bibitem{watson} J.\,A.~Watson, C.~G\'omez, R.~Bucklin, J.\,D.~Leary, D.\,B.~McConnell. \emph{Fan and Pad Greenhouse Evaporative Cooling Systems}. University of Florida IFAS Extension, CIR1135/AE069. \url{https://edis.ifas.ufl.edu/AE069}
+\bibitem{laknizi} A.~Laknizi, A.~Ben Abdellah, M.~Faqir, E.~Essadiqi, S.~Dhimdi. Performance characterization of a direct evaporative cooling pad based on pottery material. \emph{International Journal of Sustainable Engineering}, 14(1):46--56, 2021. doi:10.1080/19397038.2019.1677800
+\bibitem{mittal} A.~Mittal, T.~Kataria, G.\,K.~Das, S.\,G.~Chatterjee. Evaporative cooling of water in a small vessel under varying ambient humidity. \emph{International Journal of Green Energy}, 3(4):347--368, 2006. doi:10.1080/01971520600704654
+\bibitem{hoyano} J.~He, A.~Hoyano. Experimental study of cooling effects of a passive evaporative cooling wall constructed of porous ceramics with high water soaking-up ability. \emph{Building and Environment}, 45(2):461--472, 2010. doi:10.1016/j.buildenv.2009.07.002
+\bibitem{elsaid} E.\,M.\,S.~El-Said et al. Experimental investigation of earth-air heat exchanger using porous clay vessels for eco-friendly buildings. \emph{Scientific Reports}, 14:17548, 2024. \url{https://www.nature.com/articles/s41598-024-67212-5}
+\bibitem{jain} J.\,K.~Jain, D.\,A.~Hindoliya. Experimental performance of new evaporative cooling pad materials. \emph{Sustainable Cities and Society}, 1(4):252--256, 2011. doi:10.1016/j.scs.2011.07.005
+\bibitem{alsulaiman} F.~Al-Sulaiman. Evaluation of the performance of local fibers in evaporative cooling. \emph{Energy Conversion and Management}, 43(16):2267--2273, 2002. doi:10.1016/S0196-8904(01)00121-2
+\bibitem{doe} U.S. Department of Energy, Federal Energy Management Program. \emph{Best Management Practice \#13: Other Water-Intensive Processes}. \url{https://www.energy.gov/cmei/femp/best-management-practice-13-other-water-intensive-processes}
+\bibitem{epa} U.S. Environmental Protection Agency. \emph{Transitioning to Low-GWP Alternatives in Residential and Light Commercial Air Conditioning}. \url{https://www.epa.gov/snap/transitioning-low-gwp-alternatives-residential-and-light-commercial-air-conditioning}
+\bibitem{energystar} ENERGY STAR. \emph{Room Air Conditioners}. \url{https://www.energystar.gov/products/room_air_conditioners}
+\bibitem{toi} The Times of India / ETimes Trending Desk. Inside Project Vayu: Delhi students turn kulhads and scrap wood into eco-coolers for underprivileged government school kids. 8 May 2026. (Inspiration only.)
+\bibitem{afn} Action For Nature. 2026 International Young Eco-Hero Award listing describing Project Vaayu. \url{https://actionfornature.org/eco-hero-winners/tag/Terracotta%2BCooling}
+\end{thebibliography}
+
+\end{document}

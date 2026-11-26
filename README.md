@@ -1,7 +1,8 @@
 # ClayBreeze — A Sustainable Clay-Based Air-Cooling System
 
 **Live site:** https://tanmay-np.github.io/Claybreeze-Sustainable-Air-Cooling/  
-**Poster (A1 PDF):** [poster/ClayBreeze_Poster_A1.pdf](poster/ClayBreeze_Poster_A1.pdf)
+**Poster (PDF):** [poster/ClayBreeze_Poster_Stanford.pdf](poster/ClayBreeze_Poster_Stanford.pdf)  
+**Project report (PDF):** [report/ClayBreeze_Project_Report.pdf](report/ClayBreeze_Project_Report.pdf)
 
 > A Makerspace prototype exploring porous clay as a wetted medium for direct evaporative cooling.
 
@@ -52,7 +53,8 @@ Inspired by reporting on Project Vaayu, a separate student initiative — see [`
 - [`docs/safety-and-maintenance.md`](docs/safety-and-maintenance.md) — practical safety and maintenance considerations.
 - [`docs/references.md`](docs/references.md) — research and background sources.
 - [`data/test-data-template.csv`](data/test-data-template.csv) — blank CSV header for recording real measurements.
-- [`poster/`](poster/) — A1 portrait project poster: [`ClayBreeze_Poster_A1.pdf`](poster/ClayBreeze_Poster_A1.pdf), a [preview PNG](poster/ClayBreeze_Poster_preview.png) and the HTML source (`claybreeze-poster.html`, printed to PDF with headless Chrome).
+- [`poster/`](poster/) — project poster [`ClayBreeze_Poster_Stanford.pdf`](poster/ClayBreeze_Poster_Stanford.pdf) (36 × 24 in, LaTeX source in `poster/stanford/`, built on the MIT-licensed [stanford_beamer_poster](https://github.com/sanhacheong/stanford_beamer_poster) template, without Stanford logos). The earlier A1 version is kept: [`ClayBreeze_Poster_A1.pdf`](poster/ClayBreeze_Poster_A1.pdf) (HTML source `claybreeze-poster.html`).
+- [`report/`](report/) — final project report [`ClayBreeze_Project_Report.pdf`](report/ClayBreeze_Project_Report.pdf), LaTeX source `report/main.tex`. Shared LaTeX figures (schematic, CAD crops, QR) are in `latex-shared/`. Build with `pdflatex` (MiKTeX/TeX Live), run twice.
 
 ## Current Build Status
 
