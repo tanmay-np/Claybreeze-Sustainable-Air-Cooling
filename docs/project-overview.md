@@ -14,13 +14,21 @@ Project Guide: Dr. Kiran Wakchaure
 
 ## 1. Introduction and Purpose
 
-**ClayBreeze** is a Makerspace prototype exploring whether wetted, unglazed clay pots can act as an evaporative cooling medium in a mechanically ventilated air-cooling assembly. The project combines a fabricated metal frame, hollow clay pots, a recirculating water arrangement (pump, tubing and reservoir installed), and two rear-mounted exhaust fans. Its purpose is to build and test the concept, document the engineering decisions, and determine how the system behaves under measured operating conditions.
+**ClayBreeze** is a Makerspace prototype aimed at a real-world problem: summer heat in Indian homes, classrooms and workshops, where affordable cooling is limited. It uses porous, unglazed terracotta pots — a natural, locally made, reusable and biodegradable material — as the wetted evaporative medium instead of a replaceable pad. The build combines a fabricated metal frame, 30 hollow clay pots, a recirculating water system (tub, pump and tubing) and two rear-mounted exhaust fans, switched by an ESP32 that stages the fans by temperature and runs the pump by humidity.
 
-The project is motivated by an interest in practical cooling approaches that use accessible materials. Affordability, maintainability, water use, electricity use, and environmental considerations are therefore **evaluation goals**, not established benefits. No cooling performance, operating-cost reduction, or environmental advantage is claimed for ClayBreeze until it has been tested and compared fairly with a suitable baseline.
+The **design aim** is a cooler that is low-cost, low-power, needs no pad replacement and is built from eco-friendly materials. These are aims, not established results: performance has **not yet been measured**, and no cooling performance, operating-cost reduction or environmental advantage is claimed until ClayBreeze has been tested and compared fairly with a suitable baseline.
 
 ## 2. Background and Motivation
 
-During a summer internship at **Tinkerers' Lab, Sanjivani University**, we considered ways to explore cooling without beginning with a conventional room air conditioner. Our observations led us to examine several approaches, including traditional grass-fibre evaporative coolers, manufactured cellulose or honeycomb evaporative pads, and vapour-compression air conditioners. We became interested in hollow clay pots as an alternative wetted medium that could be arranged in a frame and supplied with recirculating water.
+Summers in much of India are hot, and many homes, government-school classrooms and small workshops have little or no mechanical cooling. The Government of India's *India Cooling Action Plan* notes that India has one of the lowest levels of access to cooling in the world, and that cooling demand — and with it refrigerant use and energy use for cooling — is set to rise. [13]
+
+During a summer internship at **Tinkerers' Lab, Sanjivani University**, we looked at the options a household, school or workshop actually has:
+
+- **Air conditioners** are expensive to buy and to run, draw high electrical power, and use refrigerants with a climate impact. For many households and schools they are out of reach. [9][10][13]
+- **Pad-type evaporative coolers** (honeycomb / cellulose pads) are cheaper, but the pads clog with scale and dust, degrade, and need periodic replacement; the bodies are usually plastic. [3][8]
+- **Grass-pad coolers** (khus / wood-wool) can harbour mould and bacteria when kept damp, cause odour and attract insects, are combustible when dry, and need frequent pad replacement. [11][12]
+
+Pad coolers do cool — the issue is the upkeep and the consumable pad, not whether evaporation works. We became interested in hollow, unglazed clay pots as a wetted medium that is natural, locally made and reusable, arranged in a frame and supplied with recirculating water.
 
 These approaches serve different needs and cannot be ranked fairly without considering the climate, design, purchase cost, maintenance, airflow, water availability, electricity supply, and required level of temperature and humidity control.
 
@@ -41,9 +49,15 @@ Project Vaayu is an **inspiration and reference project**, not evidence of ClayB
 
 ## 4. Problem Statement
 
-Can a frame containing hollow, unglazed clay pots, supplied with recirculating water and ventilated by two exhaust fans, produce a measurable reduction in air temperature across the assembly under defined ambient conditions—and, if so, what water use, airflow, humidity change, and electrical input are associated with that result?
+Summer heat in Indian homes, classrooms and workshops is a real problem, and affordable cooling is limited. Air conditioners are expensive to buy and run, draw high power and use refrigerants with climate impact. Pad-type coolers need their honeycomb or cellulose pads replaced as they clog with scale and dust, and grass (khus / wood-wool) pads can grow mould and bacteria, smell, attract insects, become a fire risk when dry and need frequent replacement. [3][8][9][11][12][13]
 
-The project must also establish whether the pots can be wetted consistently, whether excess water returns safely to the reservoir, whether the frame and attachments remain stable when loaded and wet, and whether the system can be operated and maintained safely. The answer is not yet known; it will be based on testing rather than assumption.
+**Can a low-cost, low-power cooler that uses porous, unglazed terracotta pots — with recirculating water and automatic fan and pump control — replace the consumable pad and produce a measurable reduction in air temperature under defined conditions?** If so, what water use, airflow, humidity change and electrical input go with that result?
+
+The project must also establish whether the pots wet consistently, whether excess water returns safely to the tub, whether the frame stays stable when loaded and wet, and whether the system can be operated and maintained safely. The answer is not yet known; it will be based on testing rather than assumption.
+
+### Proposed solution
+
+ClayBreeze replaces the pad with **30 porous, unglazed terracotta pots** (5 × 6) held on six ⌀12 mm rods in a welded 20 mm square-pipe frame. A pump in a tub under the frame lifts water through tubing to the top of the pots; excess water drains back to the tub. Two exhaust fans on a rear extension frame blow room air forward through and around the wet pots. An **ESP32** reads a **DHT11** sensor and switches the fans and pump through a **3-channel relay**: both fans off at or below 28 °C, one fan above 28 °C, both above 35 °C; pump on below 60 % RH. Clay is natural, locally made, reusable and biodegradable, so there is no pad to replace. Low cost, low power and an eco-friendly build are the **design aims**; they will be checked by testing.
 
 ## 5. Design and Architecture
 
@@ -100,15 +114,14 @@ ClayBreeze's actual behaviour will also depend on the pot material and exposed a
 
 The project aims to:
 
-1. Complete a mechanically stable frame assembly with secured pot-retaining rods and rear-mounted fans. **(Frame, rods, fan mount, paint and pot installation are complete.)**
-2. Update the SolidWorks model and engineering drawing to match the as-built assembly.
-3. Build and inspect a water delivery and return arrangement. **(Pump, reservoir and tubing installed; humidity-based pump control running on the ESP32. Reservoir/tubing specifications and a leak-check still need recording.)**
-4. Observe whether the chosen unglazed pots wet consistently and remain securely supported during operation.
-5. Measure inlet and outlet air temperature and relative humidity under documented conditions.
-6. Measure or estimate airflow and record fan and pump electrical input where suitable instruments are available.
-7. Quantify water consumption over a defined test period and check for leakage or unintended water loss.
-8. Evaluate operating behaviour, maintainability, material costs, and safety before drawing conclusions about affordability or sustainability.
-9. Document design changes, unsuccessful trials, limitations, and improvements so that the work is reproducible and useful as an engineering portfolio project.
+1. Design and build a clay-pot evaporative cooler from natural, locally available and reusable materials, with a stable frame, secured pot-retaining rods and rear-mounted fans. **(Frame, rods, fan mount, paint and 30 pots complete.)**
+2. Build a recirculating water system — tub, pump and tubing — that wets the pots without a consumable pad. **(Installed; specifications and a leak-check still to record.)**
+3. Add smart, low-power control: ESP32 + DHT11 + relay, staging the fans by temperature and running the pump only below 60 % RH. **(Implemented and running.)**
+4. Update the SolidWorks model and engineering drawing to match the as-built assembly.
+5. Observe whether the pots wet consistently and remain securely supported during operation.
+6. Measure inlet and outlet air temperature and relative humidity, airflow, water use and electrical input under documented conditions, against a dry-pot (fan-only) baseline.
+7. Evaluate cost, maintenance (no pad replacement) and safety from measurements and records before drawing conclusions about affordability or sustainability.
+8. Document design changes, unsuccessful trials, limitations and improvements so the work is reproducible.
 
 ## 8. Scope and Limitations
 
@@ -172,6 +185,7 @@ The references below provide background on the inspiration project, the physics 
 10. **ENERGY STAR.** “Room Air Conditioners.” [Product guidance](https://www.energystar.gov/products/room_air_conditioners). Discusses equipment sizing and energy-efficiency considerations for room air conditioners.
 11. **Jain, J. K., & Hindoliya, D. A.** “Experimental performance of new evaporative cooling pad materials.” *Sustainable Cities and Society*, 1(4), 252–256 (2011). [https://doi.org/10.1016/j.scs.2011.07.005](https://doi.org/10.1016/j.scs.2011.07.005). Laboratory comparison including khus and aspen fibres and other pad materials.
 12. **Al-Sulaiman, F.** “Evaluation of the performance of local fibers in evaporative cooling.” *Energy Conversion and Management*, 43(16), 2267–2273 (2002). [https://doi.org/10.1016/S0196-8904(01)00121-2](https://doi.org/10.1016/S0196-8904(01)00121-2). Experimental comparison of natural fibre pad materials and a commercial wetted pad, including performance degradation and material maintenance considerations.
+13. **Ministry of Environment, Forest & Climate Change (Ozone Cell), Government of India.** *India Cooling Action Plan.* New Delhi, March 2019. [Official page](https://ozonecell.nic.in/india-cooling-action-plan) · [PDF](https://ozonecell.nic.in/wp-content/uploads/2019/03/INDIA-COOLING-ACTION-PLAN-e-circulation-version080319.pdf). National plan on access to cooling, rising cooling demand, refrigerant transition and energy efficiency; cited qualitatively, no figures used.
 
 ---
 

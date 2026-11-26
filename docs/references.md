@@ -15,6 +15,8 @@ The sources below inform the background and the test plan. They do not establish
 11. **Jain, J. K., & Hindoliya, D. A.** “Experimental performance of new evaporative cooling pad materials.” *Sustainable Cities and Society* 1(4), 252–256 (2011). [DOI: 10.1016/j.scs.2011.07.005](https://doi.org/10.1016/j.scs.2011.07.005). Comparative experimental study of pad materials.
 12. **Al-Sulaiman, F.** “Evaluation of the performance of local fibers in evaporative cooling.” *Energy Conversion and Management* 43(16), 2267–2273 (2002). [DOI: 10.1016/S0196-8904(01)00121-2](https://doi.org/10.1016/S0196-8904(01)00121-2). Experimental comparison of natural-fibre wetted pads and a commercial pad.
 
+13. **Ministry of Environment, Forest & Climate Change (Ozone Cell), Government of India.** *India Cooling Action Plan.* New Delhi, March 2019. [Official page](https://ozonecell.nic.in/india-cooling-action-plan) · [PDF](https://ozonecell.nic.in/wp-content/uploads/2019/03/INDIA-COOLING-ACTION-PLAN-e-circulation-version080319.pdf). States that India has one of the lowest levels of access to cooling and that cooling demand, refrigerant use and energy use for cooling are set to rise. Used qualitatively for the problem framing; no figures from it are used.
+
 ## Citation Notes
 
 - Project Vaayu reporting is used only to explain inspiration and motivation.

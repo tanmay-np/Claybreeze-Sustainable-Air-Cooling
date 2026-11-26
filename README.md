@@ -19,9 +19,11 @@ Project Guide: Dr. Kiran Wakchaure
 
 ## Overview
 
-ClayBreeze investigates whether hollow, unglazed clay pots, supplied with recirculating water and ventilated by two rear-mounted fans, can reduce the temperature of air passing through the assembly. The project focuses on practical fabrication, water distribution, airflow, measurement, and evidence-based evaluation.
+**The problem.** Summer heat in Indian homes, classrooms and workshops is a real problem, and affordable cooling is limited ([India Cooling Action Plan, 2019](https://ozonecell.nic.in/india-cooling-action-plan)). Air conditioners are expensive to buy and run, draw high power and use refrigerants with climate impact, so many households and schools cannot use them. Pad-type coolers do cool, but their honeycomb/cellulose pads clog with scale and dust and need replacing, and grass (khus / wood-wool) pads can grow mould and bacteria, smell, attract insects, become a fire risk when dry and need frequent replacement.
 
-Affordability, maintainability, water use, electricity use, and environmental considerations are evaluation goals—not proven advantages. No cooling-performance or cost-saving result is claimed until the prototype is tested.
+**Our solution.** ClayBreeze uses 30 porous, unglazed terracotta pots — natural, locally made, reusable and biodegradable — as the wetted evaporative medium, with a recirculating tub–pump–tubing water system and ESP32 control (fans staged by temperature, pump by humidity). The design aim is low cost, low power, no pad replacement and an eco-friendly build. **These are aims, not results:** performance has not yet been measured, and no cooling or cost-saving result is claimed until the prototype is tested.
+
+Inspired by reporting on Project Vaayu, a separate student initiative — see [`docs/project-overview.md`](docs/project-overview.md).
 
 ## Current Design Snapshot
 

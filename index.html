@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0d1117">
-  <meta name="description" content="Group 17, Sanjivani University Makerspace: a student prototype testing whether wetted, unglazed clay pots and two fans can cool air. Build complete, control logic running on an ESP32; performance testing next.">
+  <meta name="description" content="Group 17, Sanjivani University Makerspace: a low-cost clay-pot evaporative cooler for hot Indian homes, classrooms and workshops — terracotta pots instead of replaceable pads, with ESP32 control. Build complete; performance testing next.">
   <title>ClayBreeze — Clay-Pot Evaporative Cooler | Engineering Journal</title>
   <link rel="canonical" href="https://tanmay-np.github.io/Claybreeze-Sustainable-Air-Cooling/">
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
@@ -13,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ClayBreeze">
   <meta property="og:title" content="ClayBreeze — A Sustainable Clay-Based Air-Cooling System">
-  <meta property="og:description" content="Group 17, Sanjivani University Makerspace: a student prototype testing whether wetted, unglazed clay pots and two fans can cool air. Build complete, control logic running on an ESP32; performance testing next.">
+  <meta property="og:description" content="Group 17, Sanjivani University Makerspace: a low-cost clay-pot evaporative cooler for hot Indian homes, classrooms and workshops — terracotta pots instead of replaceable pads, with ESP32 control. Build complete; performance testing next.">
   <meta property="og:url" content="https://tanmay-np.github.io/Claybreeze-Sustainable-Air-Cooling/">
   <meta property="og:image" content="https://tanmay-np.github.io/Claybreeze-Sustainable-Air-Cooling/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
@@ -21,7 +21,7 @@
   <meta property="og:image:alt" content="ClayBreeze website hero: 3D model of the clay-pot cooler frame with 30 terracotta pots, next to the project title">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ClayBreeze — A Sustainable Clay-Based Air-Cooling System">
-  <meta name="twitter:description" content="Group 17, Sanjivani University Makerspace: a student prototype testing whether wetted, unglazed clay pots and two fans can cool air. Build complete, control logic running on an ESP32; performance testing next.">
+  <meta name="twitter:description" content="Group 17, Sanjivani University Makerspace: a low-cost clay-pot evaporative cooler for hot Indian homes, classrooms and workshops — terracotta pots instead of replaceable pads, with ESP32 control. Build complete; performance testing next.">
   <meta name="twitter:image" content="https://tanmay-np.github.io/Claybreeze-Sustainable-Air-Cooling/assets/og-image.jpg">
   <script>
     // Apply the saved theme before first paint (default: dark).
@@ -83,7 +83,7 @@
         <div class="hero-copy">
           <p class="eyebrow">Group 17 · Sanjivani University · Makerspace</p>
           <h1 id="hero-title">ClayBreeze <span class="h1-sub">— A Sustainable Clay-Based Air-Cooling System</span></h1>
-          <p class="hero-lede">A student prototype testing whether wetted, unglazed clay pots and two rear-mounted fans can measurably cool the room air the fans blow forward through them. The prototype is fully built and its control logic is running on an ESP32. Performance testing is next, so no cooling results are claimed yet.</p>
+          <p class="hero-lede">Summer heat in Indian homes, classrooms and workshops, with little affordable cooling. ClayBreeze replaces the replaceable cooler pad with porous terracotta pots, kept wet by recirculating water and ventilated by two ESP32-controlled fans. The prototype is fully built and its control logic is running; performance testing is next, so no cooling results are claimed yet.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#journey">Explore the build <span aria-hidden="true">↓</span></a>
             <a class="button button-quiet" href="#status">Build status</a>
@@ -103,8 +103,8 @@
           <h2 id="problem-title">The problem, and what inspired us</h2>
         </header>
         <div class="prose">
-          <p class="lede">During a summer internship at Tinkerers' Lab, Sanjivani University, we looked for practical cooling approaches built from accessible materials, without starting from a conventional room air conditioner.</p>
-          <p>We compared three established directions — natural-fibre evaporative coolers, cellulose or honeycomb pads, and vapour-compression air conditioning. None can be ranked fairly without considering climate, cost, maintenance, airflow, water and electricity. We chose to test a fourth option: hollow, unglazed clay pots as the wetted medium, held in a welded frame and supplied with recirculating water.</p>
+          <p class="lede">Summer heat in Indian homes, classrooms and workshops is a real problem, and affordable cooling is limited — the Government of India's <a class="text-link" href="https://ozonecell.nic.in/india-cooling-action-plan" target="_blank" rel="noopener">India Cooling Action Plan</a> notes that India has one of the lowest levels of access to cooling in the world.</p>
+          <p>During a summer internship at Tinkerers' Lab, Sanjivani University, we looked at what a household, school or workshop can actually use. Air conditioners are expensive to buy and run and use refrigerants with climate impact. Pad coolers do cool, but their pads clog, degrade and must be replaced; grass pads can also grow mould, smell and become a fire risk when dry. Our answer: replace the pad with porous, unglazed terracotta pots — natural, locally made and reusable — kept wet by recirculating water, with ESP32 control of the fans and pump. Low cost, low power and no pad replacement are the design aims; testing will show how well it works.</p>
         </div>
         <div class="table-wrap" tabindex="0" role="region" aria-labelledby="compare-caption">
           <table class="compare-table">
@@ -113,10 +113,10 @@
               <tr><th scope="col">Approach</th><th scope="col">Potential advantages</th><th scope="col">Limitations and considerations</th></tr>
             </thead>
             <tbody>
-              <tr><th scope="row">Grass / natural-fibre coolers</th><td>Local media; simple construction; evaporation instead of a compressor.</td><td>Performance and life depend on fibre, packing, water distribution and cleaning. Limited by ambient humidity; adds moisture.</td></tr>
-              <tr><th scope="row">Cellulose / honeycomb pads</th><td>Repeatable air passages and large wetted area; established designs.</td><td>Need even wetting and cleaning; deposits reduce performance; water is consumed.</td></tr>
-              <tr><th scope="row">Vapour-compression air conditioning</th><td>Controlled cooling across a wide humidity range; can dehumidify.</td><td>Compressor and refrigerant circuit; energy use depends on efficiency, sizing and climate.</td></tr>
-              <tr class="row-highlight"><th scope="row">ClayBreeze (this prototype)</th><td>Tests whether readily available unglazed clay pots can serve as the wetted medium.</td><td>Performance unknown. Wetting, bypass airflow, water use and service life must be measured.</td></tr>
+              <tr><th scope="row">Air conditioners</th><td>Controlled cooling across a wide humidity range; can dehumidify.</td><td>High purchase and running cost and high electrical demand; refrigerants with climate impact. Out of reach for many households and schools.</td></tr>
+              <tr><th scope="row">Honeycomb / cellulose pad coolers</th><td>Cheaper; large wetted area; established designs that do cool, best in dry air.</td><td>Pads clog with scale and dust, degrade and need periodic replacement; plastic bodies.</td></tr>
+              <tr><th scope="row">Grass pad coolers (khus / wood-wool)</th><td>Local, low-cost media; simple construction.</td><td>Damp pads can harbour mould and bacteria, cause odour and attract insects; combustible when dry; frequent replacement.</td></tr>
+              <tr class="row-highlight"><th scope="row">ClayBreeze (this prototype)</th><td>Terracotta pots: natural, locally made, reusable, biodegradable — no pad to replace. The ESP32 runs fans and pump only when needed.</td><td>Design aims, not results: cooling, water use, power and service life are still to be measured.</td></tr>
             </tbody>
           </table>
         </div>
@@ -128,7 +128,7 @@
         </aside>
         <blockquote class="question">
           <p class="eyebrow">The question we are answering</p>
-          <p>Can a prototype using hollow, unglazed clay pots, recirculating water and fan-assisted airflow produce a measurable reduction in air temperature under defined conditions, with practical water use, adequate airflow and safe operation?</p>
+          <p>Can a low-cost, low-power cooler that uses porous terracotta pots instead of a replaceable pad — with recirculating water and automatic fan and pump control — produce a measurable reduction in air temperature under defined conditions, with practical water use and safe operation?</p>
         </blockquote>
       </div>
     </section>
@@ -484,6 +484,7 @@
               <li>Laknizi et al. “Performance characterization of a direct evaporative cooling pad based on pottery material.” <em>Int. J. Sustainable Engineering</em> 14(1), 2021.</li>
               <li>Mittal et al. “Evaporative Cooling of Water in a Small Vessel Under Varying Ambient Humidity.” <em>Int. J. Green Energy</em> 3(4), 2006.</li>
               <li>El-Said et al. “Experimental investigation of earth-air heat exchanger using porous clay vessels…” <em>Scientific Reports</em> 14, 2024.</li>
+              <li>Ministry of Environment, Forest &amp; Climate Change, Govt. of India. <em>India Cooling Action Plan.</em> March 2019 — access to cooling and rising cooling demand (cited qualitatively).</li>
             </ol>
             <p><a class="text-link" href="https://github.com/tanmay-np/Claybreeze-Sustainable-Air-Cooling/blob/main/docs/references.md">All references with links ↗</a></p>
           </div>
