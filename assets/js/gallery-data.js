@@ -244,7 +244,7 @@ window.CLAYBREEZE_GALLERY = [
     alt: "SolidWorks part view of a double-cone clay pot model, named kullad_part, with a top opening and a smaller side hole",
     description: "The clay-pot part model (kullad_part): a double-cone body with an open mouth and a small side hole for the rod."
   },
-  // --- Digital fabrication at Tinkerers' Lab (media/fabrication-lab/): lab practice work, not ClayBreeze parts ---
+  // --- Fab Lab Notebook (media/fabrication-lab/): 3D printing and laser cutting skills learned and practised at Tinkerers' Lab ---
   {
     src: "media/fabrication-lab/3DP_Bambu_H2D_With_AMS.jpeg",
     title: "Bambu Lab H2D with AMS",
@@ -378,7 +378,7 @@ window.CLAYBREEZE_GALLERY = [
     kind: "photo",
     width: 1280, height: 960,
     alt: "A grey 3D-printed housing with a yellow printed crank arm on a desk, wired to a motor-driver board and a microcontroller on a breadboard, with a laptop and a bench power supply behind",
-    description: "A practice mechanism with a printed housing and crank arm, wired to a motor driver and a microcontroller. It is not part of ClayBreeze."
+    description: "A practice mechanism with a printed housing and crank arm, wired to a motor driver and a microcontroller."
   },
   {
     src: "media/fabrication-lab/Laser_SIL_CO2_Cutter.jpeg",
@@ -461,4 +461,18 @@ window.CLAYBREEZE_GALLERY = [
     alt: "A small square pen holder made of laser-cut MDF panels joined with finger joints, holding a pen, on a desk",
     description: "A pen holder assembled from laser-cut MDF panels with finger joints, a typical press-fit exercise."
   }
+  // --- READY SLOT: upcoming laser-cutting photos (work in progress) ---
+  // 1. Copy the photo into media/fabrication-lab/ with a URL-safe name, e.g. Laser_<Short_Description>.jpeg
+  // 2. Run: python tools/make-web-images.py   (creates the WebP copies)
+  // 3. Uncomment the entry below (remove the leading "//" and keep the comma after the previous entry),
+  //    describe only what is visible, and set width/height to the photo's pixel size.
+  // ,{
+  //   src: "media/fabrication-lab/Laser_<Short_Description>.jpeg",
+  //   title: "<What was cut or engraved>",
+  //   category: "laser-cutting",
+  //   kind: "photo",
+  //   width: 960, height: 1280,
+  //   alt: "<Accessible description of what is visible>",
+  //   description: "<One or two modest sentences>"
+  // }
 ];

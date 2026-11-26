@@ -29,6 +29,9 @@ Used only for [digital-fabrication.md](digital-fabrication.md). Printer values w
 19. **Bambu Lab.** A1 technical specifications and product page. [bambulab.com/en/a1/tech-specs](https://bambulab.com/en/a1/tech-specs) · [bambulab.com/en/a1](https://bambulab.com/en/a1). Build volume, nozzle, max nozzle and build-plate temperature; AMS lite.
 20. **Bambu Lab.** A1 mini technical specifications and product page. [bambulab.com/en/a1-mini/tech-specs](https://bambulab.com/en/a1-mini/tech-specs) · [bambulab.com/en/a1-mini](https://bambulab.com/en/a1-mini). Build volume, nozzle, max nozzle and build-plate temperature; AMS lite.
 
+21. **Bambu Lab.** Official product images used on the website and in the report (Image: © Bambu Lab), downloaded on 26 November 2026 from the official store pages: [H2D](https://us.store.bambulab.com/products/h2d) (front view with AMS 2 Pro, `store.bblcdn.com/s7/default/d93f517422fa499f93ade82eb4fb6fe3/2.jpg`) · [P1S](https://us.store.bambulab.com/products/p1s) (`store.bblcdn.com/s7/default/7abb7477d233498b82a02dc93dd069df/P1.jpg`) · [A1](https://us.store.bambulab.com/products/a1) (`store.bblcdn.com/s7/default/4ba6711c8f9f4029a1e24de021e42b40/A1.png`) · [A1 mini](https://us.store.bambulab.com/products/a1-mini) (`store.bblcdn.com/s7/default/062e0a7dc31a4393b26943f599d2db8c/A1_mini.jpg`). No press or media kit was found on bambulab.com. Saved as WebP in `media/fabrication-lab/bambu/` without cropping or editing.
+22. **Bambu Lab Wiki.** "Filament guide — Printer, Nozzle, AMS, Build Plate, Glue Compatibility and Required Parameters." [wiki.bambulab.com/en/general/filament-guide-material-table](https://wiki.bambulab.com/en/general/filament-guide-material-table). Nozzle and bed temperatures, printer type and strength ratings for PLA, PETG, ABS, ASA and TPU (read 26 November 2026).
+
 ## Citation Notes
 
 - Project Vaayu reporting is used only to explain inspiration and motivation.

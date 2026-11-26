@@ -155,25 +155,8 @@
     notesBody.append(el("p", "", "The electronics are not modelled: their placement is not documented."));
   }
 
-  // ---------------- 07 Digital fabrication: lab photos ----------------
-  const fabGrid = $("#fab-grid");
-  [
-    "media/fabrication-lab/3DP_Bambu_H2D_With_AMS.jpeg",
-    "media/fabrication-lab/3DP_Bambu_P1S.jpeg",
-    "media/fabrication-lab/3DP_Bambu_A1_With_AMS_Lite.jpeg",
-    "media/fabrication-lab/3DP_Bambu_A1_Mini.jpeg",
-    "media/fabrication-lab/Laser_SIL_CO2_Cutter.jpeg",
-    "media/fabrication-lab/Laser_Engraving_In_Progress.jpeg",
-    "media/fabrication-lab/Laser_MDF_Pen_Holder.jpeg",
-    "media/fabrication-lab/Laser_Acrylic_Edge_Lit_Artwork.jpeg"
-  ].map(bySrc).filter(Boolean).forEach((item) => {
-    const card = el("figure", "gallery-card");
-    card.append(viewerButton(item, "gallery-thumb", { sizes: "(min-width: 1180px) 280px, (min-width: 600px) 33vw, 100vw" }));
-    const cap = el("figcaption");
-    cap.append(el("span", "label-chip", item.category === "laser-cutting" ? "Laser cutting" : "3D printing"), el("strong", "gallery-title", item.title));
-    card.append(cap);
-    fabGrid?.append(card);
-  });
+  // Shared with assets/js/fablab.js (Fab Lab Notebook), which reuses the image viewer.
+  window.ClayBreezeUI = { viewerButton, bySrc, el };
 
   // ---------------- Footer: team photo ----------------
   const teamPhoto = $("#team-photo");
@@ -185,7 +168,7 @@
     teamPhoto.append(cap);
   }
 
-  // ---------------- 08 Components ----------------
+  // ---------------- 07 Components ----------------
   const componentList = $("#component-list");
   (project.components || []).forEach((comp, index) => {
     const details = el("details", "component");
@@ -196,7 +179,7 @@
     componentList?.append(details);
   });
 
-  // ---------------- 11 Gallery ----------------
+  // ---------------- 11 Gallery (project photos first, then Fab Lab) ----------------
   const galleryGrid = $("#gallery-grid");
   const galleryCount = $("#gallery-count");
   const emptyNote = $("#gallery-empty-note");
@@ -204,7 +187,10 @@
   function renderGallery() {
     if (!galleryGrid) return;
     galleryGrid.replaceChildren();
-    const visible = galleryItems.filter((item) => activeFilter === "all" || item.category === activeFilter);
+    const isFabLab = (item) => (item.category === "3d-printing" || item.category === "laser-cutting" ? 1 : 0);
+    const visible = galleryItems
+      .filter((item) => activeFilter === "all" || item.category === activeFilter)
+      .sort((a, b) => isFabLab(a) - isFabLab(b));
     galleryCount.textContent = `${visible.length} ${visible.length === 1 ? "image" : "images"}`;
     visible.forEach((item) => {
       const card = el("figure", "gallery-card");
@@ -233,7 +219,7 @@
   if (emptyNote) emptyNote.textContent = emptyCategories.length ? `${emptyCategories.join(", ")}: no photographs added yet, so these filters are disabled.` : "";
   renderGallery();
 
-  // ---------------- 12 Status ----------------
+  // ---------------- 10 Status ----------------
   const statusGroups = $("#status-groups");
   function statusList(items) {
     const ul = el("ul");

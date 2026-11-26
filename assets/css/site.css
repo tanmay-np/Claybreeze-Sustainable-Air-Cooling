@@ -409,9 +409,7 @@ code { font-family: var(--mono); font-size: 0.88em; background: var(--surface-2)
 .status-group li { margin-bottom: 6px; color: var(--text); font-size: 16px; }
 .status-group li::marker { color: var(--muted); }
 
-/* ---------- 07 digital fabrication ---------- */
-.fab-relevance article { border-top-color: var(--clay); }
-.fab-relevance strong { color: var(--text); }
+/* ---------- Fab Lab Notebook: shared tables and workflow cards (see fablab.css) ---------- */
 .fab-steps { list-style: none; padding: 0; margin: 0 0 18px; counter-reset: fabstep; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); }
 .fab-steps li { counter-increment: fabstep; background: var(--surface); border: 1px solid var(--line); border-top: 2px solid var(--clay); padding: 14px 16px; display: grid; gap: 6px; align-content: start; }
 .fab-steps li strong { font-family: var(--display); font-size: 17px; }
@@ -430,10 +428,6 @@ code { font-family: var(--mono); font-size: 0.88em; background: var(--surface-2)
 .fab-compare-wrap { margin-top: 28px; background: var(--surface); border: 1px solid var(--line); padding: 16px 16px 4px; }
 .fab-compare { min-width: 680px; }
 .fab-compare td { font-family: var(--mono); font-size: 14px; color: var(--text); }
-.fab-note { font-size: 14px; color: var(--muted); margin: 10px 0 0; max-width: 80ch; }
-.fab-two-col { display: grid; gap: 24px; margin-top: 28px; }
-@media (min-width: 900px) { .fab-two-col { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); } }
-.fab-grid { display: grid; gap: 22px; margin-top: 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); }
 
 /* ---------- 12 references / footer ---------- */
 .ref-layout { display: grid; gap: 32px; }

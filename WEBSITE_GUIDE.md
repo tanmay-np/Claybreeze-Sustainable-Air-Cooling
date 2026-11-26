@@ -10,6 +10,7 @@ This website is a static HTML/CSS/JavaScript presentation layer for the ClayBree
 - `assets/js/gallery-data.js` — list of real project photos and CAD screenshots (with `kind` and pixel `width`/`height`).
 - `assets/js/site.js` — page behaviour: journey, design/CAD, gallery and filters, image viewer with zoom, status, navigation, presentation mode and the Control Logic Lab simulator.
 - `assets/js/model.js` — the procedural 3D model, built from the documented dimensions; approximate values are marked `APPROX`.
+- `assets/js/fablab.js` and `assets/css/fablab.css` — Part II, the Fab Lab Notebook (after the gallery): abbreviation tooltips, printer cards, H2D labelled view, FDM and laser steppers, layer-height, material, cut/engrave and kerf demos, lab videos and the safety checklist. Official printer images live in `media/fabrication-lab/bambu/` and must keep the "Image: © Bambu Lab" credit.
 - `assets/js/viewer.js` — the 3D views: hero, journey build-up inset, and the Assembly Explorer.
 - `assets/vendor/three/` — three.js 0.160.0 (build + OrbitControls + GLTFLoader), vendored locally with its MIT `LICENSE`, loaded through the import map in `index.html`. Nothing is fetched from a CDN, so the site works offline.
 
