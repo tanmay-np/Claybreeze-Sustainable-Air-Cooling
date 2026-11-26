@@ -1,6 +1,6 @@
 """Create WebP copies of the site images in media/web/ (originals are not touched).
 
-Photos (media/photos/*.jpeg) get 800 px and native-width copies; the photos are at most
+Photos (media/photos/*.jpeg and media/fabrication-lab/*.jpeg) get 800 px and native-width copies; the photos are at most
 1280 px wide, so they are never upscaled. CAD screenshots (media/cad-screenshots/*.png,
 1917 px wide) get 800 px and 1600 px copies. Output names replace spaces with hyphens:
 media/web/<name>-<width>.webp. Run from the repository root: python tools/make-web-images.py
@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "media" / "web"
 SETS = [
     (ROOT / "media" / "photos", ("*.jpeg", "*.jpg"), 80),
+    (ROOT / "media" / "fabrication-lab", ("*.jpeg", "*.jpg"), 80),
     (ROOT / "media" / "cad-screenshots", ("*.png",), 88),
 ]
 

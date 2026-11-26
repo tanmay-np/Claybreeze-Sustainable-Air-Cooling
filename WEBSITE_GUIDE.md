@@ -27,7 +27,7 @@ Testing aids: `?nowebgl` shows the CAD-screenshot fallback; `?reducedmotion` for
    - `media/photos/2026-10-30-fan-mount.jpg`
    - `media/photos/2026-10-31-electronics-breadboard.jpg`
    - `media/cad-screenshots/2026-10-30-updated-solidworks-assembly.png`
-2. Open `assets/js/gallery-data.js` and add an object to `window.CLAYBREEZE_GALLERY`, following the commented example. Choose one category: `frame-fabrication`, `rods-mounts`, `painting`, `clay-pots`, `electronics`, `water-system`, `cad`, or `testing`.
+2. Open `assets/js/gallery-data.js` and add an object to `window.CLAYBREEZE_GALLERY`, following the commented example. Choose one category: `frame-fabrication`, `rods-mounts`, `painting`, `clay-pots`, `electronics`, `water-system`, `cad`, `testing`, `team`, `3d-printing` or `laser-cutting`. Digital-fabrication lab photos live in `media/fabrication-lab/` (run `python tools/make-web-images.py` after adding photos).
 3. Provide a meaningful `alt` description, a short caption, `kind` (`photo`, `cad-drawing` or `cad-render`) and the image's pixel `width`/`height`. The site does not show dates; record real dates in the fabrication log only when they come from a real record.
 4. Refresh the site. The item will appear in the gallery and its category filter. Clicking a card opens the larger image.
 

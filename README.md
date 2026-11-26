@@ -48,6 +48,7 @@ Inspired by reporting on Project Vaayu, a separate student initiative — see [`
 - [`docs/design-and-dimensions.md`](docs/design-and-dimensions.md) — dimensions, design assumptions and CAD update plan.
 - [`docs/materials-and-components.md`](docs/materials-and-components.md) — components, known specifications and confirmation checklist.
 - [`docs/fabrication-and-assembly.md`](docs/fabrication-and-assembly.md) — build sequence and assembly inspection points.
+- [`docs/digital-fabrication.md`](docs/digital-fabrication.md) — 3D printing and laser cutting learned at Tinkerers' Lab (not used in the prototype; laser-cut parts planned).
 - [`docs/electronics-and-control.md`](docs/electronics-and-control.md) — ESP32/relay/DHT11 roles and the implemented fan and pump control logic.
 - [`docs/testing-and-results.md`](docs/testing-and-results.md) — test protocol, record sheet and calculation guidance.
 - [`docs/safety-and-maintenance.md`](docs/safety-and-maintenance.md) — practical safety and maintenance considerations.

@@ -18,7 +18,7 @@
   // WebP copies made by tools/make-web-images.py: media/web/<name>-<width>.webp at
   // 800 px and up to 1600 px (never upscaled). The original file stays as the fallback.
   function webSrcset(item) {
-    const m = /^media\/(?:photos|cad-screenshots)\/(.+)\.(?:jpe?g|png)$/i.exec(item.src);
+    const m = /^media\/(?:photos|cad-screenshots|fabrication-lab)\/(.+)\.(?:jpe?g|png)$/i.exec(item.src);
     if (!m || !item.width) return "";
     const base = `media/web/${m[1].replace(/ /g, "-")}`;
     return [...new Set([Math.min(800, item.width), Math.min(1600, item.width)])].map((w) => `${base}-${w}.webp ${w}w`).join(", ");
@@ -155,7 +155,37 @@
     notesBody.append(el("p", "", "The electronics are not modelled: their placement is not documented."));
   }
 
-  // ---------------- 07 Components ----------------
+  // ---------------- 07 Digital fabrication: lab photos ----------------
+  const fabGrid = $("#fab-grid");
+  [
+    "media/fabrication-lab/3DP_Bambu_H2D_With_AMS.jpeg",
+    "media/fabrication-lab/3DP_Bambu_P1S.jpeg",
+    "media/fabrication-lab/3DP_Bambu_A1_With_AMS_Lite.jpeg",
+    "media/fabrication-lab/3DP_Bambu_A1_Mini.jpeg",
+    "media/fabrication-lab/Laser_SIL_CO2_Cutter.jpeg",
+    "media/fabrication-lab/Laser_Engraving_In_Progress.jpeg",
+    "media/fabrication-lab/Laser_MDF_Pen_Holder.jpeg",
+    "media/fabrication-lab/Laser_Acrylic_Edge_Lit_Artwork.jpeg"
+  ].map(bySrc).filter(Boolean).forEach((item) => {
+    const card = el("figure", "gallery-card");
+    card.append(viewerButton(item, "gallery-thumb", { sizes: "(min-width: 1180px) 280px, (min-width: 600px) 33vw, 100vw" }));
+    const cap = el("figcaption");
+    cap.append(el("span", "label-chip", item.category === "laser-cutting" ? "Laser cutting" : "3D printing"), el("strong", "gallery-title", item.title));
+    card.append(cap);
+    fabGrid?.append(card);
+  });
+
+  // ---------------- Footer: team photo ----------------
+  const teamPhoto = $("#team-photo");
+  const teamItem = bySrc("media/photos/Team_With_Prototype.jpeg");
+  if (teamPhoto && teamItem) {
+    teamPhoto.append(viewerButton(teamItem, "team-thumb", { sizes: "300px" }));
+    const cap = el("figcaption");
+    cap.append(el("span", "label-chip", "Team"), document.createTextNode(` ${teamItem.description}`));
+    teamPhoto.append(cap);
+  }
+
+  // ---------------- 08 Components ----------------
   const componentList = $("#component-list");
   (project.components || []).forEach((comp, index) => {
     const details = el("details", "component");
@@ -166,7 +196,7 @@
     componentList?.append(details);
   });
 
-  // ---------------- 10 Gallery ----------------
+  // ---------------- 11 Gallery ----------------
   const galleryGrid = $("#gallery-grid");
   const galleryCount = $("#gallery-count");
   const emptyNote = $("#gallery-empty-note");
@@ -203,7 +233,7 @@
   if (emptyNote) emptyNote.textContent = emptyCategories.length ? `${emptyCategories.join(", ")}: no photographs added yet, so these filters are disabled.` : "";
   renderGallery();
 
-  // ---------------- 11 Status ----------------
+  // ---------------- 12 Status ----------------
   const statusGroups = $("#status-groups");
   function statusList(items) {
     const ul = el("ul");

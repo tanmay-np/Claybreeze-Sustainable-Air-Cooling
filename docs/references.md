@@ -17,6 +17,18 @@ The sources below inform the background and the test plan. They do not establish
 
 13. **Ministry of Environment, Forest & Climate Change (Ozone Cell), Government of India.** *India Cooling Action Plan.* New Delhi, March 2019. [Official page](https://ozonecell.nic.in/india-cooling-action-plan) · [PDF](https://ozonecell.nic.in/wp-content/uploads/2019/03/INDIA-COOLING-ACTION-PLAN-e-circulation-version080319.pdf). States that India has one of the lowest levels of access to cooling and that cooling demand, refrigerant use and energy use for cooling are set to rise. Used qualitatively for the problem framing; no figures from it are used.
 
+## Digital fabrication (3D printing and laser cutting)
+
+Used only for [digital-fabrication.md](digital-fabrication.md). Printer values were read on the official pages below on 26 November 2026.
+
+14. **Wakchaure, K.** Fab Academy 2022 documentation, Vigyan Ashram (Fab Lab). [About](https://fabacademy.org/2022/labs/vigyanashram/students/kiran-wakchaure/about.html) · [Week 3: computer-controlled cutting](https://fabacademy.org/2022/labs/vigyanashram/students/kiran-wakchaure/assignments/week03.html) · [Week 5: 3D scanning and printing](https://fabacademy.org/2022/labs/vigyanashram/students/kiran-wakchaure/assignments/week05.html). Learning reference for the workflows, laser characterisation and safety practice; paraphrased, nothing copied.
+15. **Bambu Lab.** H2D technical specifications. [bambulab.com/en/h2d/tech-specs](https://bambulab.com/en/h2d/tech-specs). Build volumes, enclosure and chamber heating, nozzles, max nozzle and bed temperature.
+16. **Bambu Lab.** H2D product page. [bambulab.com/en/h2d](https://bambulab.com/en/h2d). AMS 2 Pro and AMS HT compatibility.
+17. **Bambu Lab.** P1S product page, "Parameters Comparison" (P1P / P1S). [us.store.bambulab.com/products/p1s](https://us.store.bambulab.com/products/p1s). Build volume, enclosed shell, nozzle, max nozzle and bed temperature, AMS combos.
+18. **Bambu Lab.** P1 series page. [bambulab.com/en/p1](https://bambulab.com/en/p1). Direct-drive extruder; up to 16 colours with AMS.
+19. **Bambu Lab.** A1 technical specifications and product page. [bambulab.com/en/a1/tech-specs](https://bambulab.com/en/a1/tech-specs) · [bambulab.com/en/a1](https://bambulab.com/en/a1). Build volume, nozzle, max nozzle and build-plate temperature; AMS lite.
+20. **Bambu Lab.** A1 mini technical specifications and product page. [bambulab.com/en/a1-mini/tech-specs](https://bambulab.com/en/a1-mini/tech-specs) · [bambulab.com/en/a1-mini](https://bambulab.com/en/a1-mini). Build volume, nozzle, max nozzle and build-plate temperature; AMS lite.
+
 ## Citation Notes
 
 - Project Vaayu reporting is used only to explain inspiration and motivation.

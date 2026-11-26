@@ -25,7 +25,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{xurl}
 
-\graphicspath{{../media/photos/}{../media/cad-screenshots/}{../latex-shared/}}
+\graphicspath{{../media/photos/}{../media/cad-screenshots/}{../media/fabrication-lab/}{../latex-shared/}}
 
 \definecolor{cbclay}{RGB}{184,80,31}
 \definecolor{cbwater}{RGB}{26,111,148}
@@ -69,7 +69,11 @@
 \vspace{10mm}
 {\Large Final Project Report\par}
 \vspace{8mm}
-\includegraphics[height=58mm]{Water_System_Tub_Front_Right_View.jpeg}\par
+\begin{tabular}{@{}c@{\hspace{8mm}}c@{}}
+\includegraphics[height=54mm]{Water_System_Tub_Front_Right_View.jpeg} &
+\includegraphics[height=54mm]{Team_With_Prototype.jpeg} \\[1mm]
+{\footnotesize The ClayBreeze prototype} & {\footnotesize Group 17 with the ClayBreeze prototype}
+\end{tabular}\par
 \vspace{8mm}
 
 {\large\textbf{Group 17}\par}
@@ -345,6 +349,111 @@ The assembled frame stands inside a grey plastic tub that acts as the reservoir.
 
 \noindent Still to be recorded: tub dimensions and capacity, pump make, rating, flow and head, tubing length and bore, the distribution layout at the top, and a leak check. The supply cables beside the tub must be secured and kept clear of water.
 
+% ======================= DIGITAL FABRICATION =======================
+\chapter{Digital Fabrication: 3D Printing and Laser Cutting}
+\label{ch:digifab}
+
+Alongside the ClayBreeze build, the team learned and practised digital fabrication at Tinkerers' Lab on four Bambu Lab FDM printers (H2D, P1S, A1, A1 mini) and a SIL CO2 laser cutter (100\,W). Learning reference: Dr.\ Kiran Wakchaure's Fab Academy documentation~\cite{wakchaure}; this chapter is written in our own words.
+
+\paragraph{Relevance to ClayBreeze.} \textbf{3D printing: not used in the prototype} --- no printed part is part of ClayBreeze. \textbf{Laser cutting: planned components} --- no laser-cut part has been designed or cut yet. The photographs below show the lab's machines and practice work, not ClayBreeze parts.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.24\linewidth}\centering\includegraphics[height=42mm,width=\linewidth,keepaspectratio]{3DP_Bambu_H2D_With_AMS.jpeg}\caption{Bambu Lab H2D}\end{subfigure}\hfill
+\begin{subfigure}[b]{0.24\linewidth}\centering\includegraphics[height=42mm,width=\linewidth,keepaspectratio]{3DP_Bambu_A1_Mini.jpeg}\caption{Bambu Lab A1 mini}\end{subfigure}\hfill
+\begin{subfigure}[b]{0.24\linewidth}\centering\includegraphics[height=42mm,width=\linewidth,keepaspectratio]{Laser_Engraving_In_Progress.jpeg}\caption{Laser engraving}\end{subfigure}\hfill
+\begin{subfigure}[b]{0.24\linewidth}\centering\includegraphics[height=42mm,width=\linewidth,keepaspectratio]{Laser_MDF_Pen_Holder.jpeg}\caption{Laser-cut MDF box}\end{subfigure}
+\caption{Digital-fabrication practice at Tinkerers' Lab (lab work, not ClayBreeze parts).}
+\label{fig:digifab}
+\end{figure}
+
+\section{3D printing (FDM)}
+\textbf{Workflow:} CAD model $\rightarrow$ export STL or 3MF $\rightarrow$ slice in Bambu Studio (printer, nozzle, filament, parameters; preview layers, time and material) $\rightarrow$ print, watching the first layer $\rightarrow$ post-process (cool, release, remove supports and brim, deburr, test-fit).
+
+\begin{table}[H]
+\centering\small
+\caption{Key FDM print parameters.}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries\raggedright\arraybackslash}p{0.24\linewidth}X@{}}
+\toprule
+Parameter & \textbf{What it does} \\
+\midrule
+Layer / first-layer height & Layer thickness; thinner is smoother but slower (0.2\,mm usual for a 0.4\,mm nozzle). The first layer is equal or slightly thicker so it sticks and tolerates bed variation. \\
+Nozzle diameter & Sets line width: 0.4\,mm default; 0.2\,mm for detail; 0.6--0.8\,mm for speed and strength. \\
+Nozzle temperature & Matched to the filament: too cold gives weak layers, too hot gives stringing. \\
+Extruder & Direct drive (motor on the toolhead): good retraction, handles TPU. The H2D has two nozzles for two materials or colours. \\
+Heatbed / build plate & A warm bed holds the first layer and limits warping; plate surface (textured or smooth PEI, cool, high-temperature) chosen per material. \\
+Infill \% and pattern & How solid the inside is (10--20\,\% for display parts, more for loaded parts); grid, gyroid or cubic. \\
+Walls, top/bottom layers & Outline loops carry most of the strength; solid skins close the part. \\
+Supports, brim/raft & Supports hold steep overhangs; a brim helps small or warp-prone parts stick; a raft is a sacrificial base. \\
+Speed, cooling fan & Faster saves time but can cost quality; the part fan is high for PLA and low for ABS/ASA. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Common filaments (typical ranges; follow the spool label).}
+\begin{tabular}{@{}lllp{0.5\linewidth}@{}}
+\toprule
+Material & Nozzle & Bed & Notes \\
+\midrule
+PLA & 190--230\degC & 35--65\degC & Easiest; softens at about 55--60\degC. \\
+PETG & 220--260\degC & 65--80\degC & Tougher, more heat- and water-tolerant; strings. \\
+ABS / ASA & 240--280\degC & 90--110\degC & Heat-resistant; enclosure and ventilation needed. \\
+TPU & 210--240\degC & 30--60\degC & Flexible; print slowly, direct drive. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Lab printers, from official Bambu Lab pages~\cite{bambuh2d,bambup1s,bambua1,bambua1mini}.}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}@{}}
+\toprule
+ & H2D & P1S & A1 & A1 mini \\
+\midrule
+Build volume (mm) & 325$\times$320$\times$325 (one nozzle); 300$\times$320$\times$320 (both) & 256$\times$256$\times$256 & 256$\times$256$\times$256 & 180$\times$180$\times$180 \\
+Enclosure & Enclosed, chamber heating to 65\degC & Enclosed & Open frame (see manufacturer) & Open frame (see manufacturer) \\
+Nozzle(s) & Two, 0.4\,mm included & One, 0.4\,mm & One, 0.4\,mm & One, 0.4\,mm \\
+Max nozzle temp. & 350\degC & 300\degC & 300\degC & 300\degC \\
+Max bed temp. & 120\degC & 100\degC & 100\degC & 80\degC \\
+AMS support & AMS 2 Pro, AMS HT & AMS & AMS lite & AMS lite \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Laser cutting (CO2)}
+\textbf{Workflow:} 2D design as DXF or SVG (cut, score and engrave on separate colours or layers) $\rightarrow$ laser software (power, speed and operation per layer) $\rightarrow$ material setup (laser-safe sheet, flat on the honeycomb) $\rightarrow$ focus (beam smallest at the surface) $\rightarrow$ cut or engrave with extraction and air assist on, after a test on scrap $\rightarrow$ inspect cut-through, kerf and fits.
+
+\begin{table}[H]
+\centering\small
+\caption{Laser parameters.}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries\raggedright\arraybackslash}p{0.24\linewidth}X@{}}
+\toprule
+Parameter & \textbf{What it does} \\
+\midrule
+Power \%, speed & Share of tube output and head speed; tuned together on a test grid for each material. \\
+Frequency / PPI & Pulse rate; lower tends to char wood less, higher gives smoother acrylic edges. \\
+Focus / focal length & The lens focal length sets where the beam is narrowest; the material surface must sit there. \\
+Kerf, compensation & Width removed by the beam (a few tenths of a mm); offset paths by half the measured kerf for accurate press-fits. \\
+Vector cut vs raster engrave & A vector cut follows a line through the sheet; a raster engrave sweeps line by line to burn an image into the surface. \\
+Air assist, passes & An air jet clears smoke and flame and protects the lens; two moderate passes can cut thick stock with less charring. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\noindent\textbf{Suitable materials:} MDF, plywood, acrylic, cardboard, paper. \textbf{Never cut:} PVC or vinyl (chlorine gas), polycarbonate (burns and discolours), coated metals (not cut by CO2; coatings reflect or fume), or any unidentified sheet.
+
+\noindent\textbf{Lab machine:} SIL CO2 laser cutter, 100\,W. Bed size and other specifications: [to confirm from machine label].
+
+\section{Safety}
+\begin{itemize}
+\item Ventilation and fume extraction for both machines; let laser fumes clear before opening the lid; print ABS/ASA only enclosed, in a ventilated room.
+\item Never leave a laser unattended while it runs; keep a fire-watch, a clear bed and a known extinguisher location.
+\item PPE: the closed lid is the beam shield; safety glasses and gloves for support removal, sanding and sharp offcuts.
+\item Hot-end and bed burns: nozzles reach 300--350\degC and beds up to 120\degC.
+\end{itemize}
+
 % ======================= 8 ELECTRONICS =======================
 \chapter{Electronics and Control Logic}
 \label{ch:electronics}
@@ -540,6 +649,11 @@ ClayBreeze addresses a real problem --- affordable cooling for hot Indian homes,
 \bibitem{epa} U.S. Environmental Protection Agency. \emph{Transitioning to Low-GWP Alternatives in Residential and Light Commercial Air Conditioning}. \url{https://www.epa.gov/snap/transitioning-low-gwp-alternatives-residential-and-light-commercial-air-conditioning}
 \bibitem{energystar} ENERGY STAR. \emph{Room Air Conditioners}. \url{https://www.energystar.gov/products/room_air_conditioners}
 \bibitem{toi} The Times of India / ETimes Trending Desk. Inside Project Vayu: Delhi students turn kulhads and scrap wood into eco-coolers for underprivileged government school kids. 8 May 2026. (Inspiration only.)
+\bibitem{wakchaure} K.~Wakchaure. Fab Academy 2022 documentation, Vigyan Ashram: about page, Week~3 (computer-controlled cutting) and Week~5 (3D scanning and printing). \url{https://fabacademy.org/2022/labs/vigyanashram/students/kiran-wakchaure/about.html} (learning reference; paraphrased)
+\bibitem{bambuh2d} Bambu Lab. H2D technical specifications and product page. \url{https://bambulab.com/en/h2d/tech-specs}, \url{https://bambulab.com/en/h2d} (accessed 26 Nov 2026)
+\bibitem{bambup1s} Bambu Lab. P1S product page, parameters comparison; P1 series page. \url{https://us.store.bambulab.com/products/p1s}, \url{https://bambulab.com/en/p1} (accessed 26 Nov 2026)
+\bibitem{bambua1} Bambu Lab. A1 technical specifications and product page. \url{https://bambulab.com/en/a1/tech-specs}, \url{https://bambulab.com/en/a1} (accessed 26 Nov 2026)
+\bibitem{bambua1mini} Bambu Lab. A1 mini technical specifications and product page. \url{https://bambulab.com/en/a1-mini/tech-specs}, \url{https://bambulab.com/en/a1-mini} (accessed 26 Nov 2026)
 \bibitem{afn} Action For Nature. 2026 International Young Eco-Hero Award listing describing Project Vaayu. \url{https://actionfornature.org/eco-hero-winners/tag/Terracotta%2BCooling}
 \end{thebibliography}
 
