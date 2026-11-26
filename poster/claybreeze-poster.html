@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClayBreeze Poster (A1)</title>
+<meta name="description" content="A1 portrait project poster for ClayBreeze, a clay-pot evaporative air-cooling prototype. Sanjivani University Makerspace, Group 17.">
+<style>
+  @font-face { font-family: "Space Grotesk"; src: url("../assets/fonts/space-grotesk-latin-wght-normal.woff2") format("woff2"); font-weight: 300 700; }
+  @font-face { font-family: "Inter"; src: url("../assets/fonts/inter-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+  @font-face { font-family: "JetBrains Mono"; src: url("../assets/fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2"); font-weight: 100 800; }
+
+  /* Light print version of the site's blueprint theme */
+  :root {
+    --paper: #ffffff;
+    --ink: #0d1117;
+    --muted: #3d4652;
+    --line: #c9d0d9;
+    --grid: rgba(26, 111, 148, 0.07);
+    --clay: #b8501f;
+    --clay-soft: #fbeee7;
+    --water: #1a6f94;
+    --water-soft: #e6f2f8;
+    --ok: #1b7a4f;
+    --display: "Space Grotesk", "Segoe UI", Arial, sans-serif;
+    --sans: "Inter", "Segoe UI", Arial, sans-serif;
+    --mono: "JetBrains Mono", Consolas, monospace;
+  }
+  @page { size: 594mm 841mm; margin: 0; }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  img { height: auto; }
+  html, body { margin: 0; padding: 0; background: #e9edf2; color: var(--ink); }
+  body { font-family: var(--sans); }
+  @media print { html, body { background: var(--paper); } }
+
+  .poster {
+    width: 594mm; height: 841mm; margin: 0 auto; overflow: hidden; position: relative;
+    background-color: var(--paper);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 10mm 10mm;
+    padding: 20mm 26mm 20mm;
+    display: flex; flex-direction: column; gap: 7mm;
+    font-size: 28pt; line-height: 1.28;
+  }
+  .poster::before { /* blueprint border */
+    content: ""; position: absolute; inset: 10mm; border: 0.7mm solid var(--ink); pointer-events: none;
+  }
+
+  /* ---- header ---- */
+  .kicker { font-family: var(--mono); font-size: 28pt; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--water); margin: 0; }
+  h1 { font-family: var(--display); font-weight: 700; font-size: 112pt; line-height: 0.95; letter-spacing: -0.03em; margin: 3mm 0 0; }
+  h1 .brand { color: var(--clay); }
+  .team { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2mm 12mm; margin-top: 4mm; padding-top: 4mm; border-top: 0.6mm solid var(--ink); }
+  .team p { margin: 0; }
+  .team strong { font-weight: 700; }
+  .lead-tag { font-family: var(--mono); font-size: 28pt; font-weight: 700; color: var(--paper); background: var(--clay); padding: 0 2.5mm; border-radius: 1.5mm; }
+
+  /* ---- grid ---- */
+  .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10mm; }
+  .span2 { grid-column: span 2; }
+  .span3 { grid-column: 1 / -1; }
+  section { min-width: 0; }
+  h2 { font-family: var(--display); font-size: 44pt; font-weight: 700; line-height: 1; letter-spacing: -0.01em; margin: 0 0 3mm; display: flex; align-items: baseline; gap: 4mm; }
+  h2 .no { font-family: var(--mono); font-size: 28pt; font-weight: 700; color: var(--clay); }
+  p { margin: 0 0 3mm; }
+  .muted { color: var(--muted); }
+  .chip { display: inline-block; font-family: var(--mono); font-size: 28pt; font-weight: 600; line-height: 1.2; padding: 0.6mm 2.5mm; border: 0.5mm solid currentColor; border-radius: 1.5mm; }
+  .chip-warn { color: var(--clay); }
+  .chip-ok { color: var(--ok); }
+  .chip-water { color: var(--water); }
+
+  /* ---- schematic ---- */
+  .schematic svg { display: block; width: 100%; max-width: 335mm; height: auto; }
+  .s-frame { fill: none; stroke: var(--ink); stroke-width: 3; }
+  .s-ext { fill: none; stroke: var(--muted); stroke-width: 2.5; }
+  .s-pot { fill: var(--clay); stroke: var(--paper); stroke-width: 1.5; }
+  .s-fan { fill: #e9edf2; stroke: var(--ink); stroke-width: 2; }
+  .s-air { fill: none; stroke: var(--ink); stroke-width: 3; }
+  .s-bypass { fill: none; stroke: var(--muted); stroke-width: 2.2; stroke-dasharray: 9 7; }
+  .s-water { fill: none; stroke: var(--water); stroke-width: 4; }
+  .s-drip { stroke: var(--water); stroke-width: 2.5; stroke-dasharray: 4 6; }
+  .s-tub { fill: var(--water-soft); stroke: var(--water); stroke-width: 3; }
+  .s-pump { fill: var(--paper); stroke: var(--water); stroke-width: 3; }
+  .s-label { font-family: var(--mono); font-size: 21px; font-weight: 600; fill: var(--ink); }
+  .s-label.w { fill: var(--water); }
+  .s-label.m { fill: var(--muted); font-weight: 500; }
+  .paths { display: grid; grid-template-columns: auto 1fr; gap: 1.5mm 4mm; margin-top: 3mm; }
+  .paths dt { font-family: var(--mono); font-weight: 700; }
+  .paths dt.air { color: var(--ink); }
+  .paths dt.water { color: var(--water); }
+  .paths dd { margin: 0; }
+
+  /* ---- photos ---- */
+  .photos { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6mm; margin: 0; padding: 0; list-style: none; counter-reset: ph; }
+  .photos figure { margin: 0; }
+  .photos img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border: 0.5mm solid var(--ink); }
+  .photos figcaption { margin-top: 2mm; line-height: 1.15; }
+  .photos figcaption b { font-family: var(--mono); color: var(--clay); margin-right: 1.5mm; }
+  .photos li:last-child img { border: 1mm solid var(--water); }
+
+  /* ---- tables ---- */
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; vertical-align: top; padding: 1.6mm 2mm 1.6mm 0; border-bottom: 0.4mm solid var(--line); line-height: 1.18; }
+  thead th { font-family: var(--mono); font-weight: 700; color: var(--muted); border-bottom: 0.6mm solid var(--ink); }
+  tbody th { font-weight: 600; white-space: nowrap; padding-right: 4mm; }
+  .num { font-family: var(--mono); font-weight: 600; white-space: nowrap; }
+  .on { color: var(--ok); font-weight: 700; }
+  .off { color: var(--muted); font-weight: 600; }
+  .pump td, .pump th { color: var(--water); }
+  .chips { display: flex; flex-wrap: wrap; gap: 2mm; margin: 0; padding: 0; list-style: none; }
+  .chips li { font-family: var(--mono); font-weight: 600; font-size: 28pt; padding: 0.6mm 2.5mm; border: 0.5mm solid var(--ink); border-radius: 1.5mm; background: var(--paper); }
+  h3 { font-family: var(--display); font-size: 34pt; margin: 6mm 0 3mm; line-height: 1; }
+
+  /* ---- CAD ---- */
+  .cad figure { margin: 0 0 4mm; }
+  .cad img { display: block; border: 0.5mm solid var(--line); background: #fff; }
+  .cad .drawing img { width: 150mm; }
+  .cad .iso { display: flex; gap: 5mm; align-items: flex-end; }
+  .cad .iso img { width: 58mm; flex: none; }
+  .cad figcaption { line-height: 1.15; margin-top: 1.5mm; }
+
+  /* ---- footer ---- */
+  .foot { margin-top: auto; padding-top: 5mm; border-top: 0.6mm solid var(--ink); align-items: start; grid-template-columns: 176mm 1fr 202mm; }
+  .status .chip { letter-spacing: -0.02em; white-space: nowrap; }
+  .status { display: grid; gap: 2mm; }
+  .qr { display: grid; grid-template-columns: 58mm 1fr; gap: 5mm; align-items: center; }
+  .qr img { width: 58mm; height: 58mm; display: block; }
+  .url { font-family: var(--mono); font-size: 28pt; font-weight: 600; white-space: nowrap; letter-spacing: -0.02em; line-height: 1.15; color: var(--water); }
+</style>
+</head>
+<body>
+<main class="poster">
+
+  <header>
+    <p class="kicker">Makerspace · Group 17 · Tinkerers' Lab, Sanjivani University</p>
+    <h1><span class="brand">ClayBreeze</span> —<br>A Sustainable Clay-Based<br>Air-Cooling System</h1>
+    <div class="team">
+      <p><strong>Tanmay Nilesh Pendbhaje</strong> <span class="lead-tag">LEADER</span> · Harshal Kotame · Vedant Khairnar · Tanmay Mhaske</p>
+      <p>Project Guide: <strong>Dr. Kiran Wakchaure</strong> · FY B.Tech Mechanical Engineering</p>
+    </div>
+  </header>
+
+  <div class="row">
+    <section>
+      <h2><span class="no">01</span>Problem</h2>
+      <p>Can a frame of hollow, unglazed clay pots, kept wet with recirculating water and ventilated by two fans, give a measurable drop in air temperature?</p>
+      <h2 style="margin-top:6mm"><span class="no">02</span>Objective</h2>
+      <p>Build a working prototype with automatic fan and pump control, then measure temperature, humidity, airflow and water use.</p>
+    </section>
+
+    <section class="span2 schematic">
+      <h2><span class="no">03</span>Working principle <span class="chip chip-warn" style="margin-left:auto">CONCEPTUAL</span></h2>
+      <svg viewBox="0 4 760 318" role="img" aria-label="Side view: room air enters behind the rear fans and is blown forward through and around the wet pots and out of the front. Water goes from the tub to the pump, up the tubing to the top of the pots, and drains back to the tub.">
+        <defs>
+          <marker id="a-air" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#0d1117"/></marker>
+          <marker id="a-w" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#1a6f94"/></marker>
+        </defs>
+        <!-- frame (side view): main frame + rear extension -->
+        <rect x="300" y="52" width="80" height="214" class="s-frame"/>
+        <rect x="380" y="52" width="64" height="214" class="s-ext"/>
+        <!-- pots -->
+        <g class="s-pot">
+          <path d="M310 74 l22 -13 h16 l13 13 l-13 13 h-16 z"/><path d="M310 108 l22 -13 h16 l13 13 l-13 13 h-16 z"/>
+          <path d="M310 142 l22 -13 h16 l13 13 l-13 13 h-16 z"/><path d="M310 176 l22 -13 h16 l13 13 l-13 13 h-16 z"/>
+          <path d="M310 210 l22 -13 h16 l13 13 l-13 13 h-16 z"/><path d="M310 244 l22 -13 h16 l13 13 l-13 13 h-16 z"/>
+        </g>
+        <!-- fans -->
+        <rect x="428" y="88" width="11" height="60" class="s-fan"/>
+        <rect x="428" y="166" width="11" height="60" class="s-fan"/>
+        <!-- air -->
+        <g class="s-air" marker-end="url(#a-air)">
+          <path d="M600 118 H446"/><path d="M600 196 H446"/>
+          <path d="M424 118 C400 118 390 108 364 108"/><path d="M424 196 C400 196 390 176 364 176"/>
+          <path d="M300 108 H150"/><path d="M300 176 H150"/>
+        </g>
+        <path d="M424 92 C380 70 350 44 300 44 C260 44 220 64 150 64" class="s-bypass" marker-end="url(#a-air)"/>
+        <text x="608" y="112" class="s-label">Room air</text>
+        <text x="608" y="136" class="s-label">in</text>
+        <text x="608" y="190" class="s-label">Rear fans</text>
+        <text x="608" y="214" class="s-label">blow forward</text>
+        <text x="4" y="100" class="s-label">Out of</text>
+        <text x="4" y="124" class="s-label">the front</text>
+        <text x="4" y="168" class="s-label">More humid</text>
+        <text x="4" y="58" class="s-label m">Bypass</text>
+        <text x="272" y="264" class="s-label m" text-anchor="end">Front</text>
+        <text x="452" y="264" class="s-label m">Rear</text>
+        <!-- water -->
+        <rect x="250" y="276" width="250" height="40" class="s-tub"/>
+        <circle cx="282" cy="296" r="13" class="s-pump"/>
+        <text x="282" y="303" class="s-label w" text-anchor="middle">P</text>
+        <path d="M282 283 V22 H330" class="s-water" marker-end="url(#a-w)"/>
+        <path d="M340 22 H372" class="s-water"/>
+        <path d="M318 28 V48 M340 28 V48 M362 28 V48" class="s-drip"/>
+        <path d="M371 262 V271" class="s-water" marker-end="url(#a-w)"/>
+        <text x="510" y="292" class="s-label w">Tub</text>
+        <text x="510" y="314" class="s-label w">+ pump</text>
+        <text x="272" y="226" class="s-label w" text-anchor="end">Tubing</text>
+      </svg>
+      <dl class="paths">
+        <dt class="air">AIR</dt><dd>room air → rear fans → through &amp; around the pots → front</dd>
+        <dt class="water">WATER</dt><dd>tub → pump → tubing → pots → back to the tub</dd>
+      </dl>
+    </section>
+  </div>
+
+  <section>
+    <h2><span class="no">04</span>Build — fabrication to final assembly</h2>
+    <ul class="photos">
+      <li><figure><img src="../media/photos/Frame_pipe_cutting_1.jpeg" alt="Cutting square pipe on a chop saw" width="960" height="1280"><figcaption><b>1</b>Pipe cutting</figcaption></figure></li>
+      <li><figure><img src="../media/photos/Frame_Welded_1.jpeg" alt="Welded square-pipe frame" width="960" height="1280"><figcaption><b>2</b>Welded frame</figcaption></figure></li>
+      <li><figure><img src="../media/photos/Frame_with_Rod_And_Exhaust_Fan_Colourd.jpeg" alt="Painted frame with rods and two rear fans" width="960" height="1280"><figcaption><b>3</b>Paint, rods, fans</figcaption></figure></li>
+      <li><figure><img src="../media/photos/Frame_Completely_Assembled_Front_View.jpeg" alt="Frame with 30 clay pots fitted" width="960" height="1280"><figcaption><b>4</b>30 clay pots</figcaption></figure></li>
+      <li><figure><img src="../media/photos/Water_System_Tub_Front_Right_View.jpeg" alt="Final assembly standing in the grey water tub with tubing over the top" width="960" height="1280"><figcaption><b>5</b>Final, with tub</figcaption></figure></li>
+    </ul>
+  </section>
+
+  <div class="row">
+    <section>
+      <h2><span class="no">05</span>Key specs</h2>
+      <table>
+        <tbody>
+          <tr><th>Frame</th><td class="num">480 × 560 × 150 mm</td></tr>
+          <tr><th>Section</th><td>20 mm square pipe</td></tr>
+          <tr><th>Opening</th><td class="num">440 × 520 mm</td></tr>
+          <tr><th>Depth</th><td><span class="num">270 mm</span> with fan mount</td></tr>
+          <tr><th>Rods</th><td class="num">6 × ⌀12 mm</td></tr>
+          <tr><th>Pots</th><td>30 unglazed (5 × 6)</td></tr>
+          <tr><th>Fans</th><td>2, rear-mounted</td></tr>
+          <tr><th>Water</th><td>Tub, pump, tubing</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2><span class="no">06</span>Control logic</h2>
+      <table>
+        <thead><tr><th>Sensor reads</th><th>Output</th></tr></thead>
+        <tbody>
+          <tr><th class="num">≤ 28 °C</th><td class="off">Both fans OFF</td></tr>
+          <tr><th class="num">&gt; 28 °C</th><td class="on">One fan ON</td></tr>
+          <tr><th class="num">&gt; 35 °C</th><td class="on">Both fans ON</td></tr>
+          <tr class="pump"><th class="num">RH &lt; 60 %</th><td><b>Pump ON</b></td></tr>
+          <tr class="pump"><th class="num">RH ≥ 60 %</th><td>Pump OFF</td></tr>
+        </tbody>
+      </table>
+      <h3>Electronics</h3>
+      <ul class="chips"><li>ESP32</li><li>DHT11</li><li>3-ch relay</li><li>2 fans</li><li>Water pump</li></ul>
+    </section>
+
+    <section class="cad">
+      <h2><span class="no">07</span>CAD</h2>
+      <figure class="drawing"><img src="img/cad-drawing-dimensioned.png" alt="SolidWorks drawing with 480, 560, 270, 440 and 150 mm dimensions and a 12 mm rod callout" width="894" height="264"></figure>
+      <figure class="iso"><img src="img/cad-assembly-isometric.png" alt="SolidWorks isometric assembly view with frame, rods and 30 pots" width="545" height="820"><figcaption>SolidWorks: dimensioned drawing (above) and assembly</figcaption></figure>
+    </section>
+  </div>
+
+  <div class="row foot">
+    <section class="status">
+      <span><span class="chip chip-ok">✓ BUILD COMPLETE</span></span>
+      <span><span class="chip chip-ok">✓ CONTROL LOGIC IMPLEMENTED</span></span>
+      <p><b>Results:</b> performance testing in progress.</p>
+    </section>
+    <section>
+      <p>Inspired by reporting on <b>Project Vaayu</b>, a separate student initiative using clay kulhads to cool classrooms. Not our project; its results are not ours.</p>
+    </section>
+    <section class="qr">
+      <img src="img/qr-live-site.svg" alt="QR code linking to the ClayBreeze live site">
+      <div><p style="margin:0 0 2mm"><b>Scan: live site, 3D model, docs</b></p><p class="url">tanmay-np.github.io/<br>Claybreeze-Sustainable-<br>Air-Cooling</p></div>
+    </section>
+  </div>
+
+</main>
+</body>
+</html>

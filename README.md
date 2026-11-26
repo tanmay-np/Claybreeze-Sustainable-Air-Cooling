@@ -1,6 +1,7 @@
 # ClayBreeze — A Sustainable Clay-Based Air-Cooling System
 
-**Live site:** https://tanmay-np.github.io/Claybreeze-Sustainable-Air-Cooling/
+**Live site:** https://tanmay-np.github.io/Claybreeze-Sustainable-Air-Cooling/  
+**Poster (A1 PDF):** [poster/ClayBreeze_Poster_A1.pdf](poster/ClayBreeze_Poster_A1.pdf)
 
 > A Makerspace prototype exploring porous clay as a wetted medium for direct evaporative cooling.
 
@@ -49,6 +50,7 @@ Affordability, maintainability, water use, electricity use, and environmental co
 - [`docs/safety-and-maintenance.md`](docs/safety-and-maintenance.md) — practical safety and maintenance considerations.
 - [`docs/references.md`](docs/references.md) — research and background sources.
 - [`data/test-data-template.csv`](data/test-data-template.csv) — blank CSV header for recording real measurements.
+- [`poster/`](poster/) — A1 portrait project poster: [`ClayBreeze_Poster_A1.pdf`](poster/ClayBreeze_Poster_A1.pdf), a [preview PNG](poster/ClayBreeze_Poster_preview.png) and the HTML source (`claybreeze-poster.html`, printed to PDF with headless Chrome).
 
 ## Current Build Status
 
@@ -81,7 +83,7 @@ Real workshop photographs are in `media/photos/`, and real SolidWorks screenshot
 
 ## Website
 
-`index.html` is a static presentation website (no build step, no external requests). It includes an interactive 3D visualisation of the assembly built procedurally in `assets/js/model.js` from the documented dimensions and measurements of the SolidWorks GLB export (`assets/models/claybreeze-assembly.glb`), which the hero crossfades to and the explorer can show as "SolidWorks model". The export contains no fans, so fan size/position and all water-system positions remain approximate; see the page's "Model notes". The 3D library is three.js 0.160.0, vendored in `assets/vendor/three/` with its MIT `LICENSE`. See `WEBSITE_GUIDE.md`. Export drawings or neutral CAD formats into `cad/exports/` where useful. Keep native CAD files in `cad/native-files/` only if you intend to version them in this repository; large binaries may be better stored separately or via Git LFS. See the folder README files for guidance.
+`index.html` is a static presentation website (no build step, no external requests). It includes an interactive 3D visualisation of the assembly built procedurally in `assets/js/model.js` from the documented dimensions and measurements of the SolidWorks GLB export (`assets/models/claybreeze-assembly.glb`), which the hero crossfades to and the explorer can show as "SolidWorks model". The export contains no fans, so fan size/position and the tub, pump and tubing (estimated from photographs) remain approximate; see the page's "Model notes". The 3D library is three.js 0.160.0, vendored in `assets/vendor/three/` with its MIT `LICENSE`. See `WEBSITE_GUIDE.md`. Export drawings or neutral CAD formats into `cad/exports/` where useful. Keep native CAD files in `cad/native-files/` only if you intend to version them in this repository; large binaries may be better stored separately or via Git LFS. See the folder README files for guidance.
 
 ## Research Context
 
