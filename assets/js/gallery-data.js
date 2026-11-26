@@ -142,6 +142,33 @@ window.CLAYBREEZE_GALLERY = [
     alt: "Side view of the assembled frame showing a column of clay pots on the rods and the two white exhaust fans mounted on the rear extension frame",
     description: "A side view of the same assembly, showing the clay pots, the rod ends and the two fans on the rear extension frame."
   },
+  {
+    src: "media/photos/Water_System_Tub_Front_Left_View.jpeg",
+    title: "Assembled prototype standing in the water tub",
+    category: "water-system",
+    kind: "photo",
+    width: 960, height: 1280,
+    alt: "The painted frame with 30 clay pots standing inside a grey plastic tub, clear tubing with a blue connector running down the front-left post into the tub and along the top of the frame",
+    description: "The frame now stands inside a grey plastic tub. Clear tubing runs down the front-left post, where it joins at a blue connector, and along the top of the frame."
+  },
+  {
+    src: "media/photos/Water_System_Tub_Front_Right_View.jpeg",
+    title: "Tub, tubing and pump, front-right view",
+    category: "water-system",
+    kind: "photo",
+    width: 960, height: 1280,
+    alt: "Front-right view of the assembly in the grey tub, with clear tubing looped over the top of the frame and a small green unit with a black power cable in the right-hand corner of the tub",
+    description: "Clear tubing runs over the top of the frame and down the side. A small green unit with a black power cable sits in the front-right corner of the tub — the water pump."
+  },
+  {
+    src: "media/photos/Water_System_Tub_Side_View.jpeg",
+    title: "Side view: fans, pots and tubing in the tub",
+    category: "water-system",
+    kind: "photo",
+    width: 960, height: 1280,
+    alt: "Side view of the assembly in the grey tub, showing the two white rear fans, a column of clay pots, and clear tubing running down a frame post into the water in the tub, with loose cables beside it",
+    description: "Side view: the two rear fans, the pot column and the tubing running down a frame post into the tub, which has water in it. Loose supply cables are still visible beside the tub."
+  },
   // --- SolidWorks CAD screenshots (media/cad-screenshots/) ---
   {
     src: "media/cad-screenshots/Drawing Sheet_With_Dimensions.png",

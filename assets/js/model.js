@@ -51,7 +51,15 @@ export const APPROX = {
   paint: 0xc3c9d1,       // light grey paint (photos), tuned for the dark scene
   rawSteel: 0x7d6a4c,
   terracotta: 0xc4612e,
-  potGlow: 0x7a2a0a       // warm emissive so the pots read against the dark background
+  potGlow: 0x7a2a0a,      // warm emissive so the pots read against the dark background
+  // Water system — estimated from the photographs, not measured:
+  tubTop: [620, 440],     // tub rim, width × depth (mm)
+  tubBottom: [590, 410],  // tub floor
+  tubH: 120,              // tub wall height
+  waterDepth: 60,
+  pumpXZ: [266, 105],     // pump centre: front-right corner of the tub
+  tubColour: 0x7f8891,    // grey plastic tub
+  pumpColour: 0x2f9e8a    // green pump body
 };
 
 const W = DIM.width, H = DIM.height, D = DIM.depth, P = DIM.pipe;
@@ -114,7 +122,10 @@ function makeMaterials() {
     rods: new THREE.MeshStandardMaterial({ color: 0x8a939e, roughness: 0.45, metalness: 0.6 }),
     fanBody: new THREE.MeshStandardMaterial({ color: 0xdfe3e8, roughness: 0.7, metalness: 0 }),
     fanBlade: new THREE.MeshStandardMaterial({ color: 0xd3d8de, roughness: 0.75, metalness: 0, side: THREE.DoubleSide }),
-    water: new THREE.MeshStandardMaterial({ color: 0x4fb8e0, roughness: 0.35, metalness: 0, transparent: true, opacity: 0.3, depthWrite: false })
+    water: new THREE.MeshStandardMaterial({ color: 0x4fb8e0, roughness: 0.35, metalness: 0, transparent: true, opacity: 0.3, depthWrite: false }),
+    tub: new THREE.MeshStandardMaterial({ color: APPROX.tubColour, roughness: 0.8, metalness: 0, side: THREE.DoubleSide }),
+    pump: new THREE.MeshStandardMaterial({ color: APPROX.pumpColour, roughness: 0.6, metalness: 0 }),
+    tubing: new THREE.MeshStandardMaterial({ color: 0xe9f3f6, roughness: 0.25, metalness: 0, transparent: true, opacity: 0.6 })
   };
 }
 
@@ -230,22 +241,73 @@ export function buildAssembly() {
     groups.fans.add(fan);
   }
 
-  // ---- Water system: approximate geometry (pump, tubing and reservoir are
-  // installed, but are not in the SolidWorks export and were not measured) ----
-  const tankW = 520, tankH = 110, tankD = 230, tankY = -H / 2 - tankH / 2 - 15;
-  const tank = new THREE.Mesh(cached("tank", () => new THREE.BoxGeometry(tankW * MM, tankH * MM, tankD * MM)), M.water);
-  tank.position.set(0, tankY * MM, -10 * MM);
-  const pump = new THREE.Mesh(cached("pump", () => new THREE.BoxGeometry(60 * MM, 60 * MM, 60 * MM)), M.water);
-  pump.position.set(200 * MM, (tankY - 15) * MM, 0);
-  const pipeGeo = (len) => cached(`pipe:${len}`, () => new THREE.CylinderGeometry(6 * MM, 6 * MM, len * MM, 12));
-  const riserLen = H / 2 + 22 - tankY;
-  const riser = new THREE.Mesh(pipeGeo(riserLen), M.water);
-  riser.position.set(262 * MM, (tankY + riserLen / 2) * MM, 0);
-  const header = new THREE.Mesh(pipeGeo(W + 44), M.water);
-  header.rotation.z = Math.PI / 2;
-  header.position.set(0, (H / 2 + 22) * MM, ROD_Z * MM);
-  groups.water.add(tank, pump, riser, header);
-  groups.water.visible = false;
+  // ---- Water system: tub (reservoir), pump and tubing. Installed, but not in
+  // the SolidWorks export and not measured: sizes and positions are estimated
+  // from the photographs (APPROX.tub*). The frame stands inside the tub. ----
+  const parts = {};
+  for (const name of ["tub", "pump", "tubing"]) {
+    const g = new THREE.Group();
+    g.name = name;
+    g.userData.part = name;
+    parts[name] = g;
+    groups.water.add(g);
+  }
+  const { tubTop, tubBottom, tubH } = APPROX;
+  const floorY = -H / 2;            // frame feet rest on the tub floor
+  const tubZ = -(DIM.overallDepth - D) / 2; // tub centred under the frame + extension
+  // Tapered walls: a 4-sided open cylinder turned 45° is a square frustum; scale it to a rectangle.
+  const wallGeo = cached("tubWalls", () => {
+    const r = Math.SQRT1_2;
+    const g = new THREE.CylinderGeometry(r, r * (tubBottom[0] / tubTop[0]), tubH * MM, 4, 1, true);
+    g.rotateY(Math.PI / 4);
+    g.scale(tubTop[0] * MM, 1, tubTop[1] * MM);
+    // keep the bottom depth in proportion to the measured-looking bottom footprint
+    const pos = g.attributes.position;
+    for (let i = 0; i < pos.count; i += 1) if (pos.getY(i) < 0) pos.setZ(i, Math.sign(pos.getZ(i)) * tubBottom[1] / 2 * MM);
+    g.computeVertexNormals();
+    return g;
+  });
+  const walls = new THREE.Mesh(wallGeo, M.tub);
+  walls.position.set(0, (floorY + tubH / 2) * MM, tubZ * MM);
+  const floor = new THREE.Mesh(cached("tubFloor", () => new THREE.BoxGeometry(tubBottom[0] * MM, 4 * MM, tubBottom[1] * MM)), M.tub);
+  floor.position.set(0, (floorY - 2) * MM, tubZ * MM);
+  const rim = new THREE.Mesh(cached("tubRim", () => {
+    const s = new THREE.Shape();
+    const [w, d] = [tubTop[0] / 2 + 8, tubTop[1] / 2 + 8];
+    s.moveTo(-w * MM, -d * MM); s.lineTo(w * MM, -d * MM); s.lineTo(w * MM, d * MM); s.lineTo(-w * MM, d * MM); s.lineTo(-w * MM, -d * MM);
+    const hole = new THREE.Path();
+    const [hw, hd] = [tubTop[0] / 2 - 2, tubTop[1] / 2 - 2];
+    hole.moveTo(-hw * MM, -hd * MM); hole.lineTo(-hw * MM, hd * MM); hole.lineTo(hw * MM, hd * MM); hole.lineTo(hw * MM, -hd * MM); hole.lineTo(-hw * MM, -hd * MM);
+    s.holes.push(hole);
+    const g = new THREE.ExtrudeGeometry(s, { depth: 6 * MM, bevelEnabled: false });
+    g.rotateX(Math.PI / 2);
+    return g;
+  }), M.tub);
+  rim.position.set(0, (floorY + tubH) * MM, tubZ * MM);
+  const waterLevel = APPROX.waterDepth;
+  const water = new THREE.Mesh(cached("tubWater", () => new THREE.BoxGeometry((tubBottom[0] - 8) * MM, waterLevel * MM, (tubBottom[1] - 8) * MM)), M.water);
+  water.position.set(0, (floorY + waterLevel / 2) * MM, tubZ * MM);
+  parts.tub.add(walls, floor, rim, water);
+
+  // Pump: small green unit in the front-right corner of the tub (photo).
+  const [px, pz] = APPROX.pumpXZ;
+  const pumpBody = new THREE.Mesh(cached("pumpBody", () => new THREE.CylinderGeometry(25 * MM, 27 * MM, 55 * MM, 24)), M.pump);
+  pumpBody.position.set(px * MM, (floorY + 27.5) * MM, pz * MM);
+  const pumpCap = new THREE.Mesh(cached("pumpCap", () => new THREE.CylinderGeometry(9 * MM, 9 * MM, 14 * MM, 12)), M.pump);
+  pumpCap.position.set(px * MM, (floorY + 62) * MM, pz * MM);
+  parts.pump.add(pumpBody, pumpCap);
+
+  // Tubing: pump → along the tub floor in front of the frame → up the outside of the
+  // front-left post → across the top of the frame (top distribution) → down the right side.
+  const tubePts = [
+    [px, 69, pz], [px - 10, 40, pz + 22], [px - 60, 18, pz + 24], [100, 16, pz + 24], [-100, 16, pz + 24],
+    [-215, 18, pz + 18], [-252, 40, 88], [-254, 160, 84], [-254, 400, 82], [-252, H - 10, 74],
+    [-246, H + 8, 40], [-200, H + 10, 4], [0, H + 10, 0], [200, H + 10, 0], [246, H + 6, 0],
+    [256, H - 20, 0], [256, H - 90, 0]
+  ].map(([x, y, z]) => new THREE.Vector3(x * MM, (floorY + y) * MM, z * MM));
+  const tubeGeo = cached("tubing", () => new THREE.TubeGeometry(new THREE.CatmullRomCurve3(tubePts, false, "centripetal"), 160, 6 * MM, 10, false));
+  parts.tubing.add(new THREE.Mesh(tubeGeo, M.tubing));
+  groups.water.traverse((o) => { if (o.isMesh) o.castShadow = o.material !== M.water; });
 
   root.traverse((o) => {
     if (o.isMesh) {
@@ -262,7 +324,7 @@ export function buildAssembly() {
     pots: new THREE.Vector3(0, 0, 0.27),
     fanMount: new THREE.Vector3(0, 0, -0.12),
     fans: new THREE.Vector3(0, 0, -0.26),
-    water: new THREE.Vector3(0, -0.1, 0)
+    water: new THREE.Vector3(0.2, 0, 0.12)
   };
 
   let explode = 0;
@@ -293,11 +355,11 @@ export function buildAssembly() {
     return groups.fans.children.map((f) => f.children[f.children.length - 1]);
   }
 
-  return { root, groups, materials: M, setExplode, setStage, rotors, getExplode: () => explode };
+  return { root, groups, parts, materials: M, setExplode, setStage, rotors, getExplode: () => explode };
 }
 
-// Overall bounds for camera framing (metres), incl. extension and water ghost.
+// Overall bounds for camera framing (metres), incl. extension and the water system.
 export const BOUNDS = {
   center: new THREE.Vector3(0, -0.02, -0.04),
-  radius: 0.46
+  radius: 0.48
 };

@@ -148,8 +148,12 @@ window.CLAYBREEZE_PROJECT = {
       number: "07",
       title: "Water system & electronics integration",
       buildStage: 7,
-      insetNote: "water parts approximate; electronics not modelled",
-      photos: [],
+      insetNote: "tub, pump and tubing approximate; electronics not modelled",
+      photos: [
+        "media/photos/Water_System_Tub_Front_Right_View.jpeg",
+        "media/photos/Water_System_Tub_Front_Left_View.jpeg",
+        "media/photos/Water_System_Tub_Side_View.jpeg"
+      ],
       text: "The water motor (pump) and its tubing were installed with the reservoir, and an ESP32, a DHT11 sensor and a 3-channel relay module were integrated to switch the fans and the pump. The control logic now runs on the ESP32: both fans off at or below 28 °C, one fan above 28 °C, both above 35 °C, and the pump on whenever relative humidity is below 60 %. With this step the prototype is fully assembled."
     }
   ],
@@ -175,7 +179,9 @@ window.CLAYBREEZE_PROJECT = {
       ["Fan size", "190 mm square plate, ⌀118 mm duct", "Photos (approximate; fans not in CAD export)"],
       ["Fan positions", "Stacked, upper and middle of extension, blowing forward", "Photos (approximate)"],
       ["Frame colour", "Light grey paint", "Photos"],
-      ["Water system", "Pump, tubing and reservoir positions and sizes", "Approximate geometry — not in the SolidWorks export"]
+      ["Tub (reservoir)", "Grey plastic tub about 620 × 440 mm at the rim, 120 mm deep; the frame stands inside it", "Approximate, estimated from photographs"],
+      ["Pump", "Small green unit, about ⌀50 × 55 mm, in the front-right corner of the tub", "Approximate, estimated from photographs"],
+      ["Tubing", "Clear tube from the pump, up the front-left post and across the top of the frame", "Approximate, estimated from photographs"]
     ]
   }
 };

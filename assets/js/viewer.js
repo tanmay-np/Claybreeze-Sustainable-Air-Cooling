@@ -586,7 +586,10 @@ function init() {
       rods: { name: "Pot-retaining rods", status: "COMPLETED", text: "Six ⌀12 mm rods, drilled and attached across the frame width: 90 mm apart, on the centre plane of the frame (from the SolidWorks export)." },
       pots: { name: "Clay pots", status: "COMPLETED", text: "30 unglazed clay pots, 5 columns × 6 rows, mouths facing the front (observed in photographs). Size from the SolidWorks export (⌀80 × 80 mm, ⌀40 openings); the profile curve is approximate." },
       fans: { name: "Exhaust fans", status: "COMPLETED · CONTROL IMPLEMENTED", text: "Two exhaust fans mounted at the rear, blowing room air forward through the pot array. Switched by the ESP32 and relay: both OFF at or below 28 °C, one fan ON above 28 °C, both ON above 35 °C. Fan size is approximate." },
-      water: { name: "Water system", status: "COMPLETED · CONTROL IMPLEMENTED", text: "Water pump (motor) with tubing, plus reservoir — installed. The pump runs while relative humidity is below 60 % and stops at or above 60 %. Shown with approximate geometry; see Model notes." }
+      water: { name: "Water system", status: "COMPLETED · CONTROL IMPLEMENTED", text: "Water pump (motor) with tubing, plus reservoir — installed. The pump runs while relative humidity is below 60 % and stops at or above 60 %. Shown with approximate geometry; see Model notes." },
+      tub: { name: "Water tub (reservoir)", status: "COMPLETED", text: "Grey plastic tub under the frame; the frame stands inside it and excess water drains back into it. Size and position are approximate, estimated from photographs — capacity and dimensions not yet measured." },
+      pump: { name: "Water pump", status: "COMPLETED · CONTROL IMPLEMENTED", text: "Small pump in the tub, switched by the ESP32 and relay: ON below 60 % RH, OFF at or above 60 %. Shape and position are approximate, estimated from photographs; model and ratings not yet recorded." },
+      tubing: { name: "Tubing", status: "COMPLETED", text: "Clear tubing from the pump, up the front-left post and across the top of the frame. Route is approximate, estimated from photographs; length and diameter not yet recorded." }
     };
     const infoPanel = host.querySelector(".part-info");
     const infoName = infoPanel.querySelector(".part-name");
@@ -599,7 +602,7 @@ function init() {
     function select(part) {
       selected = part;
       const partMats = new Set();
-      if (part) assembly.groups[part]?.traverse((o) => { if (o.isMesh) partMats.add(o.material); });
+      if (part) (assembly.groups[part] || assembly.parts?.[part])?.traverse((o) => { if (o.isMesh) partMats.add(o.material); });
       for (const [m, b] of matBase) {
         const dim = part && !partMats.has(m);
         m.transparent = dim ? true : b.transparent;
@@ -641,7 +644,7 @@ function init() {
       view.dirty = true;
     }));
     const layerButtons = [...host.querySelectorAll("[data-layer]")];
-    const layerState = { frame: true, fanMount: true, rods: true, pots: true, fans: true, water: false };
+    const layerState = { frame: true, fanMount: true, rods: true, pots: true, fans: true, water: true };
     const CAD_PARTS = ["frame", "fanMount", "rods", "pots"];
     view.layerOn = (name) => layerState[name];
     function setLayer(name, on) {
@@ -651,7 +654,7 @@ function init() {
       const b = layerButtons.find((x) => x.dataset.layer === name);
       if (b) b.setAttribute("aria-pressed", String(on));
       if (name === "water") host.querySelector(".water-note").hidden = !on;
-      if (!on && selected === name) select(null);
+      if (!on && (selected === name || assembly.parts?.[selected]?.parent === g)) select(null);
       view.dirty = true;
     }
     layerButtons.forEach((b) => b.addEventListener("click", () => setLayer(b.dataset.layer, b.getAttribute("aria-pressed") !== "true")));
@@ -750,7 +753,7 @@ function init() {
       assembly.setExplode(0);
       explodeButtons.forEach((x) => x.setAttribute("aria-pressed", String(x.dataset.explode === "0")));
       ["frame", "fanMount", "rods", "pots", "fans"].forEach((n) => setLayer(n, true));
-      setLayer("water", false);
+      setLayer("water", true);
       setDims(false);
       view.dirty = true;
       setAirflow(false);

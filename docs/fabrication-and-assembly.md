@@ -69,7 +69,7 @@ The water pump (motor) with tubing and the reservoir are installed, and the pump
 | To record | Rods and fan-mount extension attached | Final layout/cut length to be measured | To record | To record | `media/photos/Frame_Rod_Assembled_1.jpeg`, `Frame_Rod_assembled_With_Fan_Extension1.jpeg` |
 | To record | Frame spray-painted; fans mounted on the rear extension frame | — | To record | To record | `media/photos/Frame_with_Rod_And_Exhaust_Fan_Colourd.jpeg` |
 | To record | 30 clay pots fixed into frame (5 × 6) | Spacing to be measured | Loose, unterminated fan cable visible in photo | To record | `media/photos/Frame_Completely_Assembled_Front_View.jpeg`, `Frame_Completely_Assembled_Side_View.jpeg` |
-| To record | Water pump, tubing and reservoir installed | Specifications to be recorded | To record | To record | No photo in repository yet |
+| To record | Water pump, tubing and reservoir installed | Specifications to be recorded | Loose supply cables beside the tub | To record | `media/photos/Water_System_Tub_Front_Left_View.jpeg`, `Water_System_Tub_Front_Right_View.jpeg`, `Water_System_Tub_Side_View.jpeg` |
 | To record | ESP32, DHT11 and 3-channel relay module integrated; control logic running | Firmware source to be added | To record | To record | No photo in repository yet |
 
 No dates are recorded yet: the photo filenames contain no dates and the image files carry no date metadata. Fill in dates only from a real record (phone gallery, workshop register, messages). "Issue observed" and "Action taken" are still to record for most rows. Do not record planned work as completed work.
