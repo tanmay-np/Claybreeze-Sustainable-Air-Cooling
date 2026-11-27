@@ -6,7 +6,7 @@
  * Status vocabulary used everywhere on the site:
  *   COMPLETED   — physically built and installed
  *   IMPLEMENTED — control logic running on the ESP32
- *   NEXT        — the next stage of work
+ *   FUTURE      — future scope (not started)
  */
 window.CLAYBREEZE_PROJECT = {
   title: "ClayBreeze",
@@ -25,7 +25,7 @@ window.CLAYBREEZE_PROJECT = {
   modelGLBSize: "4.9 MB", // shown on the button when the download is deferred (small screens, Save-Data)
 
   specifications: [
-    { label: "Frame outer size", value: "480 W × 560 H × 150 D mm", note: "Design value (SolidWorks drawing); as-built measurement pending" },
+    { label: "Frame outer size", value: "480 W × 560 H × 150 D mm", note: "Design value from the SolidWorks drawing" },
     { label: "Front inner opening", value: "440 × 520 mm", note: "440 mm on the drawing; 520 mm follows from 560 − 2 × 20 mm" },
     { label: "Frame section", value: "20 mm square pipe", note: "Wall thickness to be confirmed" },
     { label: "Overall depth with rear extension", value: "270 mm", note: "Read from the side view of the drawing" },
@@ -34,14 +34,14 @@ window.CLAYBREEZE_PROJECT = {
     { label: "Air movement", value: "2 exhaust fans", note: "Mounted at the rear, blowing room air forward through the pot array" }
   ],
 
-  // Component list for the Electronics section — purpose only, no GPIO pins, ratings or wiring.
+  // Component list for the Electronics section. Pins follow the confirmed wiring table (Section 07).
   components: [
-    { name: "ESP32 microcontroller", status: "COMPLETED", role: "Reads the DHT11 sensor, runs the control logic and drives the relay module. Integrated on a breadboard." },
-    { name: "DHT11 sensor", status: "COMPLETED", role: "Measures temperature and relative humidity for the ESP32. Sensor placement has not been documented." },
-    { name: "3-channel relay module", status: "COMPLETED", role: "Switches the two exhaust fans and the water pump under ESP32 control. Which channel drives which load is not documented here." },
-    { name: "Two exhaust fans", status: "COMPLETED", role: "Mounted on the rear extension frame, blowing room air forward through the pot array. Switched in two temperature stages by the ESP32 and relay." },
+    { name: "ESP32 microcontroller", status: "COMPLETED", role: "Straddles the breadboard centre gap (antenna at top, USB at bottom). Reads the DHT11 on GPIO4, runs the control logic and drives the relay inputs on GPIO19, GPIO21 and GPIO22." },
+    { name: "DHT11 sensor", status: "COMPLETED", role: "Measures temperature and relative humidity. VCC on the 3.3 V rail, GND on the ground rail, DATA to 13J (GPIO4)." },
+    { name: "3-channel relay module", status: "COMPLETED", role: "VCC/DC+ on the 5 V rail, GND/DC− on common ground. IN1 (8J, GPIO19) switches Fan 1, IN2 (6J, GPIO21) Fan 2 and IN3 (3J, GPIO22) the water motor." },
+    { name: "Two exhaust fans", status: "COMPLETED", role: "Mounted on the rear extension frame, blowing room air forward through the pot array. Each fan has its own relay channel and its own temperature thresholds." },
     { name: "Water pump, tubing and reservoir", status: "COMPLETED", role: "The water motor (pump) and its tubing are installed with the reservoir. The pump is switched on humidity by the ESP32 and relay." },
-    { name: "Control logic", status: "IMPLEMENTED", role: "Running on the ESP32. Temperature ≤ 28 °C: both fans OFF. Above 28 °C: one fan ON. Above 35 °C: both fans ON. Relative humidity below 60 %: pump ON; at or above 60 %: pump OFF." }
+    { name: "Control logic", status: "IMPLEMENTED", role: "Running on the ESP32, with hysteresis. Fan 1: ON above 26 °C, OFF at or below 25 °C. Fan 2: ON above 30 °C, OFF at or below 29 °C. Water motor: ON below 60 % RH, OFF at or above 62 % RH. Between the two limits each output keeps its previous state." }
   ],
 
   // Current status, grouped in plain English (Section 10). Do not repeat the journey here.
@@ -62,23 +62,21 @@ window.CLAYBREEZE_PROJECT = {
       badge: "IMPLEMENTED",
       tone: "done",
       items: [
-        "Temperature at or below 28 °C: both fans OFF.",
-        "Above 28 °C: one fan ON.",
-        "Above 35 °C: both fans ON.",
-        "Relative humidity below 60 %: pump ON. At or above 60 %: pump OFF."
+        "Fan 1: ON above 26 °C, OFF at or below 25 °C.",
+        "Fan 2: ON above 30 °C, OFF at or below 29 °C.",
+        "Water motor: ON below 60 % RH, OFF at or above 62 % RH.",
+        "Between the two limits each output keeps its previous state (hysteresis)."
       ]
     },
     {
-      heading: "Next: performance testing and results",
-      badge: "NEXT",
+      heading: "Future scope",
+      badge: "FUTURE",
       tone: "next",
       items: [
-        "Secure and terminate all fan and pump cables before powered testing.",
-        "Finish laser cutting the 3 mm MDF electronics enclosure (DXF in cad/dxf-enclosure/; cutting in progress) and fit the ESP32, relay module and DHT11 wiring inside it.",
-        "Run a dry-pot baseline and wetted-pot runs: inlet and outlet temperature and humidity, airflow and water use.",
-        "Record the raw readings in the CSV template and publish the measured results.",
-        "Measure the as-built frame and update the SolidWorks model and drawing.",
-        "Add the ESP32 firmware source to this repository."
+        "Performance measurement: a dry-pot baseline and wetted-pot runs measuring inlet and outlet temperature and humidity, airflow and water use.",
+        "Data logging: record the DHT11 readings and relay states over time (CSV template in data/).",
+        "IoT monitoring: use the ESP32's Wi-Fi to show readings and fan/pump states on a phone.",
+        "Improvements: a water-level sensor with a dry-run cut-out for the pump, as-built measurements fed back into the SolidWorks model, and the electronics fitted in the laser-cut 3 mm MDF enclosure (DXF files)."
       ]
     }
   ],
@@ -96,7 +94,7 @@ window.CLAYBREEZE_PROJECT = {
         "media/photos/Pipes_Cut_All_1.jpeg",
         "media/photos/Frame_Welded_1.jpeg"
       ],
-      text: "We cut 20 mm square pipe to length on an abrasive chop saw and sorted the pieces by length. The pieces were then welded into a box frame, designed at 480 × 560 × 150 mm with a 440 × 520 mm front opening. The frame has had a visual inspection; as-built measurements are still pending."
+      text: "We cut 20 mm square pipe to length on an abrasive chop saw and sorted the pieces by length. The pieces were then welded into a box frame, designed at 480 × 560 × 150 mm with a 440 × 520 mm front opening. The frame has had a visual inspection."
     },
     {
       number: "02",
@@ -155,7 +153,7 @@ window.CLAYBREEZE_PROJECT = {
         "media/photos/Water_System_Tub_Front_Left_View.jpeg",
         "media/photos/Water_System_Tub_Side_View.jpeg"
       ],
-      text: "The water motor (pump) and its tubing were installed with the reservoir, and an ESP32, a DHT11 sensor and a 3-channel relay module were integrated to switch the fans and the pump. The control logic now runs on the ESP32: both fans off at or below 28 °C, one fan above 28 °C, both above 35 °C, and the pump on whenever relative humidity is below 60 %. With this step the prototype is fully assembled."
+      text: "The water motor (pump) and its tubing were installed with the reservoir, and an ESP32, a DHT11 sensor and a 3-channel relay module were integrated to switch the fans and the pump. The control logic now runs on the ESP32 with hysteresis: Fan 1 ON above 26 °C and OFF at or below 25 °C, Fan 2 ON above 30 °C and OFF at or below 29 °C, and the pump ON below 60 % relative humidity and OFF at or above 62 %. With this step the prototype is fully assembled."
     }
   ],
 
@@ -188,10 +186,10 @@ window.CLAYBREEZE_PROJECT = {
 };
 
 /*
- * Control Logic Lab — single source of truth for the implemented fan/pump
- * thresholds. The simulator (assets/js/site.js) reads these values rather
- * than hard-coding them, so the displayed thresholds and the simulated
- * behaviour can never drift apart.
+ * Circuit & Control Lab — single source of truth for the implemented fan/pump
+ * thresholds (same values as firmware/claybreeze_controller). The simulator
+ * (assets/js/circuit-lab.js) reads these values rather than hard-coding them,
+ * so the displayed thresholds and the simulated behaviour can never drift apart.
  *
  * This powers a SOFTWARE SIMULATION ONLY. It has no connection to the
  * actual ESP32, DHT11 or relay hardware.
@@ -199,10 +197,10 @@ window.CLAYBREEZE_PROJECT = {
 window.CLAYBREEZE_CONTROL = {
   label: "Implemented control logic",
   status: "IMPLEMENTED",
-  // Fans: temp <= oneFanAboveC → both OFF; > oneFanAboveC → one fan; > bothFansAboveC → both fans.
-  oneFanAboveC: 28,
-  bothFansAboveC: 35,
-  // Pump: RH < pumpOnBelowRH → ON; RH >= pumpOnBelowRH → OFF.
-  pumpOnBelowRH: 60,
-  note: "The same thresholds as the logic running on the ESP32."
+  // Hysteresis: ON past the first limit, OFF past the second, previous state in between.
+  fan1: { onAboveC: 26, offAtOrBelowC: 25 },
+  fan2: { onAboveC: 30, offAtOrBelowC: 29 },
+  pump: { onBelowRH: 60, offAtOrAboveRH: 62 },
+  readIntervalS: 2,
+  note: "The same thresholds and hysteresis as the sketch running on the ESP32."
 };

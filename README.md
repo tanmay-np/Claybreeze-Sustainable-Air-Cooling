@@ -6,7 +6,7 @@
 
 > A Makerspace prototype exploring porous clay as a wetted medium for direct evaporative cooling.
 
-**Project status: Build complete — control logic running; next: performance testing.** The metal frame is fabricated and painted, the six 12 mm pot-retaining rods are attached, the rear fan-mount extension carries both exhaust fans, and 30 clay pots (5 columns × 6 rows) are fixed into the frame. The water pump with tubing and the reservoir are installed. An ESP32, a DHT11 sensor and a 3-channel relay module are integrated, and the control logic is running on the ESP32: both fans off at or below 28 °C, one fan above 28 °C, both fans above 35 °C, and the pump on below 60 % relative humidity (off at or above 60 %). Next: performance testing and results. No cooling-performance result is claimed until the prototype is tested.
+**Project status: Build complete — control logic running.** The metal frame is fabricated and painted, the six 12 mm pot-retaining rods are attached, the rear fan-mount extension carries both exhaust fans, and 30 clay pots (5 columns × 6 rows) are fixed into the frame. The water pump with tubing and the reservoir are installed. An ESP32, a DHT11 sensor and a 3-channel relay module are integrated, and the control logic is running on the ESP32 with hysteresis: Fan 1 ON above 26 °C and OFF at or below 25 °C; Fan 2 ON above 30 °C and OFF at or below 29 °C; the water motor ON below 60 % RH and OFF at or above 62 % RH; between the limits each output keeps its previous state. The firmware is in [`firmware/`](firmware/). No cooling-performance result is claimed.
 
 ## Student
 
@@ -22,11 +22,11 @@ Project Guide: Dr. Kiran Wakchaure
 
 **The problem.** Summer heat in Indian homes, classrooms and workshops is a real problem, and affordable cooling is limited ([India Cooling Action Plan, 2019](https://ozonecell.nic.in/india-cooling-action-plan)). Air conditioners are expensive to buy and run, draw high power and use refrigerants with climate impact, so many households and schools cannot use them. Pad-type coolers do cool, but their honeycomb/cellulose pads clog with scale and dust and need replacing, and grass (khus / wood-wool) pads can grow mould and bacteria, smell, attract insects, become a fire risk when dry and need frequent replacement.
 
-**Our solution.** ClayBreeze uses 30 porous, unglazed terracotta pots — natural, locally made, reusable and biodegradable — as the wetted evaporative medium, with a recirculating tub–pump–tubing water system and ESP32 control (fans staged by temperature, pump by humidity). The design aim is low cost, low power, no pad replacement and an eco-friendly build. **These are aims, not results:** performance has not yet been measured, and no cooling or cost-saving result is claimed until the prototype is tested.
+**Our solution.** ClayBreeze uses 30 porous, unglazed terracotta pots — natural, locally made, reusable and biodegradable — as the wetted evaporative medium, with a recirculating tub–pump–tubing water system and ESP32 control (each fan switched on temperature and the pump on humidity, with hysteresis). The design aim is low cost, low power, no pad replacement and an eco-friendly build. **These are aims, not results:** performance has not been measured, and no cooling or cost-saving result is claimed.
 
 Inspired by reporting on Project Vaayu, a separate student initiative — see [`docs/project-overview.md`](docs/project-overview.md).
 
-**Method — CAD first.** The prototype was modelled and checked in SolidWorks first (parts, assembly and a dimensioned drawing), then fabricated step by step. The website and the report follow the same order: problem → how it works → CAD and design → interactive 3D model → build journey → electronics (including the laser-cut enclosure) → testing → safety → status → project gallery, followed by the separate Makerspace Workbench.
+**Method — CAD first.** The prototype was modelled and checked in SolidWorks first (parts, assembly and a dimensioned drawing), then fabricated step by step. The website and the report follow the same order: problem → how it works → CAD and design → interactive 3D model → build journey → electronics (wiring, control and the laser-cut enclosure) → test method → safety → status → project gallery, followed by the separate Makerspace Workbench.
 
 ## Current Design Snapshot
 
@@ -34,14 +34,49 @@ Inspired by reporting on Project Vaayu, a separate student initiative — see [`
 |---|---|
 | Frame outer dimensions | 480 mm wide × 560 mm high × 150 mm deep |
 | Front inner opening | 440 × 520 mm |
-| Frame section | 20 mm square pipe; wall thickness to be confirmed |
+| Frame section | 20 mm square pipe |
 | Pot-retaining rods | 12 mm diameter; holes drilled and rods attached to the frame |
-| Pot layout | 5 columns × 6 rows (30 pots), observed in the assembly photographs; spacing not yet measured |
+| Pot layout | 5 columns × 6 rows (30 pots), observed in the assembly photographs |
 | Frame finish | Spray-painted |
 | Fan mount | Rear extension frame, fabricated; both exhaust fans mounted on it |
-| Electronics | ESP32 + DHT11 + 3-channel relay module, integrated; control logic running (see `docs/electronics-and-control.md`) |
-| Water circuit | Water pump with tubing, plus reservoir: installed. Pump ON below 60 % RH, OFF at or above 60 % |
-| Airflow | Two exhaust fans on the rear extension frame, blowing room air forward through and around the pots and out of the front (direction confirmed by the team); switched in two temperature stages (28 °C / 35 °C) by the ESP32 + relay |
+| Electronics | ESP32 + DHT11 + 3-channel relay module on a breadboard (wiring below); control logic running; firmware in `firmware/` |
+| Water circuit | Water pump with tubing, plus reservoir: installed. Water motor ON below 60 % RH, OFF at or above 62 % RH |
+| Airflow | Two exhaust fans on the rear extension frame, blowing room air forward through and around the pots and out of the front (direction confirmed by the team); Fan 1 ON above 26 °C / OFF at or below 25 °C, Fan 2 ON above 30 °C / OFF at or below 29 °C, via the ESP32 + relay |
+
+## ESP32 Wiring
+
+Board orientation: antenna at top, USB at bottom; the ESP32 straddles the breadboard centre gap.
+
+| Breadboard | ESP32 pin | Connection |
+|---|---|---|
+| 1J | V5 (5V) | Right positive rail (5V) |
+| 19B | 3V3 | Left positive rail (3.3V) |
+| 14B | GND | Left negative rail (GND) |
+| 7J | GND | Right negative rail (GND) |
+| 13J | GPIO4 (G4) | DHT11 DATA |
+| 8J | GPIO19 (G19) | Relay IN1 – Fan 1 |
+| 6J | GPIO21 (G21) | Relay IN2 – Fan 2 |
+| 3J | GPIO22 (G22) | Relay IN3 – Water motor |
+
+Peripheral power:
+
+- DHT11 VCC → 3.3V rail; GND → GND rail; DATA → 13J (GPIO4)
+- Relay VCC/DC+ → 5V rail; GND/DC− → common GND; IN1/IN2/IN3 → 8J/6J/3J
+
+Notes:
+
+- Keep the 3.3V and 5V positive rails separate; ground rails are connected together.
+- Do not connect CLK, SD2, SD3, CMD, SD1 or SD0.
+
+## Control Logic (with hysteresis)
+
+| Output | ON | OFF | Between the limits |
+|---|---|---|---|
+| Fan 1 (IN1, GPIO19) | above 26 °C | at or below 25 °C | keeps its previous state |
+| Fan 2 (IN2, GPIO21) | above 30 °C | at or below 29 °C | keeps its previous state |
+| Water motor (IN3, GPIO22) | below 60 % RH | at or above 62 % RH | keeps its previous state |
+
+The website's **Circuit & Control Lab** animates this circuit and runs the same logic (simulator — not connected to hardware).
 
 ## Repository Guide
 
@@ -50,11 +85,12 @@ Inspired by reporting on Project Vaayu, a separate student initiative — see [`
 - [`docs/design-and-dimensions.md`](docs/design-and-dimensions.md) — dimensions, design assumptions and CAD update plan.
 - [`docs/materials-and-components.md`](docs/materials-and-components.md) — components, known specifications and confirmation checklist.
 - [`docs/fabrication-and-assembly.md`](docs/fabrication-and-assembly.md) — build sequence and assembly inspection points.
-- [`docs/digital-fabrication.md`](docs/digital-fabrication.md) — Makerspace Workbench — 3D Printing & Laser Cutting at Tinkerers' Lab: FDM motion types (bed-slinger vs CoreXY), laser head motion, uni- vs bidirectional engraving, and the laser-cut electronics enclosure (cutting in progress).
+- [`docs/digital-fabrication.md`](docs/digital-fabrication.md) — Makerspace Workbench — 3D Printing & Laser Cutting at Tinkerers' Lab: FDM motion types (bed-slinger vs CoreXY), laser head motion, uni- vs bidirectional engraving, and the laser-cut 3 mm MDF enclosure for the electronics (DXF files).
 - [`docs/solidworks-to-dxf.md`](docs/solidworks-to-dxf.md) — From SolidWorks to Laser Cutter: exporting DXF files in eight steps (menu paths from the SOLIDWORKS help), with the enclosure as the worked example.
 - [`cad/dxf-enclosure/`](cad/dxf-enclosure/) — DXF of the laser-cut electronics enclosure: 6 finger-jointed panels for a 120 × 150 × 100 mm box in 3 mm MDF.
-- [`docs/electronics-and-control.md`](docs/electronics-and-control.md) — ESP32/relay/DHT11 roles and the implemented fan and pump control logic.
-- [`docs/testing-and-results.md`](docs/testing-and-results.md) — test protocol, record sheet and calculation guidance.
+- [`docs/electronics-and-control.md`](docs/electronics-and-control.md) — ESP32/relay/DHT11 roles, the breadboard wiring table and the implemented fan and pump control logic with hysteresis.
+- [`firmware/`](firmware/) — the ESP32 sketch [`claybreeze_controller.ino`](firmware/claybreeze_controller/claybreeze_controller.ino) and its [README](firmware/README.md) (pins, active-LOW relays, libraries, build).
+- [`docs/testing-and-results.md`](docs/testing-and-results.md) — test method, record sheet and calculation guidance.
 - [`docs/safety-and-maintenance.md`](docs/safety-and-maintenance.md) — practical safety and maintenance considerations.
 - [`docs/references.md`](docs/references.md) — research and background sources.
 - [`data/test-data-template.csv`](data/test-data-template.csv) — blank CSV header for recording real measurements.
@@ -63,24 +99,27 @@ Inspired by reporting on Project Vaayu, a separate student initiative — see [`
 
 ## Current Build Status
 
-- [x] SolidWorks concept/design created
-- [x] Metal frame fabricated
-- [x] Holes drilled and 12 mm pot-retaining rods attached
-- [x] Fan mount fabricated
-- [x] Frame spray-painted
-- [x] Clay pots fixed into the frame
-- [x] Two exhaust fans mounted
-- [x] Water pump with tubing, plus reservoir, installed
-- [x] ESP32, DHT11 and 3-channel relay module integrated
-- [x] Prototype fully assembled
-- [x] Control logic running on the ESP32 (two-stage fans at 28 °C / 35 °C; pump below 60 % RH)
-- [ ] Firmware source added to this repository
-- [ ] As-built measurements of the frame recorded (visual inspection done)
-- [ ] CAD model updated to match the as-built assembly
-- [ ] Performance testing: baseline and wetted-pot runs (temperature, humidity, airflow, water use)
-- [ ] Test data analysed and results documented
+Completed:
 
-Checkboxes are project tracking notes and should be updated only when the relevant step is completed.
+- SolidWorks concept/design created
+- Metal frame fabricated
+- Holes drilled and 12 mm pot-retaining rods attached
+- Fan mount fabricated
+- Frame spray-painted
+- Clay pots fixed into the frame
+- Two exhaust fans mounted
+- Water pump with tubing, plus reservoir, installed
+- ESP32, DHT11 and 3-channel relay module integrated
+- Prototype fully assembled
+- Control logic running on the ESP32 with hysteresis (Fan 1: 26/25 °C, Fan 2: 30/29 °C, water motor: 60/62 % RH)
+- ESP32 firmware in this repository (`firmware/claybreeze_controller/`), compiled for the ESP32 Dev Module
+
+## Future Scope
+
+- **Performance measurement:** dry-pot baseline and wetted-pot runs — inlet and outlet temperature and humidity, airflow, water use.
+- **Data logging:** record DHT11 readings and relay states over time (CSV template in `data/`).
+- **IoT monitoring:** use the ESP32's Wi-Fi to show readings and fan/pump states on a phone.
+- **Improvements:** water-level sensor with a pump dry-run cut-out, as-built measurements fed back into the SolidWorks model, and the electronics fitted in the laser-cut 3 mm MDF enclosure (DXF files).
 
 ## Suggested First Test
 

@@ -103,6 +103,7 @@
   th, td { text-align: left; vertical-align: top; padding: 1.6mm 2mm 1.6mm 0; border-bottom: 0.4mm solid var(--line); line-height: 1.18; }
   thead th { font-family: var(--mono); font-weight: 700; color: var(--muted); border-bottom: 0.6mm solid var(--ink); }
   tbody th { font-weight: 600; white-space: nowrap; padding-right: 4mm; }
+  td.num { white-space: nowrap; padding-right: 4mm; }
   .num { font-family: var(--mono); font-weight: 600; white-space: nowrap; }
   .on { color: var(--ok); font-weight: 700; }
   .off { color: var(--muted); font-weight: 600; }
@@ -234,17 +235,16 @@
     <section>
       <h2><span class="no">06</span>Control logic</h2>
       <table>
-        <thead><tr><th>Sensor reads</th><th>Output</th></tr></thead>
+        <thead><tr><th>Output</th><th>ON</th><th>OFF</th></tr></thead>
         <tbody>
-          <tr><th class="num">≤ 28 °C</th><td class="off">Both fans OFF</td></tr>
-          <tr><th class="num">&gt; 28 °C</th><td class="on">One fan ON</td></tr>
-          <tr><th class="num">&gt; 35 °C</th><td class="on">Both fans ON</td></tr>
-          <tr class="pump"><th class="num">RH &lt; 60 %</th><td><b>Pump ON</b></td></tr>
-          <tr class="pump"><th class="num">RH ≥ 60 %</th><td>Pump OFF</td></tr>
+          <tr><th>Fan 1</th><td class="on num">&gt; 26 °C</td><td class="off num">≤ 25 °C</td></tr>
+          <tr><th>Fan 2</th><td class="on num">&gt; 30 °C</td><td class="off num">≤ 29 °C</td></tr>
+          <tr class="pump"><th>Pump (RH)</th><td class="num"><b>&lt; 60 %</b></td><td class="num">≥ 62 %</td></tr>
         </tbody>
       </table>
+      <p>Between the limits each output keeps its previous state (hysteresis).</p>
       <h3>Electronics</h3>
-      <ul class="chips"><li>ESP32</li><li>DHT11</li><li>3-ch relay</li><li>2 fans</li><li>Water pump</li></ul>
+      <ul class="chips"><li>ESP32</li><li>DHT11 · GPIO4</li><li>Relay · GPIO19/21/22</li><li>2 fans</li><li>Water motor</li></ul>
     </section>
 
     <section class="cad">
@@ -258,7 +258,7 @@
     <section class="status">
       <span><span class="chip chip-ok">✓ BUILD COMPLETE</span></span>
       <span><span class="chip chip-ok">✓ CONTROL LOGIC IMPLEMENTED</span></span>
-      <p><b>Results:</b> performance testing in progress.</p>
+      <p><b>Results:</b> no measured results are claimed.</p>
     </section>
     <section>
       <p>Inspired by reporting on <b>Project Vaayu</b>, a separate student initiative using clay kulhads to cool classrooms. Not our project; its results are not ours.</p>

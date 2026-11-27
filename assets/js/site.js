@@ -232,7 +232,7 @@
   $$("[data-gallery]").forEach((box) => {
     const cfg = GALLERIES[box.dataset.gallery];
     if (!cfg) return;
-    const grid = $(".gallery-grid", box), count = $(".gallery-count", box), emptyNote = $(".gallery-empty-note", box);
+    const grid = $(".gallery-grid", box), count = $(".gallery-count", box);
     const buttons = $$(".gallery-filter", box);
     let activeFilter = "all";
     const visibleItems = () => cfg.items.filter((item) => activeFilter === "all" || cfg.match(item, activeFilter));
@@ -249,12 +249,11 @@
         grid.append(card);
       });
     }
-    const empty = [];
     buttons.forEach((button) => {
       const value = button.dataset.filter;
       const n = value === "all" ? cfg.items.length : cfg.items.filter((item) => cfg.match(item, value)).length;
       button.dataset.count = String(n);
-      if (!n) { button.disabled = true; button.title = "No images in this category yet"; empty.push(button.textContent.trim()); }
+      if (!n) { button.remove(); return; } // never show a filter with no images
       button.addEventListener("click", () => {
         if (button.disabled) return;
         activeFilter = value;
@@ -262,7 +261,6 @@
         render();
       });
     });
-    if (emptyNote) emptyNote.textContent = empty.length ? `${empty.join(", ")}: no photographs added yet, so ${empty.length === 1 ? "this filter is" : "these filters are"} disabled.` : "";
     render();
   });
 
@@ -396,97 +394,5 @@
     }, 6000);
   });
 
-  // ---------------- Control Logic Lab ----------------
-  // A SOFTWARE SIMULATION of the logic running on the ESP32 (thresholds from
-  // window.CLAYBREEZE_CONTROL). It has no connection to the real ESP32, DHT11
-  // or relay hardware.
-  const CONTROL = window.CLAYBREEZE_CONTROL || { oneFanAboveC: 28, bothFansAboveC: 35, pumpOnBelowRH: 60 };
-  const tempSlider = $("#sim-temp-slider");
-  const tempNumber = $("#sim-temp-number");
-  const rhSlider = $("#sim-rh-slider");
-  const rhNumber = $("#sim-rh-number");
-  const fanOutputs = $("#sim-fan-outputs");
-  const pumpOutputs = $("#sim-pump-outputs");
-  const fanTable = $("#sim-fan-table");
-  const pumpTable = $("#sim-pump-table");
-  const fanExplain = $("#sim-fan-explain");
-  const pumpExplain = $("#sim-pump-explain");
-  const simRuleNote = $("#sim-rule-note");
-  const simReset = $("#sim-reset");
-
-  if (tempSlider && fanOutputs && pumpOutputs) {
-    const LOW = CONTROL.oneFanAboveC;
-    const HIGH = CONTROL.bothFansAboveC;
-    const RH = CONTROL.pumpOnBelowRH;
-    const state = { t: 25, rh: 50 };
-
-    // Exactly the implemented comparisons: <= LOW off, > LOW one fan, > HIGH both; RH < RH_ON pump on.
-    function evaluateFans(t) {
-      if (t > HIGH) return { stage: 2, fan1: true, fan2: true };
-      if (t > LOW) return { stage: 1, fan1: true, fan2: false };
-      return { stage: 0, fan1: false, fan2: false };
-    }
-    function evaluatePump(rh) {
-      return rh < RH;
-    }
-    window.__claybreezeControl = { evaluateFans, evaluatePump };
-
-    function chip(label, isOn) {
-      const c = el("div", `sim-chip ${isOn ? "is-on" : "is-off"}`);
-      c.append(el("span", "sim-chip-label", label), el("span", "sim-chip-value", isOn ? "ON" : "OFF"));
-      return c;
-    }
-    function buildTable(table, head, rows) {
-      const thead = el("thead");
-      const tr = el("tr");
-      head.forEach((h) => { const th = el("th", "", h); th.scope = "col"; tr.append(th); });
-      thead.append(tr);
-      const tbody = el("tbody");
-      rows.forEach((r) => { const row = el("tr"); r.forEach((c) => row.append(el("td", "", c))); tbody.append(row); });
-      table.append(thead, tbody);
-      return [...tbody.rows];
-    }
-    const fanRows = buildTable(fanTable, ["Temperature", "Fans"], [[`≤ ${LOW}\u00a0°C`, "Both OFF"], [`> ${LOW}\u00a0°C and ≤ ${HIGH}\u00a0°C`, "One fan ON"], [`> ${HIGH}\u00a0°C`, "Both ON"]]);
-    const pumpRows = buildTable(pumpTable, ["Relative humidity", "Pump"], [[`< ${RH}\u00a0%`, "ON"], [`≥ ${RH}\u00a0%`, "OFF"]]);
-    if (simRuleNote) simRuleNote.textContent = CONTROL.note || "";
-
-    function render() {
-      const { t, rh } = state;
-      const fans = evaluateFans(t);
-      fanOutputs.replaceChildren(chip("Fan stage 1", fans.fan1), chip("Fan stage 2", fans.fan2));
-      fanRows.forEach((row, i) => row.classList.toggle("is-active", i === fans.stage));
-      const tt = `${t.toFixed(1)}\u00a0°C`;
-      if (fans.stage === 0) fanExplain.textContent = `${tt} is at or below ${LOW}\u00a0°C, so both fans are OFF.`;
-      else if (fans.stage === 1) fanExplain.textContent = `${tt} is above ${LOW}\u00a0°C and at or below ${HIGH}\u00a0°C, so one fan is ON.`;
-      else fanExplain.textContent = `${tt} is above ${HIGH}\u00a0°C, so both fans are ON.`;
-
-      const pumpOn = evaluatePump(rh);
-      pumpOutputs.replaceChildren(chip("Water pump", pumpOn));
-      pumpRows.forEach((row, i) => row.classList.toggle("is-active", i === (pumpOn ? 0 : 1)));
-      const rr = `${rh.toFixed(1)}\u00a0% RH`;
-      pumpExplain.textContent = pumpOn ? `${rr} is below ${RH}\u00a0%, so the pump is ON.` : `${rr} is at or above ${RH}\u00a0%, so the pump is OFF.`;
-    }
-
-    function bind(slider, number, key, min, max) {
-      slider.addEventListener("input", () => { state[key] = parseFloat(slider.value); number.value = slider.value; render(); });
-      number.addEventListener("input", () => {
-        const v = parseFloat(number.value);
-        if (Number.isNaN(v)) return;
-        state[key] = Math.min(max, Math.max(min, v));
-        slider.value = String(state[key]);
-        render();
-      });
-      number.addEventListener("change", () => { number.value = String(state[key]); });
-    }
-    bind(tempSlider, tempNumber, "t", 15, 45);
-    bind(rhSlider, rhNumber, "rh", 30, 90);
-    if (simReset) simReset.addEventListener("click", () => {
-      state.t = 25; state.rh = 50;
-      tempSlider.value = "25"; tempNumber.value = "25";
-      rhSlider.value = "50"; rhNumber.value = "50";
-      render();
-    });
-
-    render();
-  }
+  // The Circuit & Control Lab lives in assets/js/circuit-lab.js.
 })();

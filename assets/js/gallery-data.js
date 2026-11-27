@@ -254,7 +254,7 @@ window.CLAYBREEZE_GALLERY = [
     kind: "photo",
     width: 1280, height: 960,
     alt: "The laser head cutting finger-jointed box panels out of a brown MDF sheet on the honeycomb bed, with a bright spot where the beam meets the sheet",
-    description: "Cutting the finger-jointed MDF panels of the ClayBreeze electronics enclosure (DXF: cad/dxf-enclosure/basic-box-120x150x100-3mm.dxf). Laser cutting in progress."
+    description: "Cutting the finger-jointed MDF panels of the ClayBreeze electronics enclosure (DXF: cad/dxf-enclosure/basic-box-120x150x100-3mm.dxf)."
   },
   // --- Makerspace Workbench (media/fabrication-lab/): 3D printing and laser cutting practised at Tinkerers' Lab ---
   // Titles are the cleaned-up file names. To relabel a photo, rename the file and update its entry here.
@@ -416,7 +416,7 @@ window.CLAYBREEZE_GALLERY = [
   },
   {
     src: "media/fabrication-lab/Laser_Engraving_In_Progress.jpeg",
-    title: "Laser engraving in progress",
+    title: "Laser engraving",
     category: "laser-cutting",
     kind: "photo",
     width: 960, height: 1280,

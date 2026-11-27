@@ -564,3 +564,104 @@ body.presentation-mode .s-label { font-size: 19px; }
 @media (min-width: 1000px) { .design-flow li + li::before { content: "→"; left: -5px; top: 50%; transform: translate(-50%, -50%); } }
 @media (max-width: 999px) { .design-flow li + li::before { content: "↓"; left: 50%; top: -5px; transform: translate(-50%, -50%); } }
 .journey-bridge { font-family: var(--display); font-size: clamp(18px, 1.8vw, 22px); color: var(--text); margin: 0 0 8px; border-left: 3px solid var(--clay); padding-left: 12px; }
+
+/* ---------- 07 Electronics: wiring table + Circuit & Control Lab ---------- */
+:root { --c5v: #ef5b50; --c3v3: #e3b341; --cgnd: #8b98a8; --pcb: #1d2a38; --pcb-relay: #1f4f9c; --pcb-dht: #2f7fd0; }
+:root[data-theme="light"] { --c5v: #c62f25; --c3v3: #9a6700; --cgnd: #47515e; }
+.status-future { color: var(--water-ink); border-color: var(--water); }
+.wiring-orient { color: var(--muted); max-width: 80ch; margin: 0 0 14px; }
+.wiring-orient strong { color: var(--text); }
+.wiring-wrap { display: grid; gap: 20px 32px; margin-bottom: 8px; }
+@media (min-width: 900px) { .wiring-wrap { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; } }
+.wiring-table td.mono { white-space: nowrap; }
+.wiring-table tr.is-hl td { background: var(--surface-2); color: var(--text); }
+.wiring-table tr.is-hl td:first-child { box-shadow: inset 3px 0 0 var(--clay); }
+.wiring-notes { background: var(--surface); border: 1px solid var(--line); padding: 14px 18px; min-width: 0; }
+.wiring-notes h4 { font-family: var(--mono); font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 6px; }
+.wiring-notes h4 + ul { margin: 0 0 14px; padding-left: 1.1em; }
+.wiring-notes ul:last-child { margin-bottom: 0; }
+.wiring-notes li { margin-bottom: 4px; }
+
+.circuit { margin: 0 0 18px; display: grid; gap: 14px 28px; }
+@media (min-width: 1000px) { .circuit { grid-template-columns: minmax(0, 560px) minmax(0, 1fr); align-items: start; } }
+.circuit-svg { background: var(--bg); border: 1px solid var(--line); padding: 8px; min-width: 0; }
+.cl-svg { display: block; width: 100%; height: auto; max-width: 560px; margin: 0 auto; touch-action: manipulation; }
+.circuit figcaption { min-width: 0; }
+.circuit-legend { list-style: none; margin: 0 0 12px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14px; color: var(--muted); }
+.circuit-legend .lg { display: inline-block; width: 18px; height: 4px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+.lg-5v { background: var(--c5v); } .lg-3v3 { background: var(--c3v3); } .lg-gnd { background: var(--cgnd); } .lg-data { background: var(--water); } .lg-sig { background: var(--ok); box-shadow: 0 0 6px var(--ok); }
+.circuit-wire-info { font-family: var(--mono); font-size: 15px; color: var(--text); background: var(--surface-2); border-left: 3px solid var(--water); padding: 10px 12px; min-height: 3.2em; margin: 0 0 12px; }
+.circuit-note { font-size: 14px; color: var(--muted); margin: 0; }
+.sim-readout { font-family: var(--mono); font-size: 15px; color: var(--text); background: var(--bg); border: 1px solid var(--line); padding: 10px 12px; margin: 0 0 18px; }
+.logic-table td.is-zone { color: var(--text); background: var(--surface-2); box-shadow: inset 0 -2px 0 var(--clay); }
+#sim-pump-table td.is-zone { box-shadow: inset 0 -2px 0 var(--water); }
+.logic-table td.is-on { color: var(--ok-ink); font-weight: 700; }
+
+/* SVG parts */
+.cl-t { font-family: var(--mono); fill: var(--text); font-size: 12px; }
+.cl-xs { font-size: 10px; } .cl-sm { font-size: 12px; } .cl-md { font-size: 14px; font-weight: 600; }
+.cl-muted { fill: var(--muted); }
+.cl-rownum { stroke: var(--surface-2); stroke-width: 4; paint-order: stroke; }
+.cl-sign { font-size: 15px; font-weight: 700; }
+.cl-rail-3v3-t { fill: var(--c3v3); } .cl-rail-gnd-t { fill: var(--cgnd); } .cl-rail-5v-t { fill: var(--c5v); }
+.cl-board { fill: var(--surface-2); stroke: var(--line-strong); stroke-width: 1.5; }
+.cl-gap { fill: var(--bg); opacity: 0.6; }
+.cl-hole { fill: var(--line-strong); }
+.cl-rail { stroke-width: 3; opacity: 0.55; }
+.cl-rail-3v3 { stroke: var(--c3v3); } .cl-rail-gnd { stroke: var(--cgnd); } .cl-rail-5v { stroke: var(--c5v); }
+.cl-pcb { fill: var(--pcb); stroke: #0b1118; stroke-width: 1.5; }
+.cl-antenna { fill: none; stroke: #d4a72c; stroke-width: 2; }
+.cl-can { fill: #b8c2cf; stroke: #6c7888; transition: fill 0.2s; }
+.cl-can.is-busy { fill: #e6f6ff; }
+.cl-chip-t { fill: #0d1117; font-size: 13px; font-weight: 700; }
+.cl-usb { fill: #c9d0d9; stroke: #6c7888; }
+.cl-on-dark { fill: #cfd6df; }
+.cl-pin { fill: #d4a72c; }
+.cl-pin-t { fill: #f2f5f8; font-size: 11px; }
+.cl-relay-pcb { fill: var(--pcb-relay); stroke: #0e2a57; stroke-width: 1.5; }
+.cl-cube { fill: #2a6fdb; stroke: #a9c8ff; stroke-width: 1; }
+.cl-term { fill: #2e8b57; stroke: #155d36; }
+.cl-led { fill: #4a2b2c; stroke: #1a0e0e; }
+.cl-led.is-on { fill: #ff5a4e; filter: url(#cl-glow); }
+.cl-dht-body { fill: var(--pcb-dht); stroke: #174a7c; stroke-width: 1.5; }
+.cl-grille { fill: #dfeaf6; opacity: 0.85; }
+.cl-reading { fill: var(--water-ink); }
+.cl-wire { cursor: pointer; outline: none; }
+.cl-wire path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.cl-wire .halo { stroke: var(--surface-2); stroke-width: 7; }
+.cl-wire .vis { stroke-width: 3.2; }
+.cl-wire .hit { stroke: transparent; stroke-width: 16; pointer-events: stroke; }
+.cl-wire .end { fill: var(--text); }
+.w-5v .vis { stroke: var(--c5v); } .w-3v3 .vis { stroke: var(--c3v3); } .w-gnd .vis { stroke: var(--cgnd); } .w-data .vis { stroke: var(--water); }
+.w-sig .vis, .w-load .vis { stroke: var(--line-strong); }
+.w-sig.is-on .vis, .w-load.is-on .vis { stroke: var(--ok); filter: url(#cl-glow); }
+.cl-wire.is-hl .vis { stroke-width: 5.5; }
+.cl-wire.is-hl .halo, .cl-wire:focus-visible .halo { stroke: var(--clay); stroke-width: 10; opacity: 0.45; }
+.cl-fan-ring { fill: var(--surface); stroke: var(--line-strong); stroke-width: 2.5; }
+.cl-load.is-on .cl-fan-ring { stroke: var(--ok); }
+.cl-blade { fill: var(--muted); opacity: 0.8; }
+.cl-load.is-on .cl-blade { fill: var(--water); opacity: 1; }
+.cl-hub { fill: var(--line-strong); }
+.cl-state { font-weight: 700; fill: var(--muted); }
+.cl-load.is-on .cl-state { fill: var(--ok-ink); }
+.cl-tub { fill: none; stroke: var(--line-strong); stroke-width: 2; }
+.cl-tub-water { fill: var(--water); opacity: 0.22; }
+.cl-pump { fill: var(--surface-2); stroke: var(--line-strong); stroke-width: 2; }
+.cl-load.is-on .cl-pump { stroke: var(--ok); }
+.cl-tube { fill: none; stroke: var(--water); stroke-width: 5; opacity: 0.25; stroke-linecap: round; }
+.cl-tube-flow { fill: none; stroke: var(--water); stroke-width: 3; stroke-dasharray: 6 6; opacity: 0; stroke-linecap: round; }
+.cl-load.is-on .cl-tube-flow { opacity: 1; }
+.cl-ghost { fill: none; stroke: none; }
+.cl-pulse { pointer-events: none; filter: url(#cl-glow); }
+.cl-pulse-data { fill: var(--water); } .cl-pulse-sig { fill: var(--ok); }
+/* Narrow screens: give the circuit the full width and larger labels (SVG text scales with the drawing). */
+@media (max-width: 599px) {
+  .sim-panel { padding: 14px 10px; }
+  .circuit-svg { padding: 2px; margin-inline: -4px; }
+  .cl-t { font-size: 14px; }
+  .cl-xs { font-size: 12.5px; }
+  .cl-pin-t { font-size: 13.5px; }
+  .cl-chip-t { font-size: 14px; }
+  .cl-md { font-size: 17px; }
+  .cl-sm { font-size: 14px; }
+}

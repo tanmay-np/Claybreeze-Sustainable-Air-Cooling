@@ -95,13 +95,13 @@ Pad coolers do cool --- the problem is the consumable pad and its upkeep.
 \end{alertblock}
 
 \begin{block}{Solution}
-ClayBreeze replaces the pad with \emphr{30 porous, unglazed terracotta pots}, kept wet by recirculating water, with \emphg{smart ESP32 control}: fans staged by temperature, pump run by humidity.
+ClayBreeze replaces the pad with \emphr{30 porous, unglazed terracotta pots}, kept wet by recirculating water, with \emphg{smart ESP32 control}: each fan switched on temperature, the pump on humidity, with hysteresis.
 \begin{itemize}
 \item \textbf{Natural material:} locally made, reusable, biodegradable clay.
 \item \textbf{No pad to replace:} the pots are the wetted medium; porous clay draws water through its walls~[3].
 \item \textbf{Low power by design:} fans and pump run only when the readings call for them.
 \end{itemize}
-\textbf{Design aim:} low cost, low power, no pad replacement, eco-friendly. \emph{This is the aim, not a measured result --- testing is in progress.}
+\textbf{Design aim:} low cost, low power, no pad replacement, eco-friendly. \emph{This is the aim, not a measured result.}
 \end{block}
 
 \end{column}
@@ -165,30 +165,26 @@ Control & ESP32 + DHT11 + 3-ch relay \\
 \end{tabularx}
 \end{block}
 
-\begin{block}{Control logic (implemented)}
+\begin{block}{Control logic (implemented, with hysteresis)}
 \renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xll@{}}
 \toprule
-\textbf{DHT11 reading} & \textbf{Output} \\
+\textbf{Output} & \textbf{ON} & \textbf{OFF} \\
 \midrule
-$\le 28$\degC & Both fans OFF \\
-$> 28$\degC & \textcolor{cbok}{\textbf{One fan ON}} \\
-$> 35$\degC & \textcolor{cbok}{\textbf{Both fans ON}} \\
-\midrule
-\textcolor{cbwater}{RH $< 60$\,\%} & \textcolor{cbwater}{\textbf{Pump ON}} \\
-\textcolor{cbwater}{RH $\ge 60$\,\%} & \textcolor{cbwater}{Pump OFF} \\
+Fan 1 & \textcolor{cbok}{\textbf{$> 26$\degC}} & $\le 25$\degC \\
+Fan 2 & \textcolor{cbok}{\textbf{$> 30$\degC}} & $\le 29$\degC \\
+\textcolor{cbwater}{Water motor} & \textcolor{cbwater}{\textbf{RH $< 60$\,\%}} & \textcolor{cbwater}{RH $\ge 62$\,\%} \\
 \bottomrule
 \end{tabularx}\\[0.3em]
-{\small The pump stops in humid air, where evaporation has less cooling potential~[2].}
+{\small Between the limits each output keeps its previous state, so the relays do not chatter. The pump stops in humid air, where evaporation has less cooling potential~[2].}
 \end{block}
 
 \begin{block}{Electronics}
 \begin{itemize}
-\item \textbf{ESP32} --- reads the sensor, runs the logic
-\item \textbf{DHT11} --- temperature and humidity
-\item \textbf{3-channel relay} --- switches the loads
-\item \textbf{2 exhaust fans} --- temperature-staged
-\item \textbf{Water pump} --- humidity-controlled
+\item \textbf{ESP32} on a breadboard --- runs the logic
+\item \textbf{DHT11} --- DATA on GPIO4 (13J), 3.3V rail
+\item \textbf{3-channel relay} (5V rail) --- IN1 GPIO19 Fan 1, IN2 GPIO21 Fan 2, IN3 GPIO22 water motor
+\item \textbf{Firmware} --- \texttt{firmware/claybreeze\_controller}
 \end{itemize}
 \end{block}
 
@@ -202,16 +198,15 @@ $> 35$\degC & \textcolor{cbok}{\textbf{Both fans ON}} \\
 \begin{alertblock}{Status}
 \textcolor{cbok}{\textbf{\checkmark\ Build complete}} --- frame, 30 pots, fans, tub, pump, tubing.\\
 \textcolor{cbok}{\textbf{\checkmark\ Control logic implemented}} --- running on the ESP32.\\[0.3em]
-\textbf{Results:} performance testing in progress --- no results are claimed yet.
+\textbf{Results:} no measured results are claimed.
 \end{alertblock}
 
 \begin{block}{Future scope}
 \begin{itemize}
-\item Measure inlet/outlet temperature and RH, airflow, water use and power against a dry-pot baseline.
-\item Even top water distribution; leak check.
-\item Splash-proof enclosure and PCB for the electronics.
-\item Threshold hysteresis; water-level sensing; fan guards.
-\item Other pot sizes and clay bodies; CAD updated to as-built.
+\item \textbf{Performance measurement:} inlet/outlet temperature and RH, airflow, water use and power against a dry-pot baseline.
+\item \textbf{Data logging} of readings and relay states.
+\item \textbf{IoT monitoring} over the ESP32's Wi-Fi.
+\item \textbf{Improvements:} even water distribution, water-level sensing, fan guards, electronics in the laser-cut MDF enclosure, CAD updated to as-built.
 \end{itemize}
 \end{block}
 

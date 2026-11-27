@@ -1,8 +1,6 @@
 # Testing and Results
 
-> **Results status: Next — performance testing.** The prototype is fully assembled: frame, rods, fan mount, paint, 30 clay pots, two fans, water pump with tubing and reservoir, and the ESP32 + DHT11 + 3-channel relay module. The control logic is running on the ESP32 (see `docs/electronics-and-control.md`). This file defines the test plan. It contains no measured ClayBreeze performance data.
->
-> Measured temperature-drop and humidity results will be published here after testing.
+> **Test method.** The prototype is fully assembled: frame, rods, fan mount, paint, 30 clay pots, two fans, water pump with tubing and reservoir, and the ESP32 + DHT11 + 3-channel relay module. The control logic is running on the ESP32 (see `docs/electronics-and-control.md`). This file defines the test method. It contains no measured ClayBreeze performance data.
 
 ## 1. Test Objectives
 
@@ -16,12 +14,12 @@
 
 ## 1a. Control-Logic Checks
 
-These checks belong to the performance-testing stage. See `docs/electronics-and-control.md` for the implemented logic.
+These checks are part of the test method. See `docs/electronics-and-control.md` for the implemented logic.
 
 - Compare DHT11 readings against a separate reference thermometer/hygrometer at the same location, to characterise sensor accuracy.
-- Record the fan stages observed at the DHT11 reading: both off at or below 28 °C, one fan above 28 °C, both above 35 °C.
-- Record the pump state observed at the DHT11 reading: on below 60 % RH, off at or above 60 % RH.
-- Watch for rapid relay switching when a reading sits close to 28 °C, 35 °C or 60 % RH.
+- Record the fan states observed at the DHT11 reading: Fan 1 ON above 26 °C and OFF at or below 25 °C; Fan 2 ON above 30 °C and OFF at or below 29 °C.
+- Record the water-motor state: ON below 60 % RH, OFF at or above 62 % RH.
+- Confirm the hysteresis: between the two limits each output keeps its previous state, so the relays do not chatter near a threshold (e.g. 25 → 26.5 → 25.5 → 24.5 °C gives Fan 1 OFF/ON/ON/OFF).
 - Record sensor placement (whether the DHT11 reads ambient, inlet or outlet air) and startup behaviour.
 
 ## 2. Suggested Operating Conditions
@@ -79,9 +77,8 @@ Report whether the value includes both fans and the pump, and state whether powe
 
 | Test ID | Date/time | Mode | Ambient T (°C) | Ambient RH (%) | Inlet T (°C) | Outlet T (°C) | Inlet RH (%) | Outlet RH (%) | Water change (L) | Air velocity (m/s) | Electrical input (W) | Notes |
 |---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| Pending | — | — | — | — | — | — | — | — | — | — | — | No test results recorded yet |
 
-Delete the placeholder row when actual testing begins and add one row per run. Do not fill missing readings with estimates without explicitly identifying them as estimates.
+Add one row per run. Do not fill missing readings with estimates without explicitly identifying them as estimates.
 
 ## 7. Interpretation and Reporting
 

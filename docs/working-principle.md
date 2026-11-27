@@ -2,7 +2,7 @@
 
 ## 1. Concept
 
-ClayBreeze investigates direct evaporative cooling using wetted, unglazed clay pots and fan-driven airflow. A pump moves water from a bottom reservoir to a distribution arrangement above the pot array. Two exhaust fans on the rear extension frame, switched in two temperature stages by an ESP32 + relay module, are mounted at the rear, blowing room air forward through and around the pot array. Excess water is intended to return to the reservoir, if the drainage arrangement supports this in practice.
+ClayBreeze investigates direct evaporative cooling using wetted, unglazed clay pots and fan-driven airflow. A pump moves water from a bottom reservoir to a distribution arrangement above the pot array. Two exhaust fans on the rear extension frame, each switched on temperature by an ESP32 + relay module (with hysteresis), are mounted at the rear, blowing room air forward through and around the pot array. Excess water is intended to return to the reservoir, if the drainage arrangement supports this in practice.
 
 The prototype is fully assembled: frame, rods, fan mount, paint, 30 pots, two fans, the water pump with tubing and reservoir, and the ESP32 + DHT11 + 3-channel relay module. The control logic is running (see `docs/electronics-and-control.md`). Flow uniformity, bypass airflow, temperature change, humidity change and water consumption remain to be checked and measured — see `docs/testing-and-results.md`.
 
@@ -10,7 +10,7 @@ The prototype is fully assembled: frame, rods, fan mount, paint, 30 pots, two fa
 
 Based on the assembled frame (see the project gallery) and the SolidWorks pot model, the pots are mounted in rows with their open mouths facing the front of the frame, and each row is threaded onto a horizontal retaining rod running through the pot body. The airflow path, confirmed by the team, is: room air is taken in behind the two exhaust fans on the rear extension frame, blown forward through and around the wetted pots, and leaves through the open front into the room.
 
-Because the pots do not form a sealed surface against the frame or against each other, some incoming air can bypass the pots rather than pass through or directly across their wetted surface. **This bypass has not yet been measured** and must be evaluated during commissioning — see the open design questions in `docs/design-and-dimensions.md` (whether a shroud or plenum is needed) and the verification plan in `docs/testing-and-results.md`.
+Because the pots do not form a sealed surface against the frame or against each other, some incoming air can bypass the pots rather than pass through or directly across their wetted surface. **This bypass has not been measured** and must be evaluated during commissioning — see the open design questions in `docs/design-and-dimensions.md` (whether a shroud or plenum is needed) and the verification plan in `docs/testing-and-results.md`.
 
 ## 2. Evaporative Cooling
 

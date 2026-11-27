@@ -8,6 +8,6 @@
   - 2 × 150 × 100 mm (long sides)
   - 2 × 120 × 100 mm (short sides)
 - Box: 120 × 150 × 100 mm. Material: 3 mm MDF (from the file names).
-- Status: laser cutting in progress. Photograph: `media/Laser Cutting for project/`.
+- Laser-cut 3 mm MDF enclosure for the electronics (DXF files). Photograph of the cutting: `media/Laser Cutting for project/`.
 
-Panel names are by size only; cable and sensor cut-outs are not yet decided.
+Panel names are by size only.

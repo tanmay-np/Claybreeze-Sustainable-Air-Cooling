@@ -581,15 +581,15 @@ function init() {
 
     // --- part picking ---
     const partInfo = {
-      frame: { name: "Frame", status: "COMPLETED", text: "Welded 20 mm square-pipe frame, 480 × 560 × 150 mm (design values), 440 × 520 mm front opening. Spray-painted grey. Visual inspection done; as-built measurements pending." },
+      frame: { name: "Frame", status: "COMPLETED", text: "Welded 20 mm square-pipe frame, 480 × 560 × 150 mm (design values), 440 × 520 mm front opening. Spray-painted grey. Visual inspection done." },
       fanMount: { name: "Rear fan-mount extension", status: "COMPLETED", text: "Extension frame welded behind the main frame; carries both fans. Overall side depth 270 mm on the SolidWorks drawing." },
       rods: { name: "Pot-retaining rods", status: "COMPLETED", text: "Six ⌀12 mm rods, drilled and attached across the frame width: 90 mm apart, on the centre plane of the frame (from the SolidWorks export)." },
       pots: { name: "Clay pots", status: "COMPLETED", text: "30 unglazed clay pots, 5 columns × 6 rows, mouths facing the front (observed in photographs). Size from the SolidWorks export (⌀80 × 80 mm, ⌀40 openings); the profile curve is approximate." },
-      fans: { name: "Exhaust fans", status: "COMPLETED · CONTROL IMPLEMENTED", text: "Two exhaust fans mounted at the rear, blowing room air forward through the pot array. Switched by the ESP32 and relay: both OFF at or below 28 °C, one fan ON above 28 °C, both ON above 35 °C. Fan size is approximate." },
-      water: { name: "Water system", status: "COMPLETED · CONTROL IMPLEMENTED", text: "Water pump (motor) with tubing, plus reservoir — installed. The pump runs while relative humidity is below 60 % and stops at or above 60 %. Shown with approximate geometry; see Model notes." },
-      tub: { name: "Water tub (reservoir)", status: "COMPLETED", text: "Grey plastic tub under the frame; the frame stands inside it and excess water drains back into it. Size and position are approximate, estimated from photographs — capacity and dimensions not yet measured." },
-      pump: { name: "Water pump", status: "COMPLETED · CONTROL IMPLEMENTED", text: "Small pump in the tub, switched by the ESP32 and relay: ON below 60 % RH, OFF at or above 60 %. Shape and position are approximate, estimated from photographs; model and ratings not yet recorded." },
-      tubing: { name: "Tubing", status: "COMPLETED", text: "Clear tubing from the pump, up the front-left post and across the top of the frame. Route is approximate, estimated from photographs; length and diameter not yet recorded." }
+      fans: { name: "Exhaust fans", status: "COMPLETED · CONTROL IMPLEMENTED", text: "Two exhaust fans mounted at the rear, blowing room air forward through the pot array. Each fan has its own relay channel. Fan 1 (IN1, GPIO19): ON above 26 °C, OFF at or below 25 °C. Fan 2 (IN2, GPIO21): ON above 30 °C, OFF at or below 29 °C. In between, each fan keeps its previous state. Fan size is approximate." },
+      water: { name: "Water system", status: "COMPLETED · CONTROL IMPLEMENTED", text: "Water pump (motor) with tubing, plus reservoir — installed. The pump (IN3, GPIO22) switches ON below 60 % RH and OFF at or above 62 % RH, keeping its previous state in between. Shown with approximate geometry; see Model notes." },
+      tub: { name: "Water tub (reservoir)", status: "COMPLETED", text: "Grey plastic tub under the frame; the frame stands inside it and excess water drains back into it. Size and position are approximate, estimated from photographs." },
+      pump: { name: "Water pump", status: "COMPLETED · CONTROL IMPLEMENTED", text: "Small pump in the tub, switched by the ESP32 and relay channel IN3 (GPIO22): ON below 60 % RH, OFF at or above 62 % RH, previous state in between. Shape and position are approximate, estimated from photographs." },
+      tubing: { name: "Tubing", status: "COMPLETED", text: "Clear tubing from the pump, up the front-left post and across the top of the frame. Route is approximate, estimated from photographs." }
     };
     const infoPanel = host.querySelector(".part-info");
     const infoName = infoPanel.querySelector(".part-name");

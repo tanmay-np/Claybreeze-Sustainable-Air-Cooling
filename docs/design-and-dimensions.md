@@ -8,19 +8,19 @@
 | Frame outer height | 560 mm | Updated design dimension; verify against fabricated frame |
 | Frame depth | 150 mm | Updated design dimension; verify against fabricated frame |
 | Front inner opening | 440 × 520 mm | Verify after rod and mount fit-up |
-| Frame section | 20 mm square pipe | Wall thickness not yet confirmed |
+| Frame section | 20 mm square pipe | Cut, welded and spray-painted |
 | Pot-retaining rods | 12 mm diameter | Holes drilled and rods attached — **completed** |
 | Frame finish | Spray-painted | **Completed** |
-| Pot arrangement | 5 columns × 6 rows (30 pots) | Clay pots are fixed into the frame — **completed**; layout observed in the assembly photographs. Spacing not yet measured |
-| Fans | Two exhaust fans on the rear extension frame, blowing room air forward through the pot array | Fan-mount extension fabricated and both fans mounted — **completed**; switched in two temperature stages by the ESP32 + relay (see `docs/electronics-and-control.md`). Model, size, rated airflow and electrical rating still to be recorded |
-| Reservoir | Bottom tub | **Installed**; capacity, dimensions and mounting still to be recorded |
-| Rear extension (from drawing) | Overall side-view depth 270 mm; extension members 132.5 mm in from each side | Read from the dimensioned SolidWorks drawing; not yet measured on the fabricated frame |
+| Pot arrangement | 5 columns × 6 rows (30 pots) | Clay pots are fixed into the frame — **completed**; layout observed in the assembly photographs |
+| Fans | Two exhaust fans on the rear extension frame, blowing room air forward through the pot array | Fan-mount extension fabricated and both fans mounted — **completed**; each fan switched by its own relay channel with hysteresis (see `docs/electronics-and-control.md`) |
+| Reservoir | Bottom tub | **Installed** |
+| Rear extension (from drawing) | Overall side-view depth 270 mm; extension members 132.5 mm in from each side | Read from the dimensioned SolidWorks drawing |
 
 All dimensions should be labelled as design or measured values. Do not describe a design dimension as an as-built measurement until the fabricated part has been measured.
 
 ## 2. Design Status
 
-The physical prototype is assembled: the metal frame is fabricated, spray-painted, fitted with the six drilled-and-attached 12 mm pot-retaining rods and the rear fan-mount extension, and 30 clay pots are fixed in place. The water pump with tubing and the reservoir are installed. An ESP32, a DHT11 sensor and a 3-channel relay module are integrated, and the control logic is running (see `docs/electronics-and-control.md`). The frame has had a visual inspection; as-built measurements are pending. The next stage is performance testing (see `docs/testing-and-results.md`). Updating the SolidWorks model and engineering drawing to the as-built parts is still to do — a documentation task, not unfinished construction.
+The physical prototype is assembled: the metal frame is fabricated, spray-painted, fitted with the six drilled-and-attached 12 mm pot-retaining rods and the rear fan-mount extension, and 30 clay pots are fixed in place. The water pump with tubing and the reservoir are installed. An ESP32, a DHT11 sensor and a 3-channel relay module are integrated, and the control logic is running (see `docs/electronics-and-control.md`). The frame has had a visual inspection. Future scope: performance measurement (see `docs/testing-and-results.md`) and updating the SolidWorks model and drawing to as-built measurements — a documentation task, not unfinished construction.
 
 ## 3. CAD and Drawing Workflow
 
@@ -28,13 +28,13 @@ The physical prototype is assembled: the metal frame is fabricated, spray-painte
 2. Fit the real pots and determine safe retaining points, spacing and clearances. **(Pots are now fixed into the frame — 30 pots, 5 × 6, observed in photographs; record the as-installed spacing.)**
 3. Fabricate and attach the rods; record actual rod count, cut length and attachment method. **(Completed — rods drilled and attached.)**
 4. Establish fan orientation, mounting-hole pattern, clearances, guards and airflow direction from the actual fan hardware. **(Fan mount fabricated — completed; record model, rating and final orientation.)**
-5. Measure the completed assembly and update the SolidWorks model to match it. **(Design-concept screenshots are now available — see Section 5 below — but they have not yet been checked against as-built measurements of the fabricated frame.)**
-6. Update the drawing dimensions and identify any differences from the original design. **(The available dimensioned drawing shows 480 × 560 × 150 mm, a 440 mm opening and a ⌀12 mm rod, matching the documented design values. This confirms the CAD design matches the written spec — it is not yet a confirmation that the physical frame measures the same.)**
+5. Measure the completed assembly and update the SolidWorks model to match it. **(Design-concept screenshots are now available — see Section 5 below — but they have not been checked against as-built measurements of the fabricated frame.)**
+6. Update the drawing dimensions and identify any differences from the original design. **(The available dimensioned drawing shows 480 × 560 × 150 mm, a 440 mm opening and a ⌀12 mm rod, matching the documented design values. This confirms the CAD design matches the written spec — it is not a confirmation that the physical frame measures the same.)**
 7. Export a viewable drawing (PDF) and, if useful, a neutral 3D file such as STEP for the repository.
 
 **Naming discrepancy — rod part:** the rod part file is named `20mm_rod` in the SolidWorks model tree, which could be misread as a 20 mm rod diameter. The dimensioned drawing calls the rod out at ⌀12.00 mm, and ⌀12 mm matches the physical rods fitted to the frame. The name is a leftover naming discrepancy (the frame is built from 20 mm square pipe), not a dimension conflict — rename the part in the CAD project when the model is updated; no documented dimension needs to change.
 
-**Other values read from the dimensioned drawing** (not yet measured on the fabricated frame): overall side-view depth 270 mm (150 mm frame plus the rear fan-mount extension); the extension members sit 132.5 mm in from each side of the 480 mm frame; the side view also shows 45, 100, 110 and 120 mm dimensions around the rod-hole member and extension. The drawing does not show a 520 mm dimension — the 440 × 520 mm opening follows from 480 × 560 mm less two 20 mm pipe sections.
+**Other values read from the dimensioned drawing** (design values from the drawing): overall side-view depth 270 mm (150 mm frame plus the rear fan-mount extension); the extension members sit 132.5 mm in from each side of the 480 mm frame; the side view also shows 45, 100, 110 and 120 mm dimensions around the rod-hole member and extension. The drawing does not show a 520 mm dimension — the 440 × 520 mm opening follows from 480 × 560 mm less two 20 mm pipe sections.
 
 ## 4. Design Questions to Close
 
@@ -61,11 +61,9 @@ The physical prototype is assembled: the metal frame is fabricated, spray-painte
 
 These are design-concept screenshots, not evidence that the physical prototype matches them exactly — as-built measurement against the fabricated frame is still outstanding (Section 3, steps 5–6).
 
-Still to add:
-- `cad/exports/`: shareable drawing PDFs and STEP exports.
-- `media/photos/`: additional dated photographs as the project progresses (electronics, water system, testing).
+Possible additions (future scope): shareable drawing PDFs and STEP exports in `cad/exports/`.
 
-Use real project evidence only. If a drawing or photo is not yet available, leave a TODO rather than generating a misleading placeholder image.
+Use real project evidence only; never generate a stand-in image for a drawing or photo that does not exist.
 
 ## 6. SolidWorks GLB Export (`assets/models/claybreeze-assembly.glb`)
 

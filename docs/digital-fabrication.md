@@ -7,7 +7,7 @@
 | Process | Status |
 |---|---|
 | 3D printing | Skills learned and practised at Tinkerers' Lab on the Bambu Lab H2D, P1S, A1 and A1 mini. Photographs: `media/fabrication-lab/` and Drive folder 02. |
-| Laser cutting | Practice pieces done (photographs in `media/fabrication-lab/`). **Applied in ClayBreeze:** the electronics enclosure is being cut now — *laser cutting in progress* (see section D). |
+| Laser cutting | Practice pieces done (photographs in `media/fabrication-lab/`). **Applied in ClayBreeze:** the laser-cut 3 mm MDF enclosure for the electronics (DXF files, see section D). |
 
 **Lab machines:** Bambu Lab **H2D**, **P1S**, **A1** and **A1 mini** 3D printers, and a **SIL CO2 (carbon dioxide) laser cutter, 100 W**.
 
@@ -198,15 +198,13 @@ The learning reference characterised its own laser by cutting a grid of test squ
 |---|---|
 | Type | CO2 laser cutter |
 | Laser power | 100 W |
-| Bed size | [to confirm from machine label] |
-| Model / other specifications | [to confirm from machine label] |
 
 ## D. Applied in ClayBreeze: electronics enclosure
 
 | | |
 |---|---|
 | Purpose | Houses the ESP32, the relay module and the DHT11 wiring |
-| Status | **Laser cutting in progress** |
+| Enclosure | Laser-cut 3 mm MDF enclosure for the electronics (DXF files) |
 | How the DXF is made | [solidworks-to-dxf.md](solidworks-to-dxf.md) |
 | DXF | [`cad/dxf-enclosure/basic-box-120x150x100-3mm.dxf`](../cad/dxf-enclosure/basic-box-120x150x100-3mm.dxf) |
 | Box size | 120 × 150 × 100 mm (from the file name and panel sizes) |
@@ -221,7 +219,7 @@ The DXF (read with `ezdxf`) holds **6 closed, finger-jointed panels** (432 line 
 | Long sides | 150 × 100 mm | 2 |
 | Short sides | 120 × 100 mm | 2 |
 
-Cable and sensor cut-outs and which panel is the top are not yet decided.
+Panel names are by size only.
 
 ## E. Safety checklist (both machines)
 

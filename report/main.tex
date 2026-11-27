@@ -96,9 +96,9 @@ Tanmay Mhaske\\
 \begin{abstract}
 \noindent Summer heat in Indian homes, classrooms and workshops is a real and growing problem, and affordable cooling is limited: the Government of India's \emph{India Cooling Action Plan} notes that India has one of the lowest levels of access to cooling in the world~\cite{icap}. Air conditioners are expensive to buy and run and use refrigerants with climate impact; evaporative coolers are cheaper but depend on honeycomb, cellulose or grass pads that clog, degrade, can harbour mould and must be replaced.
 
-\medskip\noindent ClayBreeze is a Makerspace prototype that replaces the consumable pad with \textbf{30 porous, unglazed terracotta pots} --- a natural, locally made, reusable and biodegradable material --- held in a welded 20\,mm square-pipe frame (480 $\times$ 560 $\times$ 150\,mm). A pump in a tub below the frame recirculates water through tubing to the top of the pots, and two rear-mounted exhaust fans blow room air through and around the wet pots. An ESP32 microcontroller reads a DHT11 temperature and humidity sensor and switches the fans and pump through a three-channel relay: both fans are off at or below 28\degC, one fan runs above 28\degC, both run above 35\degC, and the pump runs only while relative humidity is below 60\,\%.
+\medskip\noindent ClayBreeze is a Makerspace prototype that replaces the consumable pad with \textbf{30 porous, unglazed terracotta pots} --- a natural, locally made, reusable and biodegradable material --- held in a welded 20\,mm square-pipe frame (480 $\times$ 560 $\times$ 150\,mm). A pump in a tub below the frame recirculates water through tubing to the top of the pots, and two rear-mounted exhaust fans blow room air through and around the wet pots. An ESP32 microcontroller reads a DHT11 temperature and humidity sensor and switches the fans and pump through a three-channel relay with hysteresis: Fan~1 switches on above 26\degC{} and off at or below 25\degC, Fan~2 on above 30\degC{} and off at or below 29\degC, and the water motor on below 60\,\% relative humidity and off at or above 62\,\%; between the two limits each output keeps its previous state.
 
-\medskip\noindent The prototype is fully built and its control logic is running. This report documents the problem, background, design and CAD, materials, fabrication, water system, electronics, safety and the planned tests. \textbf{No performance results are reported}: low cost, low power, no pad replacement and an eco-friendly build are the design aims, and they will be checked by the measurements described in Chapter~\ref{ch:testing}.
+\medskip\noindent The prototype is fully built and its control logic is running. This report documents the problem, background, design and CAD, materials, fabrication, water system, electronics, safety and the test method. \textbf{No performance results are reported}: low cost, low power, no pad replacement and an eco-friendly build are the design aims, and they will be checked by the measurements described in Chapter~\ref{ch:testing}.
 \end{abstract}
 
 \tableofcontents
@@ -126,7 +126,7 @@ Table~\ref{tab:options} summarises the options we examined during a summer inter
 Air conditioner (vapour compression) & Controlled cooling over a wide humidity range; dehumidifies. & High purchase and running cost; high electrical demand; refrigerants with climate impact~\cite{epa,energystar,icap}. Out of reach for many households and schools. \\
 Honeycomb / cellulose pad cooler & Cheaper; large wetted area; established designs. & Pads clog with scale and dust, degrade and need periodic replacement; mineral deposits reduce performance~\cite{watson,doe}; plastic bodies. \\
 Grass (khus / wood-wool) pad cooler & Local, low-cost pad media; simple construction. & Damp organic pads can harbour mould and bacteria, cause odour and attract insects; combustible when dry; natural fibres degrade and need frequent replacement~\cite{alsulaiman,jain}. \\
-\textbf{ClayBreeze} (this work) & Terracotta pots: natural, locally made, reusable, biodegradable; no pad to replace; ESP32 runs loads only when needed. & Design aims only --- cooling, water use, power and service life are still to be measured. \\
+\textbf{ClayBreeze} (this work) & Terracotta pots: natural, locally made, reusable, biodegradable; no pad to replace; ESP32 runs loads only when needed. & Design aims only --- cooling, water use, power and service life have not been measured. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -147,7 +147,7 @@ ClayBreeze replaces the pad with 30 porous, unglazed terracotta pots arranged 5 
 \item \textbf{No pad replacement:} the fired clay pots are the wetted medium and are reusable.
 \item \textbf{Eco-friendly:} terracotta is natural, locally made and biodegradable; no refrigerant is used.
 \end{itemize}
-These are aims, not results; they are tested by the plan in Chapter~\ref{ch:testing}.
+These are aims, not results; the test method is in Chapter~\ref{ch:testing}.
 
 \section{Inspiration: Project Vaayu}
 ClayBreeze was inspired in part by reporting on \emph{Project Vaayu}, a separate student initiative in Delhi that used clay tea cups (kulhads), scrap wood and metal and water circulation to build cooling units for government-school classrooms~\cite{toi,afn}. Project Vaayu is \textbf{not our work}, and its reported outcomes are not evidence of how ClayBreeze performs; our measurements will be recorded independently.
@@ -173,8 +173,8 @@ Room air conditioners use a compressor and refrigerant circuit. Their energy use
 \section{Objectives}
 \begin{enumerate}
 \item Design and build a clay-pot evaporative cooler from natural, locally available and reusable materials, with a stable frame, secured pot-retaining rods and rear-mounted fans. \textcolor{cbok}{\textbf{Complete.}}
-\item Build a recirculating water system --- tub, pump and tubing --- that wets the pots without a consumable pad. \textcolor{cbok}{\textbf{Installed}} (specifications and leak check to record).
-\item Add smart, low-power control: ESP32 + DHT11 + relay, staging the fans by temperature and running the pump only below 60\,\% RH. \textcolor{cbok}{\textbf{Implemented and running.}}
+\item Build a recirculating water system --- tub, pump and tubing --- that wets the pots without a consumable pad. \textcolor{cbok}{\textbf{Installed}}.
+\item Add smart, low-power control: ESP32 + DHT11 + relay, switching each fan on its own temperature limits and the water motor on humidity, with hysteresis. \textcolor{cbok}{\textbf{Implemented and running.}}
 \item Update the SolidWorks model and drawing to match the as-built assembly. \emph{To do.}
 \item Observe whether the pots wet consistently and stay securely supported in operation. \emph{To do.}
 \item Measure inlet and outlet temperature and RH, airflow, water use and electrical input against a dry-pot (fan-only) baseline. \emph{To do.}
@@ -211,7 +211,7 @@ The project followed a CAD-first method: every part was modelled and checked in 
 \end{figure}
 
 \section{Design dimensions}
-The frame was designed in SolidWorks. Table~\ref{tab:dims} lists the design dimensions from the dimensioned drawing (Figure~\ref{fig:drawing}). As-built dimensions have not yet been measured; the CAD model is to be revised once they are.
+The frame was designed in SolidWorks. Table~\ref{tab:dims} lists the design dimensions from the dimensioned drawing (Figure~\ref{fig:drawing}). These are design values; measuring the as-built frame and updating the CAD model is part of the future scope.
 
 \begin{table}[H]
 \centering
@@ -297,13 +297,13 @@ Table~\ref{tab:materials} lists the materials and components. Makes, models and 
 \toprule
 \textbf{Item} & \textbf{Qty} & \textbf{Notes} \\
 \midrule
-Square metal pipe, 20\,mm & as cut & Frame and rear fan-mount extension; welded and spray-painted grey. Wall thickness and grade to record. \\
+Square metal pipe, 20\,mm & as cut & Frame and rear fan-mount extension; welded and spray-painted grey. \\
 Steel rods, \dia12\,mm & 6 & Pot-retaining rods through drilled holes in the frame. \\
 Unglazed clay pots (kulhad type) & 30 & Hollow-through, 5 $\times$ 6. Size, mass and porosity to measure. \\
-Exhaust fans & 2 & On the rear extension, blowing forward. Model and rating to record. \\
-Plastic tub (reservoir) & 1 & Grey tub under the frame; collects return water. Size and capacity to record. \\
-Water pump & 1 & In the tub; switched by the relay. Model, flow and head to record. \\
-Clear tubing and connector & as fitted & From the pump up the frame to the top of the pots. Length and bore to record. \\
+Exhaust fans & 2 & On the rear extension, blowing forward. \\
+Plastic tub (reservoir) & 1 & Grey tub under the frame; collects return water. \\
+Water pump & 1 & In the tub; switched by the relay. \\
+Clear tubing and connector & as fitted & From the pump up the frame to the top of the pots. \\
 ESP32 development board & 1 & Runs the control logic. \\
 DHT11 sensor & 1 & Temperature and relative humidity. \\
 3-channel relay module & 1 & Switches fan 1, fan 2 and the pump. \\
@@ -369,14 +369,14 @@ The assembled frame stands inside a grey plastic tub that acts as the reservoir.
 \label{fig:water}
 \end{figure}
 
-\noindent Still to be recorded: tub dimensions and capacity, pump make, rating, flow and head, tubing length and bore, the distribution layout at the top, and a leak check. The supply cables beside the tub must be secured and kept clear of water.
+\noindent Future scope: a leak check, an even distribution layout at the top, and a record of the tub, pump and tubing specifications. The supply cables beside the tub must be secured and kept clear of water.
 
 % ======================= 8 ELECTRONICS =======================
 \chapter{Electronics and Control Logic}
 \label{ch:electronics}
 
 \section{Architecture}
-The ESP32 reads temperature and relative humidity from the DHT11 and drives a three-channel relay module that switches the two fans and the pump (Figure~\ref{fig:arch}). The figure is functional only; GPIO pins, relay channel mapping and wiring are not documented here and should be taken from the firmware and component datasheets.
+The ESP32 reads temperature and relative humidity from the DHT11 and drives a three-channel relay module that switches the two fans and the pump (Figure~\ref{fig:arch}). Table~\ref{tab:wiring} gives the confirmed breadboard wiring, and Figure~\ref{fig:circuit} draws it. The firmware is \url{firmware/claybreeze_controller/claybreeze_controller.ino} in the repository; it drives an active-LOW relay module (\texttt{RELAY\_ON LOW}) and reads the DHT11 every 2\,s, skipping failed (NaN) readings.
 
 \begin{figure}[H]
 \centering
@@ -395,53 +395,74 @@ The ESP32 reads temperature and relative humidity from the DHT11 and drives a th
   \draw[arr] (relay) -- (f2);
   \draw[arr] (relay) -- (p);
 \end{tikzpicture}
-\caption{Functional architecture of the control electronics (not a wiring diagram).}
+\caption{Functional architecture of the control electronics.}
 \label{fig:arch}
 \end{figure}
 
-\noindent\textbf{Enclosure (laser cutting in progress).} A laser-cut box will house the ESP32, the relay module and the DHT11 wiring: six finger-jointed panels for a 120 $\times$ 150 $\times$ 100\,mm box in 3\,mm MDF. The DXF is in the repository (\texttt{cad/dxf-enclosure/}); details in Section~\ref{sec:enclosure}.
+\section{ESP32 wiring}
+Board orientation: antenna at top, USB at bottom; the ESP32 straddles the breadboard centre gap.
 
-\section{Implemented control logic}
 \begin{table}[H]
 \centering
-\begin{minipage}[t]{0.47\linewidth}\centering
-\caption{Fan control (temperature).}
-\label{tab:fans}
-\begin{tabular}{@{}ll@{}}
+\caption{Breadboard wiring of the ESP32.}
+\label{tab:wiring}
+\begin{tabular}{@{}lll@{}}
 \toprule
-\textbf{DHT11 temperature} & \textbf{Fans} \\
+\textbf{Breadboard} & \textbf{ESP32 pin} & \textbf{Connection} \\
 \midrule
-$\le 28$\degC & Both OFF \\
-$> 28$\degC{} and $\le 35$\degC & One fan ON \\
-$> 35$\degC & Both fans ON \\
+1J & V5 (5V) & Right positive rail (5V) \\
+19B & 3V3 & Left positive rail (3.3V) \\
+14B & GND & Left negative rail (GND) \\
+7J & GND & Right negative rail (GND) \\
+13J & GPIO4 (G4) & DHT11 DATA \\
+8J & GPIO19 (G19) & Relay IN1 -- Fan 1 \\
+6J & GPIO21 (G21) & Relay IN2 -- Fan 2 \\
+3J & GPIO22 (G22) & Relay IN3 -- Water motor \\
 \bottomrule
 \end{tabular}
-\end{minipage}\hfill
-\begin{minipage}[t]{0.47\linewidth}\centering
-\caption{Pump control (humidity).}
-\label{tab:pump}
-\begin{tabular}{@{}ll@{}}
-\toprule
-\textbf{DHT11 relative humidity} & \textbf{Pump} \\
-\midrule
-$< 60$\,\% & ON \\
-$\ge 60$\,\% & OFF \\
-\bottomrule
-\end{tabular}
-\end{minipage}
 \end{table}
 
-\noindent At exactly 28.0\degC{} both fans are off; at exactly 35.0\degC{} one fan is on; at exactly 60.0\,\% RH the pump is off. Two physical points matter when interpreting this logic:
+\noindent\textbf{Peripheral power.} DHT11 VCC $\rightarrow$ 3.3V rail; GND $\rightarrow$ GND rail; DATA $\rightarrow$ 13J (GPIO4). Relay VCC/DC+ $\rightarrow$ 5V rail; GND/DC$-$ $\rightarrow$ common GND; IN1/IN2/IN3 $\rightarrow$ 8J/6J/3J.
+
+\noindent\textbf{Notes.} Keep the 3.3V and 5V positive rails separate; ground rails are connected together. Do not connect CLK, SD2, SD3, CMD, SD1 or SD0.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.62\linewidth]{circuit-lab.png}
+\caption{Breadboard circuit, drawn from Table~\ref{tab:wiring} (original illustration from the website's Circuit \& Control Lab, shown at 31\degC{} and 55\,\% RH: both fans and the water motor ON). Fan and pump supply wiring through the relay contacts is simplified.}
+\label{fig:circuit}
+\end{figure}
+
+\noindent\textbf{Laser-cut 3\,mm MDF enclosure for the electronics (DXF files).} A finger-jointed box for the ESP32, the relay module and the DHT11 wiring: six panels for a 120 $\times$ 150 $\times$ 100\,mm box in 3\,mm MDF. The DXF is in the repository (\texttt{cad/dxf-enclosure/}); details in Section~\ref{sec:enclosure}.
+
+\section{Implemented control logic (with hysteresis)}
+\begin{table}[H]
+\centering
+\caption{Control logic running on the ESP32. Between the ON and OFF limits each output keeps its previous state.}
+\label{tab:fans}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Output} & \textbf{Relay / GPIO} & \textbf{ON} & \textbf{OFF} \\
+\midrule
+Fan 1 & IN1 / GPIO19 & $> 26$\degC & $\le 25$\degC \\
+Fan 2 & IN2 / GPIO21 & $> 30$\degC & $\le 29$\degC \\
+Water motor & IN3 / GPIO22 & $< 60$\,\% RH & $\ge 62$\,\% RH \\
+\bottomrule
+\end{tabular}
+\end{table}
+\label{tab:pump}
+
+\noindent The 1\,\degC{} and 2\,\% bands stop the relays from switching on and off rapidly when a reading sits near a threshold. For example, 25 $\rightarrow$ 26.5 $\rightarrow$ 25.5 $\rightarrow$ 24.5\degC{} gives Fan~1 OFF, ON, ON, OFF; and 59 $\rightarrow$ 61 $\rightarrow$ 62 $\rightarrow$ 61 $\rightarrow$ 59\,\% RH gives the water motor ON, ON, OFF, OFF, ON. All relays start OFF at power-on. Two physical points matter when interpreting this logic:
 \begin{itemize}
 \item Direct evaporative cooling has less potential in humid air~\cite{watson}, so stopping the pump at high RH avoids pumping water for little benefit.
 \item Stopping the pump does not instantly dry the pots; their surfaces keep evaporating for some time, so humidity and cooling lag the pump's on/off state.
 \end{itemize}
 
-\section{Open engineering questions}
-Sensor placement (ambient, inlet or outlet air), start-up behaviour before the first valid reading, rapid relay switching near the thresholds (hysteresis is not yet implemented), and whether the chosen thresholds are useful are all to be settled by testing. A browser simulation of this logic is available on the project website; it is software only and is not connected to the hardware.
+\section{Engineering notes}
+Sensor placement (ambient, inlet or outlet air) decides what the thresholds respond to, and performance measurement will show how well the chosen limits suit the cooler. The project website's \emph{Circuit \& Control Lab} animates this circuit and runs the same logic; it is a simulator, not connected to the hardware.
 
 % ======================= 9 TESTING =======================
-\chapter{Testing Plan}
+\chapter{Test Method}
 \label{ch:testing}
 
 \section{Test conditions}
@@ -496,28 +517,12 @@ Use clean water and drain the tub when the cooler will be idle, so water does no
 
 \begin{center}
 \fbox{\begin{minipage}{0.9\linewidth}\centering\vspace{3mm}
-\textbf{Results: to be measured.}\\[2mm]
-Performance testing is in progress. No temperature, humidity, airflow, water-use, power or cost results have been recorded, and none are reported here. Results will be added only from real measurements, with the raw data and the test conditions.
+\textbf{No measured results are reported.}\\[2mm]
+No temperature, humidity, airflow, water-use, power or cost measurements are reported in this report. Performance measurement is part of the future scope (Section~\ref{sec:future}); results will come only from real measurements, with the raw data and the test conditions.
 \vspace{3mm}\end{minipage}}
 \end{center}
 
-\begin{table}[H]
-\centering
-\caption{Results template (to be filled from measurements).}
-\label{tab:results}
-\small
-\begin{tabular}{@{}lccccccc@{}}
-\toprule
-\textbf{Run} & \textbf{Mode} & $T_\text{in}$ & $T_\text{out}$ & $RH_\text{in}$ & $RH_\text{out}$ & \textbf{Water} & \textbf{Power} \\
- & & (\textdegree C) & (\textdegree C) & (\%) & (\%) & (L/h) & (W) \\
-\midrule
-1 & Dry baseline & -- & -- & -- & -- & -- & -- \\
-2 & Wetted pots & -- & -- & -- & -- & -- & -- \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-What \emph{has} been verified is qualitative: the prototype is fully assembled, and the control logic is running on the ESP32, switching the fans and the pump.
+What \emph{has} been verified is qualitative: the prototype is fully assembled, and the control logic is running on the ESP32, switching the fans and the water motor with the hysteresis logic of Table~\ref{tab:fans}.
 
 % ======================= 12 CHALLENGES =======================
 \chapter{Challenges}
@@ -527,7 +532,7 @@ What \emph{has} been verified is qualitative: the prototype is fully assembled, 
 \item Supporting 30 fragile clay pots securely without cracking them.
 \item Routing tubing so water reaches the top of the pot array and drains back to the tub.
 \item Keeping the breadboard electronics and supply cables away from water.
-\item Choosing thresholds for the temperature-staged fans and the humidity-based pump.
+\item Choosing thresholds and hysteresis bands for the two fans and the water motor.
 \item Keeping the CAD model in step with the physical build.
 \end{itemize}
 
@@ -535,16 +540,15 @@ What \emph{has} been verified is qualitative: the prototype is fully assembled, 
 \chapter{Conclusion and Future Scope}
 
 \section{Conclusion}
-ClayBreeze addresses a real problem --- affordable cooling for hot Indian homes, classrooms and workshops --- by replacing the consumable cooler pad with porous, unglazed terracotta pots, kept wet by a recirculating water system and controlled by an ESP32. The frame, 30 pots, fans, tub, pump and tubing are complete, and the temperature-staged fan control and humidity-based pump control are running. The design aims of low cost, low power, no pad replacement and an eco-friendly build are \emph{plausible but unproven}: they will be confirmed or rejected by the tests in Chapter~\ref{ch:testing}.
+ClayBreeze addresses a real problem --- affordable cooling for hot Indian homes, classrooms and workshops --- by replacing the consumable cooler pad with porous, unglazed terracotta pots, kept wet by a recirculating water system and controlled by an ESP32. The frame, 30 pots, fans, tub, pump and tubing are complete, and the fan and water-motor control with hysteresis is running on the ESP32. The design aims of low cost, low power, no pad replacement and an eco-friendly build are \emph{plausible but unproven}: performance measurement with the method in Chapter~\ref{ch:testing} will confirm or reject them.
 
 \section{Future scope}
+\label{sec:future}
 \begin{itemize}
-\item Run dry-baseline and wetted-pot tests: inlet/outlet temperature and RH, airflow, water use and electrical power.
-\item Add an even top water-distribution header and complete a leak check.
-\item Move the electronics to a PCB in a splash-proof enclosure; add fan guards.
-\item Add hysteresis to the thresholds, a water-level sensor in the tub and a dry-run cut-out for the pump.
-\item Study other pot sizes, spacings and clay bodies.
-\item Record costs from receipts; update the SolidWorks model and drawing to the as-built prototype.
+\item \textbf{Performance measurement:} dry-baseline and wetted-pot runs --- inlet/outlet temperature and RH, airflow, water use and electrical power.
+\item \textbf{Data logging:} record the DHT11 readings and relay states over time.
+\item \textbf{IoT monitoring:} use the ESP32's Wi-Fi to show readings and fan/pump states on a phone.
+\item \textbf{Improvements:} an even top water-distribution header and a leak check; a water-level sensor with a dry-run cut-out for the pump; the electronics on a PCB inside the laser-cut 3\,mm MDF enclosure; fan guards; other pot sizes, spacings and clay bodies; costs from receipts; the SolidWorks model and drawing updated to the as-built prototype.
 \end{itemize}
 
 \section*{Project links}
@@ -557,7 +561,7 @@ ClayBreeze addresses a real problem --- affordable cooling for hot Indian homes,
 \chapter{Makerspace Workbench --- 3D Printing \& Laser Cutting at Tinkerers' Lab}
 \label{ch:digifab}
 
-This chapter records the 3D printing and laser cutting skills learned and practised at Tinkerers' Lab, Sanjivani University, and where they feed back into ClayBreeze. The lab has four Bambu Lab printers that use \textbf{FDM --- Fused Deposition Modelling (also called FFF, Fused Filament Fabrication)} and a \textbf{CO$_2$ (carbon dioxide) laser cutter}. Learning reference: Dr.\ Kiran Wakchaure's Fab Academy documentation~\cite{wakchaure}; everything here is in our own words. Practice pieces are done, and the ClayBreeze electronics enclosure is being laser-cut now (Section~\ref{sec:enclosure}).
+This chapter records the 3D printing and laser cutting skills learned and practised at Tinkerers' Lab, Sanjivani University, and where they feed back into ClayBreeze. The lab has four Bambu Lab printers that use \textbf{FDM --- Fused Deposition Modelling (also called FFF, Fused Filament Fabrication)} and a \textbf{CO$_2$ (carbon dioxide) laser cutter}. Learning reference: Dr.\ Kiran Wakchaure's Fab Academy documentation~\cite{wakchaure}; everything here is in our own words. Practice pieces are done, and the skills are applied in ClayBreeze as the laser-cut 3\,mm MDF enclosure for the electronics (Section~\ref{sec:enclosure}).
 
 \begin{table}[H]
 \centering\small
@@ -905,11 +909,11 @@ Air assist, passes & An air jet clears smoke and flame and protects the lens; tw
 
 \noindent\textbf{Allowed:} MDF (medium-density fibreboard), plywood, acrylic, cardboard, paper. \textbf{Never cut:} PVC or vinyl (chlorine gas), polycarbonate (burns and discolours), coated metals (not cut by CO$_2$; coatings reflect or fume), or any unidentified sheet.
 
-\noindent\textbf{Lab machine:} SIL CO$_2$ laser cutter, 100\,W. Bed size and other specifications: [to confirm from machine label].
+\noindent\textbf{Lab machine:} SIL CO$_2$ laser cutter, 100\,W.
 
 \section{Applied in ClayBreeze: electronics enclosure}
 \label{sec:enclosure}
-The laser-cutting practice is being put to work on the project: a finger-jointed box to house the ESP32, the relay module and the DHT11 wiring. \textbf{Status: laser cutting in progress.} The cutting file is \texttt{cad/dxf-enclosure/basic-box-120x150x100-3mm.dxf} in the GitHub repository; how such a file is exported from SolidWorks is described in Section~\ref{sec:dxfguide}. Read with \texttt{ezdxf}, it holds \textbf{six closed, finger-jointed panels} (432 line segments, millimetres) nested on a 426 $\times$ 253\,mm area, for a 120 $\times$ 150 $\times$ 100\,mm box (Table~\ref{tab:enclosure}, Figure~\ref{fig:enclosure}). Material: 3\,mm MDF, as stated in the file names. Which panel is the top, and the cable and sensor cut-outs, are not yet decided.
+The laser-cutting practice is being put to work on the project: a finger-jointed box to house the ESP32, the relay module and the DHT11 wiring. The cutting file is \url{cad/dxf-enclosure/basic-box-120x150x100-3mm.dxf} in the GitHub repository; how such a file is exported from SolidWorks is described in Section~\ref{sec:dxfguide}. Read with \texttt{ezdxf}, it holds \textbf{six closed, finger-jointed panels} (432 line segments, millimetres) nested on a 426 $\times$ 253\,mm area, for a 120 $\times$ 150 $\times$ 100\,mm box (Table~\ref{tab:enclosure}, Figure~\ref{fig:enclosure}). Material: 3\,mm MDF, as stated in the file names. Panel names are by size only.
 
 \begin{table}[H]
 \centering\small
@@ -940,7 +944,7 @@ Short sides & 120 $\times$ 100 & 2 \\
 \includegraphics[width=\linewidth]{enclosure-cutting.jpg}
 \caption{Laser cutting MDF to store electronics.}
 \end{subfigure}
-\caption{ClayBreeze electronics enclosure: six finger-jointed panels in 3\,mm MDF (laser cutting in progress).}
+\caption{ClayBreeze electronics enclosure: six finger-jointed panels in 3\,mm MDF (DXF files).}
 \label{fig:enclosure}
 \end{figure}
 
