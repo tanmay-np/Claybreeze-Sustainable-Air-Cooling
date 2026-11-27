@@ -190,6 +190,26 @@ Room air conditioners use a compressor and refrigerant circuit. Their energy use
 % ======================= 4 DESIGN AND CAD =======================
 \chapter{Design and CAD}
 
+The project followed a CAD-first method: every part was modelled and checked in SolidWorks before any material was cut (Figure~\ref{fig:designflow}).
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\sffamily\scriptsize, node distance=3mm,
+  st/.style={draw, rounded corners=2pt, align=center, minimum height=11mm, text width=24mm, line width=0.7pt},
+  ar/.style={-{Latex[length=2mm]}, line width=0.7pt}]
+  \node[st, fill=cbwater!10, draw=cbwater] (a) {\textbf{1. Model}\\SolidWorks parts\\and assembly};
+  \node[st, fill=cbwater!10, draw=cbwater, right=of a] (b) {\textbf{2. Drawing}\\480$\times$560$\times$150\,mm,\\\dia12\,mm rods};
+  \node[st, fill=cbwater!10, draw=cbwater, right=of b] (c) {\textbf{3. Check}\\pot spacing, rods,\\fan extension};
+  \node[st, fill=cbclay!10, draw=cbclay, right=of c] (d) {\textbf{4. Fabricate}\\cut, weld, drill};
+  \node[st, fill=cbclay!10, draw=cbclay, right=of d] (e) {\textbf{5. Assemble}\\pots, fans, pump,\\ESP32 control};
+  \draw[ar] (a) -- (b); \draw[ar] (b) -- (c); \draw[ar] (c) -- (d); \draw[ar] (d) -- (e);
+  \node[above=1mm of b, text=cbwater] {\textbf{Design}};
+  \node[above=1mm of d.north east, text=cbclay] {\textbf{Fabricate}};
+\end{tikzpicture}
+\caption{Design first, then fabricate.}
+\label{fig:designflow}
+\end{figure}
+
 \section{Design dimensions}
 The frame was designed in SolidWorks. Table~\ref{tab:dims} lists the design dimensions from the dimensioned drawing (Figure~\ref{fig:drawing}). As-built dimensions have not yet been measured; the CAD model is to be revised once they are.
 
@@ -296,7 +316,7 @@ Spray paint, welding consumables & -- & Frame finishing and fabrication. \\
 % ======================= 6 FABRICATION =======================
 \chapter{Fabrication Process}
 
-The prototype was fabricated in the university workshop. The steps below follow the photographs taken during the build; dates are not recorded because the photographs carry no date metadata.
+With the design finalised in SolidWorks, we fabricated the prototype step by step. The prototype was fabricated in the university workshop. The steps below follow the photographs taken during the build; dates are not recorded because the photographs carry no date metadata.
 
 \section{Cutting and welding the frame}
 The 20\,mm square pipe was marked and cut to length on an abrasive chop saw, sorted by length and welded into a box frame (Figure~\ref{fig:fab1}).
@@ -420,19 +440,7 @@ $\ge 60$\,\% & OFF \\
 \section{Open engineering questions}
 Sensor placement (ambient, inlet or outlet air), start-up behaviour before the first valid reading, rapid relay switching near the thresholds (hysteresis is not yet implemented), and whether the chosen thresholds are useful are all to be settled by testing. A browser simulation of this logic is available on the project website; it is software only and is not connected to the hardware.
 
-% ======================= 9 SAFETY =======================
-\chapter{Safety and Maintenance}
-
-\section{Mechanical}
-Inspect welds and joints before loading; remove burrs and sharp edges; check that rods hold the pots without point-loading or cracking them; keep the frame stable; secure the fans and guard accessible blades; isolate power before adjusting rods, fans, tubing or pots.
-
-\section{Water and electrical}
-Keep water, splashes and runoff away from fan motors, connectors, the relay and the ESP32. The breadboard electronics are not water-resistant and must be kept out of the drip path and later enclosed. Have any mains wiring and protective devices checked by a qualified person; do not rely on software as the only means of isolation; never handle wiring with wet hands; de-energise before refilling, cleaning or repairing leaks; do not run the pump dry or against a blocked outlet.
-
-\section{Hygiene and maintenance}
-Use clean water and drain the tub when the cooler will be idle, so water does not stagnate. Inspect the tub, tubing and pots for deposits, slime, blockages, cracks and leaks, and clean them with methods compatible with the clay and pump~\cite{doe}. Record cracked pots, corrosion, loose fasteners and changes in flow or fan noise.
-
-% ======================= 10 TESTING =======================
+% ======================= 9 TESTING =======================
 \chapter{Testing Plan}
 \label{ch:testing}
 
@@ -470,6 +478,18 @@ Once reliable measurements exist:
 \text{Electrical energy} &= \bar{P} \times t
 \end{align*}
 A positive $\Delta T$ shows that outlet air was cooler than inlet air for that run; it does not by itself establish room-wide cooling or superiority over another cooler. RH must be interpreted with the simultaneous temperatures.
+
+% ======================= 10 SAFETY =======================
+\chapter{Safety and Maintenance}
+
+\section{Mechanical}
+Inspect welds and joints before loading; remove burrs and sharp edges; check that rods hold the pots without point-loading or cracking them; keep the frame stable; secure the fans and guard accessible blades; isolate power before adjusting rods, fans, tubing or pots.
+
+\section{Water and electrical}
+Keep water, splashes and runoff away from fan motors, connectors, the relay and the ESP32. The breadboard electronics are not water-resistant and must be kept out of the drip path and later enclosed. Have any mains wiring and protective devices checked by a qualified person; do not rely on software as the only means of isolation; never handle wiring with wet hands; de-energise before refilling, cleaning or repairing leaks; do not run the pump dry or against a blocked outlet.
+
+\section{Hygiene and maintenance}
+Use clean water and drain the tub when the cooler will be idle, so water does not stagnate. Inspect the tub, tubing and pots for deposits, slime, blockages, cracks and leaks, and clean them with methods compatible with the clay and pump~\cite{doe}. Record cracked pots, corrosion, loose fasteners and changes in flow or fan noise.
 
 % ======================= 11 RESULTS =======================
 \chapter{Results}
@@ -741,6 +761,36 @@ AMS support & AMS 2 Pro, AMS HT & AMS & AMS lite & AMS lite \\
 \label{fig:digifab}
 \end{figure}
 
+\section{From SolidWorks to laser cutter: exporting DXF files}
+\label{sec:dxfguide}
+A laser cutter reads flat 2D outlines, usually as a DXF file. The steps below take a panel from a SolidWorks part to a cut piece, using our electronics enclosure (Section~\ref{sec:enclosure}) as the worked example. Menu paths follow the official SOLIDWORKS 2024 help pages~\cite{swoutput,swoptions,swsheet,swunits}, paraphrased. Figure~\ref{fig:dxfguide} shows one key frame of each step's illustration; on the website they are animated.
+
+{\sloppy
+\begin{enumerate}[itemsep=2pt]
+\item \textbf{Model each panel at 1:1 in mm.} Units: \textbf{Tools \guilsinglright{} Options \guilsinglright{} Document Properties \guilsinglright{} Units}, unit system \textbf{MMGS}~\cite{swunits}. Sketch the outline at full size (150 $\times$ 100\,mm for our long side) and extrude it to the sheet thickness, 3\,mm.
+\item \textbf{Finger joints and kerf.} Tabs and slots on the mating edges (our DXF: 13\,mm fingers, 3\,mm deep). Allow for the kerf by offsetting half of it in CAD or compensating in the laser software.
+\item \textbf{Method A --- part face.} Select the face, \textbf{File \guilsinglright{} Save As}, \emph{Save as type} \textbf{Dxf (*.dxf)}; in the DXF/DWG Output PropertyManager choose \textbf{Export: Faces / loops / edges} (or \emph{Annotation views}), check the DXF/DWG Cleanup preview, \textbf{Save}. Or right-click the face, \textbf{Export to DXF / DWG}~\cite{swoutput}.
+\item \textbf{Method B --- drawing.} One Front view at scale 1:1, dimensions and annotations hidden; \textbf{File \guilsinglright{} Save As \guilsinglright{} Dxf (*.dxf) \guilsinglright{} Options}, \textbf{Scale output 1:1 (Drawings only): Enable}~\cite{swoptions}.
+\item \textbf{Method C --- sheet metal (if used).} Right-click \textbf{Flat-Pattern \guilsinglright{} Export to DXF/DWG}; under \emph{Entities To Export} clear \textbf{Bend lines}~\cite{swsheet}.
+\item \textbf{Export settings.} Millimetres, 1:1, no title block or border, only cutting geometry; \textbf{Enable merging} (end point merging) and \textbf{Export all splines as polylines}; cut and engrave on separate layers~\cite{swoptions}.
+\item \textbf{Check.} In a viewer: overall size (150 $\times$ 100\,mm), closed contours, no duplicate lines.
+\item \textbf{Cut.} Import, assign power and speed per layer (cut red, engrave blue), test on scrap, cut.
+\end{enumerate}
+\par}
+
+\begin{figure}[H]
+\centering
+\foreach \n/\t in {1/Model at 1:1, 2/Fingers and kerf, 3/Method A: Save As DXF, 4/Method B: drawing 1:1}{%
+  \begin{minipage}[t]{0.235\linewidth}\centering\includegraphics[width=\linewidth]{dxf-guide/step-\n.png}\\[-1pt]{\scriptsize \n.~\t}\end{minipage}\hfill}
+\par\medskip
+\foreach \n/\t in {5/Method C: flat pattern, 6/Export settings, 7/Check the DXF, 8/Cut the real panel}{%
+  \begin{minipage}[t]{0.235\linewidth}\centering\includegraphics[width=\linewidth]{dxf-guide/step-\n.png}\\[-1pt]{\scriptsize \n.~\t}\end{minipage}\hfill}
+\caption{From SolidWorks to laser cutter: one key frame per step. Original, stylised illustrations of a generic CAD window (not screenshots); steps 2, 4, 5, 7 and 8 draw the real 150 $\times$ 100\,mm panel from our DXF.}
+\label{fig:dxfguide}
+\end{figure}
+
+\noindent\textbf{Common mistakes:} wrong scale (a drawing exported at sheet scale cuts the wrong size); dimensions exported as lines (they get cut); open contours (the part never drops out --- enable end point merging); splines misread (export as polylines); duplicate lines (cut twice, charred edge).
+
 \section{Laser cutting (CO$_2$)}
 A CO$_2$ laser focuses an infrared beam onto a sheet to burn a line through it (cutting) or mark its surface (engraving).
 \textbf{Workflow:} 2D design as DXF or SVG $\rightarrow$ laser software (power, speed and job per colour) $\rightarrow$ material setup (allowed sheet, flat on the honeycomb) $\rightarrow$ focus (beam narrowest at the surface) $\rightarrow$ cut or engrave with extraction and air assist on, after a test on scrap $\rightarrow$ inspect cut-through, fit and kerf.
@@ -859,7 +909,7 @@ Air assist, passes & An air jet clears smoke and flame and protects the lens; tw
 
 \section{Applied in ClayBreeze: electronics enclosure}
 \label{sec:enclosure}
-The laser-cutting practice is being put to work on the project: a finger-jointed box to house the ESP32, the relay module and the DHT11 wiring. \textbf{Status: laser cutting in progress.} The cutting file is \texttt{cad/dxf-enclosure/basic-box-120x150x100-3mm.dxf} in the GitHub repository. Read with \texttt{ezdxf}, it holds \textbf{six closed, finger-jointed panels} (432 line segments, millimetres) nested on a 426 $\times$ 253\,mm area, for a 120 $\times$ 150 $\times$ 100\,mm box (Table~\ref{tab:enclosure}, Figure~\ref{fig:enclosure}). Material: 3\,mm MDF, as stated in the file names. Which panel is the top, and the cable and sensor cut-outs, are not yet decided.
+The laser-cutting practice is being put to work on the project: a finger-jointed box to house the ESP32, the relay module and the DHT11 wiring. \textbf{Status: laser cutting in progress.} The cutting file is \texttt{cad/dxf-enclosure/basic-box-120x150x100-3mm.dxf} in the GitHub repository; how such a file is exported from SolidWorks is described in Section~\ref{sec:dxfguide}. Read with \texttt{ezdxf}, it holds \textbf{six closed, finger-jointed panels} (432 line segments, millimetres) nested on a 426 $\times$ 253\,mm area, for a 120 $\times$ 150 $\times$ 100\,mm box (Table~\ref{tab:enclosure}, Figure~\ref{fig:enclosure}). Material: 3\,mm MDF, as stated in the file names. Which panel is the top, and the cable and sensor cut-outs, are not yet decided.
 
 \begin{table}[H]
 \centering\small
@@ -924,6 +974,10 @@ Short sides & 120 $\times$ 100 & 2 \\
 \bibitem{bambua1} Bambu Lab. A1 technical specifications and product page (``bed slinger''). \url{https://bambulab.com/en/a1/tech-specs}, \url{https://bambulab.com/en/a1} (accessed 26--27 Nov 2026)
 \bibitem{bambua1mini} Bambu Lab. A1 mini technical specifications and product page (``bed slinger''). \url{https://bambulab.com/en/a1-mini/tech-specs}, \url{https://bambulab.com/en/a1-mini} (accessed 26--27 Nov 2026)
 \bibitem{bambuh2dwiki} Bambu Lab Wiki. Introduction to H2D --- Core XY movement system. \url{https://wiki.bambulab.com/en/h2/manual/h2d-intro} (accessed 27 Nov 2026)
+\bibitem{swoutput} Dassault Syst\`emes. DXF/DWG Output PropertyManager. SOLIDWORKS Design Help 2024. \url{https://help.solidworks.com/2024/english/SolidWorks/sldworks/HIDD_DVE_PART_EXPORT_OPTIONS.htm} (accessed 27 Nov 2026)
+\bibitem{swoptions} Dassault Syst\`emes. DXF/DWG File Export Options. SOLIDWORKS Design Help 2024. \url{https://help.solidworks.com/2024/English/SolidWorks/sldworks/r_dxf_dwg_export_options.htm} (accessed 27 Nov 2026)
+\bibitem{swsheet} Dassault Syst\`emes. Saving Sheet Metal Flat Patterns as DXF Files. SOLIDWORKS Design Help 2024. \url{https://help.solidworks.com/2024/English/solidworks/sldworks/t_Saving_Sheet_Metal_Flat_Patterns_DXF_Files.htm} (accessed 27 Nov 2026)
+\bibitem{swunits} Dassault Syst\`emes. Document Properties --- Units. SOLIDWORKS Design Help 2023. \url{https://help.solidworks.com/2023/english/SolidWorks/sldworks/HIDD_OPTIONS_UNITS_NEW.htm} (accessed 27 Nov 2026)
 \bibitem{bambuwiki} Bambu Lab Wiki. Filament guide --- printer, nozzle, AMS, build plate, glue compatibility and required parameters. \url{https://wiki.bambulab.com/en/general/filament-guide-material-table} (accessed 26 Nov 2026)
 \bibitem{bambuimages} Bambu Lab. Official product images of the H2D, P1S, A1 and A1 mini, from the official store pages \url{https://us.store.bambulab.com/products/h2d}, \url{https://us.store.bambulab.com/products/p1s}, \url{https://us.store.bambulab.com/products/a1}, \url{https://us.store.bambulab.com/products/a1-mini}. Images \textcopyright\ Bambu Lab (accessed 26 Nov 2026)
 \bibitem{afn} Action For Nature. 2026 International Young Eco-Hero Award listing describing Project Vaayu. \url{https://actionfornature.org/eco-hero-winners/tag/Terracotta%2BCooling}

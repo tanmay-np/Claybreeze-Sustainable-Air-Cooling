@@ -44,7 +44,7 @@ window.CLAYBREEZE_PROJECT = {
     { name: "Control logic", status: "IMPLEMENTED", role: "Running on the ESP32. Temperature ≤ 28 °C: both fans OFF. Above 28 °C: one fan ON. Above 35 °C: both fans ON. Relative humidity below 60 %: pump ON; at or above 60 %: pump OFF." }
   ],
 
-  // Current status, grouped in plain English (Section 11). Do not repeat the journey here.
+  // Current status, grouped in plain English (Section 10). Do not repeat the journey here.
   // A group either lists items directly or splits them into labelled subgroups.
   statusGroups: [
     {

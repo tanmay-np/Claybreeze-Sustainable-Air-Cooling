@@ -1,0 +1,27 @@
+<!doctype html>
+<!--
+  Renders one key frame of the "From SolidWorks to Laser Cutter" illustrations (light theme),
+  using the same code as the website (assets/js/dxf-guide.js). Used to make the report's
+  static figure strip:  tools/dxf-keyframes.html?step=1 … ?step=8  (see tools/render-dxf-keyframes.py).
+-->
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <title>DXF guide key frame</title>
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <link rel="stylesheet" href="../assets/css/workbench.css">
+  <style>
+    html, body { margin: 0; padding: 0; background: #ffffff; overflow: hidden; }
+    .dg-svg { width: 960px; height: 600px; border: 0; background: #ffffff; }
+  </style>
+</head>
+<body>
+  <svg class="dg-svg" id="kf" viewBox="0 0 480 300" role="img" aria-label="Key frame"></svg>
+  <script src="../assets/js/dxf-guide.js"></script>
+  <script>
+    const i = Math.max(1, Math.min(8, Number(new URLSearchParams(location.search).get("step")) || 1)) - 1;
+    const G = window.ClayBreezeDxfGuide;
+    G.render(document.getElementById("kf"), i)(G.STEPS[i].still);
+  </script>
+</body>
+</html>

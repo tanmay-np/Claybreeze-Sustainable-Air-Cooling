@@ -26,6 +26,8 @@ Project Guide: Dr. Kiran Wakchaure
 
 Inspired by reporting on Project Vaayu, a separate student initiative — see [`docs/project-overview.md`](docs/project-overview.md).
 
+**Method — CAD first.** The prototype was modelled and checked in SolidWorks first (parts, assembly and a dimensioned drawing), then fabricated step by step. The website and the report follow the same order: problem → how it works → CAD and design → interactive 3D model → build journey → electronics (including the laser-cut enclosure) → testing → safety → status → project gallery, followed by the separate Makerspace Workbench.
+
 ## Current Design Snapshot
 
 | Parameter | Current information |
@@ -49,6 +51,7 @@ Inspired by reporting on Project Vaayu, a separate student initiative — see [`
 - [`docs/materials-and-components.md`](docs/materials-and-components.md) — components, known specifications and confirmation checklist.
 - [`docs/fabrication-and-assembly.md`](docs/fabrication-and-assembly.md) — build sequence and assembly inspection points.
 - [`docs/digital-fabrication.md`](docs/digital-fabrication.md) — Makerspace Workbench — 3D Printing & Laser Cutting at Tinkerers' Lab: FDM motion types (bed-slinger vs CoreXY), laser head motion, uni- vs bidirectional engraving, and the laser-cut electronics enclosure (cutting in progress).
+- [`docs/solidworks-to-dxf.md`](docs/solidworks-to-dxf.md) — From SolidWorks to Laser Cutter: exporting DXF files in eight steps (menu paths from the SOLIDWORKS help), with the enclosure as the worked example.
 - [`cad/dxf-enclosure/`](cad/dxf-enclosure/) — DXF of the laser-cut electronics enclosure: 6 finger-jointed panels for a 120 × 150 × 100 mm box in 3 mm MDF.
 - [`docs/electronics-and-control.md`](docs/electronics-and-control.md) — ESP32/relay/DHT11 roles and the implemented fan and pump control logic.
 - [`docs/testing-and-results.md`](docs/testing-and-results.md) — test protocol, record sheet and calculation guidance.

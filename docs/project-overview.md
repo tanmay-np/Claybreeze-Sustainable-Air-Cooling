@@ -59,7 +59,27 @@ The project must also establish whether the pots wet consistently, whether exces
 
 ClayBreeze replaces the pad with **30 porous, unglazed terracotta pots** (5 × 6) held on six ⌀12 mm rods in a welded 20 mm square-pipe frame. A pump in a tub under the frame lifts water through tubing to the top of the pots; excess water drains back to the tub. Two exhaust fans on a rear extension frame blow room air forward through and around the wet pots. An **ESP32** reads a **DHT11** sensor and switches the fans and pump through a **3-channel relay**: both fans off at or below 28 °C, one fan above 28 °C, both above 35 °C; pump on below 60 % RH. Clay is natural, locally made, reusable and biodegradable, so there is no pad to replace. Low cost, low power and an eco-friendly build are the **design aims**; they will be checked by testing.
 
-## 5. Design and Architecture
+## 5. Working Principle: Evaporative Cooling with Porous Clay
+
+Evaporative cooling uses the energy absorbed when liquid water changes into water vapour. At the wetted clay surface, evaporation draws latent heat from the water, clay, and surrounding air. If the water remains distributed over an exposed surface and air moves across it, some of the air's sensible heat can be converted into latent energy associated with water vapour. The measured air temperature may therefore decrease while its moisture content and relative humidity increase. This is the basis of direct evaporative cooling. [3][5]
+
+Unglazed clay can contain connected pores that absorb and transport water by capillary action. Research on porous ceramic evaporative walls and pottery-based cooling pads shows that porous ceramic media can be investigated as wetted evaporative surfaces. However, water absorption and surface wetting depend on the clay body, firing, porosity, geometry, and operating arrangement; those properties must not be assumed for the pots used in ClayBreeze. [4][5][6]
+
+In the ClayBreeze arrangement:
+
+1. The pump lifts water from the bottom reservoir to a distribution arrangement at the top.
+2. Water is intended to spread over the exposed clay surfaces. The consistency of this distribution is a key item to inspect and test.
+3. The two exhaust fans, mounted at the rear on the extension frame, blow room air forward through and around the pots and out of the front. The final assembly must be checked for airflow bypass, blocked openings, and uneven flow.
+4. Water that does not evaporate is intended to drain back into the reservoir for recirculation.
+5. Evaporation and the fan-driven airflow are expected to affect outlet temperature and humidity, but the magnitude and stability of those changes are **pending testing**.
+
+### Effect of ambient relative humidity
+
+Relative humidity describes how close the air is to saturation at its current temperature. In general, drier incoming air has a larger gap between dry-bulb and wet-bulb temperatures and can accept more moisture through evaporation. As incoming relative humidity rises, the available evaporative cooling potential decreases. Direct evaporative cooling also adds moisture to the airstream, so outlet humidity must be measured alongside temperature. The wet-bulb temperature provides a useful theoretical reference for direct evaporative cooling, but it is not a prediction of ClayBreeze's actual outlet temperature. [3][7]
+
+ClayBreeze's actual behaviour will also depend on the pot material and exposed area, water-distribution uniformity, airflow rate and direction, contact time, ambient conditions, water temperature, and any air bypass around the assembly. Results from other pottery or evaporative-pad prototypes cannot be transferred directly because their dimensions, materials, and test conditions differ. [4][5]
+
+## 6. Design and Architecture (CAD first)
 
 The current concept places the clay-pot array inside a fabricated square-pipe frame. A pump in a bottom reservoir is intended to deliver water through tubing to a distribution arrangement above the pots. Water will wet the clay surfaces; excess water is intended to drain back into the reservoir. Two exhaust fans mounted at the rear, behind the pot array, take in room air and blow it forward through and around the pots, out of the front into the room. The actual airflow path, water coverage, and return-flow behaviour must be verified during assembly and commissioning.
 
@@ -82,6 +102,8 @@ The current concept places the clay-pot array inside a fabricated square-pipe fr
 
 ### Build status and CAD approach
 
+- **Method — CAD first:** every part was modelled and checked in SolidWorks (parts, assembly, dimensioned drawing) before any material was cut; the frame was then fabricated step by step from the drawing. The laser-cut electronics enclosure follows the same path: SolidWorks panels → DXF → laser cutter (see [`solidworks-to-dxf.md`](solidworks-to-dxf.md)).
+
 - **Completed:** the metal frame is fabricated and spray-painted; the six 12 mm pot-retaining rods are drilled and attached; the rear fan-mount extension is fabricated and both fans are mounted on it; 30 clay pots (5 × 6) are fixed into the frame. The water pump with tubing and the reservoir are installed. The ESP32, DHT11 and 3-channel relay module are integrated, and the control logic is running on the ESP32.
 - **Next:** performance testing and results — temperature, humidity, airflow and water use (see `docs/testing-and-results.md`). Secure and terminate all fan and pump cables before powered testing.
 - **Still to record:** tubing/reservoir specifications and a leak-check; pot spacing and the as-built frame dimensions have not been measured (visual inspection done; as-built measurements pending).
@@ -89,26 +111,6 @@ The current concept places the clay-pot array inside a fabricated square-pipe fr
 - **Electronics:** see `docs/electronics-and-control.md` for component roles and the implemented two-stage fan and humidity-based pump control logic.
 
 Photographs of the fabricated frame, the actual pots, the attachment process, and the revised SolidWorks model should be added to the repository as the work progresses. Images should show real project evidence and be labelled with dates or captions where practical.
-
-## 6. Working Principle: Evaporative Cooling with Porous Clay
-
-Evaporative cooling uses the energy absorbed when liquid water changes into water vapour. At the wetted clay surface, evaporation draws latent heat from the water, clay, and surrounding air. If the water remains distributed over an exposed surface and air moves across it, some of the air's sensible heat can be converted into latent energy associated with water vapour. The measured air temperature may therefore decrease while its moisture content and relative humidity increase. This is the basis of direct evaporative cooling. [3][5]
-
-Unglazed clay can contain connected pores that absorb and transport water by capillary action. Research on porous ceramic evaporative walls and pottery-based cooling pads shows that porous ceramic media can be investigated as wetted evaporative surfaces. However, water absorption and surface wetting depend on the clay body, firing, porosity, geometry, and operating arrangement; those properties must not be assumed for the pots used in ClayBreeze. [4][5][6]
-
-In the ClayBreeze arrangement:
-
-1. The pump lifts water from the bottom reservoir to a distribution arrangement at the top.
-2. Water is intended to spread over the exposed clay surfaces. The consistency of this distribution is a key item to inspect and test.
-3. The two exhaust fans, mounted at the rear on the extension frame, blow room air forward through and around the pots and out of the front. The final assembly must be checked for airflow bypass, blocked openings, and uneven flow.
-4. Water that does not evaporate is intended to drain back into the reservoir for recirculation.
-5. Evaporation and the fan-driven airflow are expected to affect outlet temperature and humidity, but the magnitude and stability of those changes are **pending testing**.
-
-### Effect of ambient relative humidity
-
-Relative humidity describes how close the air is to saturation at its current temperature. In general, drier incoming air has a larger gap between dry-bulb and wet-bulb temperatures and can accept more moisture through evaporation. As incoming relative humidity rises, the available evaporative cooling potential decreases. Direct evaporative cooling also adds moisture to the airstream, so outlet humidity must be measured alongside temperature. The wet-bulb temperature provides a useful theoretical reference for direct evaporative cooling, but it is not a prediction of ClayBreeze's actual outlet temperature. [3][7]
-
-ClayBreeze's actual behaviour will also depend on the pot material and exposed area, water-distribution uniformity, airflow rate and direction, contact time, ambient conditions, water temperature, and any air bypass around the assembly. Results from other pottery or evaporative-pad prototypes cannot be transferred directly because their dimensions, materials, and test conditions differ. [4][5]
 
 ## 7. Project Objectives
 

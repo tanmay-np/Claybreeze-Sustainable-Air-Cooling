@@ -11,8 +11,13 @@ This website is a static HTML/CSS/JavaScript presentation layer for the ClayBree
 - `assets/js/site.js` — page behaviour: journey, design/CAD, gallery and filters, image viewer with zoom, status, navigation, presentation mode and the Control Logic Lab simulator.
 - `assets/js/model.js` — the procedural 3D model, built from the documented dimensions; approximate values are marked `APPROX`.
 - `assets/js/workbench.js` and `assets/css/workbench.css` — Part II, the Makerspace Workbench (after the project gallery; nav item "Workbench"): abbreviation tooltips, printer cards, wrapping photo grids, H2D labelled view, the bed-slinger vs CoreXY motion comparison, the FDM walkthrough (with a mode toggle linked to the comparison), laser workflow stepper, laser head motion, uni- vs bidirectional engraving, layer-height, material, cut/engrave and kerf demos, the ClayBreeze enclosure (drawn from the DXF), lab videos, the safety checklist and the Workbench gallery. Animations run only while on screen and respect `?reducedmotion`; `?debuganim` exposes `window.__wbAnimators` for testing. Official printer images live in `media/fabrication-lab/bambu/` and must keep the "Image: © Bambu Lab" credit.
+- `assets/js/dxf-guide.js` — the "From SolidWorks to Laser Cutter" stepper in the Workbench: eight steps with original animated SVG illustrations (generic CAD window; steps 2, 4, 5, 7 and 8 draw the real enclosure panel from the DXF). `tools/dxf-keyframes.html` + `tools/render-dxf-keyframes.py` render the report's key frames from the same code; `tools/dxf-panel-preview.py` makes the single-panel SVG from the DXF.
 - `assets/js/viewer.js` — the 3D views: hero, journey build-up inset, and the Assembly Explorer.
 - `assets/vendor/three/` — three.js 0.160.0 (build + OrbitControls + GLTFLoader), vendored locally with its MIT `LICENSE`, loaded through the import map in `index.html`. Nothing is fetched from a CDN, so the site works offline.
+
+## Page order
+
+CAD first, as the project was built: hero → problem → how it works → CAD and design (Sec 04) → interactive 3D model (05) → build journey (06) → electronics (07) → testing (08) → safety (09) → status (10) → project gallery (11) → Part II, Makerspace Workbench (12) → references (13).
 
 ## 3D model
 

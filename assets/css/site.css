@@ -548,3 +548,19 @@ body.presentation-mode .s-label { font-size: 19px; }
 }
 .layer-controls, .kerf-controls { min-width: 0; }
 .layer-controls input[type=range], .kerf-controls input[type=range] { min-width: 0; max-width: 100%; box-sizing: border-box; margin-inline: 0; }
+
+/* ---------- CAD-first: Design -> Fabricate flow and journey bridge ---------- */
+.design-flow { list-style: none; margin: 0 0 28px; padding: 0; display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); counter-reset: df; }
+@media (min-width: 1000px) { .design-flow { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.design-flow li { position: relative; display: grid; gap: 4px; align-content: start; background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--water); padding: 12px 14px; counter-increment: df; }
+.design-flow li.df-fab { border-top-color: var(--clay); }
+.design-flow strong { font-family: var(--display); font-size: 17px; line-height: 1.25; }
+.design-flow strong::before { content: counter(df) ". "; font-family: var(--mono); color: var(--muted); }
+.design-flow span:not(.df-tag) { font-size: 14px; color: var(--muted); line-height: 1.35; }
+.df-tag { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--water-ink); }
+.df-fab .df-tag { color: var(--clay-ink); }
+/* Arrows sit on the leading edge of the next step (inside the gap), so nothing overflows to the right. */
+.design-flow li + li::before { position: absolute; font-family: var(--mono); color: var(--muted); z-index: 1; line-height: 1; }
+@media (min-width: 1000px) { .design-flow li + li::before { content: "→"; left: -5px; top: 50%; transform: translate(-50%, -50%); } }
+@media (max-width: 999px) { .design-flow li + li::before { content: "↓"; left: 50%; top: -5px; transform: translate(-50%, -50%); } }
+.journey-bridge { font-family: var(--display); font-size: clamp(18px, 1.8vw, 22px); color: var(--text); margin: 0 0 8px; border-left: 3px solid var(--clay); padding-left: 12px; }

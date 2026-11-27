@@ -401,3 +401,79 @@ body.presentation-mode .workbench, body.presentation-mode .fl-p, body.presentati
 .dxf-lbl text { font: 600 11px var(--mono); fill: #47515e; text-anchor: middle; }
 .enclosure-parts { width: 100%; }
 .status-chip.status-progress { color: var(--clay-ink); border-color: var(--clay); }
+
+/* ---------- From SolidWorks to Laser Cutter (DXF guide) ---------- */
+.dxf-guide { display: grid; gap: 18px; background: var(--surface); border: 1px solid var(--line); padding: 18px; }
+@media (min-width: 1000px) { .dxf-guide { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; } }
+.dg-figure { margin: 0; }
+.dg-svg { width: 100%; height: auto; display: block; background: var(--bg); border: 1px solid var(--line); }
+.dg-figure figcaption { font-size: 15px; color: var(--muted); margin-top: 8px; }
+.dg-count { font-family: var(--mono); font-size: 15px; color: var(--muted); margin: 0 0 8px; }
+.dg-nums { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.dg-num { min-width: 44px; min-height: 44px; font: 700 16px var(--mono); color: var(--text); background: var(--bg); border: 1px solid var(--line-strong); cursor: pointer; }
+.dg-num.is-active { background: var(--clay); border-color: var(--clay); color: var(--on-accent); }
+:root[data-theme="light"] .dg-num.is-active { background: var(--clay-ink); border-color: var(--clay-ink); }
+.dg-num:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+.dg-step-title { font-size: 21px; margin: 0 0 8px; }
+.dg-step-body { font-size: 16px; color: var(--muted); min-height: 9em; }
+.dg-step-body b { color: var(--text); font-weight: 600; }
+.dg-step-src { font-size: 15px; color: var(--muted); margin: 10px 0 14px; min-height: 1.4em; overflow-wrap: anywhere; }
+.dg-mistakes { margin-top: 18px; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--clay); padding: 14px 18px; }
+.dg-mistakes h4 { font-size: 19px; margin: 0 0 8px; }
+.dg-mistakes ul { margin: 0; padding-left: 20px; }
+.dg-mistakes li { font-size: 16px; color: var(--muted); margin-bottom: 6px; }
+.dg-mistakes strong { color: var(--text); }
+/* illustration parts (theme colours) */
+.dg-win { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1.5; }
+.dg-bar { fill: var(--surface-2); }
+.dg-dot { fill: var(--line-strong); }
+.dg-pane { fill: var(--surface-2); opacity: 0.6; }
+.dg-row { fill: transparent; }
+.dg-row.is-on { fill: color-mix(in srgb, var(--water) 25%, transparent); }
+.dg-t { font: 500 13px var(--sans); fill: var(--text); }
+.dg-title { font-size: 12px; fill: var(--muted); }
+.dg-small { font-size: 12px; }
+.dg-tiny { font-size: 10px; fill: var(--muted); }
+.dg-mono { font-family: var(--mono); }
+.dg-strongt { font-weight: 700; }
+.dg-menu { font-weight: 700; }
+.dg-accent { fill: var(--clay-ink); font-weight: 700; }
+.dg-ok { fill: var(--ok-ink); font-weight: 700; font-size: 13px; }
+.dg-dimt { fill: var(--water-ink); font-family: var(--mono); font-size: 12px; }
+.dg-dim { stroke: var(--water-ink); stroke-width: 1.2; }
+.dg-sketch { fill: none; stroke: var(--water); stroke-width: 2; stroke-dasharray: 100; }
+.dg-face { fill: color-mix(in srgb, #c9a36b 70%, transparent); stroke: #8a6a3d; stroke-width: 1; }
+.dg-face.is-sel { fill: color-mix(in srgb, var(--water) 30%, transparent); stroke: var(--water-ink); }
+.dg-solid-side { fill: #9c7a4a; }
+.dg-solid-top { fill: #b8925c; }
+.dg-outline { fill: none; stroke: var(--text); stroke-width: 1.4; stroke-linejoin: round; }
+.dg-strong { stroke: var(--clay-ink); stroke-width: 1.3; }
+.dg-glow { fill: none; stroke: var(--ok); stroke-width: 4; opacity: 0; }
+.dg-lens { fill: none; stroke: var(--water); stroke-width: 1.5; stroke-dasharray: 3 3; }
+.dg-card { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1.2; }
+.dg-shadow { filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35)); }
+.dg-accentbox { stroke: var(--clay); }
+.dg-ghost { fill: var(--line-strong); opacity: 0.55; }
+.dg-hl { fill: color-mix(in srgb, var(--water) 28%, transparent); }
+.dg-field { fill: var(--bg); stroke: var(--line-strong); }
+.dg-radio { fill: var(--clay); stroke: var(--text); stroke-width: 1; }
+.dg-box { fill: var(--bg); stroke: var(--text); stroke-width: 1.2; }
+.dg-box.is-off { stroke: var(--clay-ink); }
+.dg-tick { fill: none; stroke: var(--ok); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.dg-cursor { fill: var(--text); stroke: var(--bg); stroke-width: 1; }
+.dg-sheet { fill: #ffffff; }
+.dg-sheetborder { fill: none; stroke: #9aa6b5; stroke-width: 1; }
+.dg-sheet ~ .dg-t, .dg-sheet ~ g:not(.dg-toast) .dg-t { fill: #0d1117; }
+.dg-mat-a { fill: #c9a36b; stroke: #8a6a3d; }
+.dg-mat-b { fill: #b8925c; stroke: #8a6a3d; }
+.dg-slot { fill: var(--surface); }
+.dg-gap { fill: var(--clay); }
+.dg-red { fill: #e5484d; }
+.dg-blue { fill: #3e8ed0; }
+.dg-mdf { fill: #c9a36b; }
+.dg-guide { fill: none; stroke: #6d5130; stroke-width: 0.6; stroke-dasharray: 3 3; }
+.dg-cut { fill: none; stroke: #e5484d; stroke-width: 1.3; stroke-linejoin: round; }
+.dg-engrave { font: 700 22px var(--display); fill: #3e8ed0; }
+.dg-head { fill: var(--surface); stroke: var(--text); stroke-width: 1.5; }
+.dg-spark { fill: #ffd27a; }
+.dg-spark.is-blue { fill: #9fd0ff; }

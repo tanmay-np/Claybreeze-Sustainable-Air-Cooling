@@ -7,7 +7,7 @@
 | Process | Status |
 |---|---|
 | 3D printing | Skills learned and practised at Tinkerers' Lab on the Bambu Lab H2D, P1S, A1 and A1 mini. Photographs: `media/fabrication-lab/` and Drive folder 02. |
-| Laser cutting | Practice pieces done (photographs in `media/fabrication-lab/`). **Applied in ClayBreeze:** the electronics enclosure is being cut now — *laser cutting in progress* (see section C). |
+| Laser cutting | Practice pieces done (photographs in `media/fabrication-lab/`). **Applied in ClayBreeze:** the electronics enclosure is being cut now — *laser cutting in progress* (see section D). |
 
 **Lab machines:** Bambu Lab **H2D**, **P1S**, **A1** and **A1 mini** 3D printers, and a **SIL CO2 (carbon dioxide) laser cutter, 100 W**.
 
@@ -132,7 +132,11 @@ The website marks these on Bambu Lab's official H2D front image (positions appro
 7. **Filament and AMS** — the AMS 2 Pro holds four spools and feeds them automatically.
 8. **Camera and lighting** — built-in cameras (the spec lists a nozzle camera) and chamber light.
 
-## B. Laser cutting (CO2)
+## B. From SolidWorks to Laser Cutter — exporting DXF files
+
+An eight-step guide (model at 1:1 in mm → finger joints and kerf → export a face, a 1:1 drawing or a flat pattern as DXF → export settings → check → cut), with the enclosure as the worked example: [solidworks-to-dxf.md](solidworks-to-dxf.md). On the website each step has an original animated illustration.
+
+## C. Laser cutting (CO2)
 
 A CO2 (carbon dioxide) laser focuses an infrared beam onto a sheet to burn a line through it (cutting) or mark its surface (engraving).
 
@@ -197,12 +201,13 @@ The learning reference characterised its own laser by cutting a grid of test squ
 | Bed size | [to confirm from machine label] |
 | Model / other specifications | [to confirm from machine label] |
 
-## C. Applied in ClayBreeze: electronics enclosure
+## D. Applied in ClayBreeze: electronics enclosure
 
 | | |
 |---|---|
 | Purpose | Houses the ESP32, the relay module and the DHT11 wiring |
 | Status | **Laser cutting in progress** |
+| How the DXF is made | [solidworks-to-dxf.md](solidworks-to-dxf.md) |
 | DXF | [`cad/dxf-enclosure/basic-box-120x150x100-3mm.dxf`](../cad/dxf-enclosure/basic-box-120x150x100-3mm.dxf) |
 | Box size | 120 × 150 × 100 mm (from the file name and panel sizes) |
 | Material | 3 mm MDF — from the file names (`…-3mm.dxf`, "Laser Cutting MDF to store electronics") |
@@ -218,7 +223,7 @@ The DXF (read with `ezdxf`) holds **6 closed, finger-jointed panels** (432 line 
 
 Cable and sensor cut-outs and which panel is the top are not yet decided.
 
-## D. Safety checklist (both machines)
+## E. Safety checklist (both machines)
 
 - [ ] Fume extraction / ventilation on; ABS/ASA only in an enclosed printer in a ventilated room.
 - [ ] Sheet is on the allowed list — no PVC, vinyl, polycarbonate or coated metal.
