@@ -10,7 +10,7 @@ This website is a static HTML/CSS/JavaScript presentation layer for the ClayBree
 - `assets/js/gallery-data.js` — list of real project photos and CAD screenshots (with `kind` and pixel `width`/`height`).
 - `assets/js/site.js` — page behaviour: journey, design/CAD, gallery and filters, image viewer with zoom, status, navigation, presentation mode and the Control Logic Lab simulator.
 - `assets/js/model.js` — the procedural 3D model, built from the documented dimensions; approximate values are marked `APPROX`.
-- `assets/js/fablab.js` and `assets/css/fablab.css` — Part II, the Fab Lab Notebook (after the gallery): abbreviation tooltips, printer cards, H2D labelled view, FDM and laser steppers, layer-height, material, cut/engrave and kerf demos, lab videos and the safety checklist. Official printer images live in `media/fabrication-lab/bambu/` and must keep the "Image: © Bambu Lab" credit.
+- `assets/js/workbench.js` and `assets/css/workbench.css` — Part II, the Makerspace Workbench (after the project gallery; nav item "Workbench"): abbreviation tooltips, printer cards, wrapping photo grids, H2D labelled view, the bed-slinger vs CoreXY motion comparison, the FDM walkthrough (with a mode toggle linked to the comparison), laser workflow stepper, laser head motion, uni- vs bidirectional engraving, layer-height, material, cut/engrave and kerf demos, the ClayBreeze enclosure (drawn from the DXF), lab videos, the safety checklist and the Workbench gallery. Animations run only while on screen and respect `?reducedmotion`; `?debuganim` exposes `window.__wbAnimators` for testing. Official printer images live in `media/fabrication-lab/bambu/` and must keep the "Image: © Bambu Lab" credit.
 - `assets/js/viewer.js` — the 3D views: hero, journey build-up inset, and the Assembly Explorer.
 - `assets/vendor/three/` — three.js 0.160.0 (build + OrbitControls + GLTFLoader), vendored locally with its MIT `LICENSE`, loaded through the import map in `index.html`. Nothing is fetched from a CDN, so the site works offline.
 
@@ -28,9 +28,9 @@ Testing aids: `?nowebgl` shows the CAD-screenshot fallback; `?reducedmotion` for
    - `media/photos/2026-10-30-fan-mount.jpg`
    - `media/photos/2026-10-31-electronics-breadboard.jpg`
    - `media/cad-screenshots/2026-10-30-updated-solidworks-assembly.png`
-2. Open `assets/js/gallery-data.js` and add an object to `window.CLAYBREEZE_GALLERY`, following the commented example. Choose one category: `frame-fabrication`, `rods-mounts`, `painting`, `clay-pots`, `electronics`, `water-system`, `cad`, `testing`, `team`, `3d-printing` or `laser-cutting`. Digital-fabrication lab photos live in `media/fabrication-lab/` (run `python tools/make-web-images.py` after adding photos).
+2. Open `assets/js/gallery-data.js` and add an object to `window.CLAYBREEZE_GALLERY`, following the commented example. Choose one category. Project gallery: `frame-fabrication`, `rods-mounts`, `painting`, `clay-pots`, `electronics`, `water-system`, `cad`, `testing`, `team` or `enclosure`. Workbench gallery: `3d-printing`, `laser-cutting` or `printers` (`enclosure` photos appear in both galleries). Workbench captions are the cleaned-up file names, so rename a file to relabel it. Digital-fabrication lab photos live in `media/fabrication-lab/` (run `python tools/make-web-images.py` after adding photos).
 3. Provide a meaningful `alt` description, a short caption, `kind` (`photo`, `cad-drawing` or `cad-render`) and the image's pixel `width`/`height`. The site does not show dates; record real dates in the fabrication log only when they come from a real record.
-4. Refresh the site. The item will appear in the gallery and its category filter. Clicking a card opens the larger image.
+4. Refresh the site. The item will appear in its gallery and category filter. Clicking a card opens the viewer, whose arrows (and the arrow keys) step only through that gallery's current filter. All photo grids wrap (4 / 3 / 2 / 1 columns at ≥1200 / ≥900 / ≥600 / smaller widths); nothing on the page scrolls sideways.
 
 Example entry:
 

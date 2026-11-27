@@ -1,13 +1,13 @@
-# Fab Lab Notebook — 3D Printing and Laser Cutting
+# Makerspace Workbench — 3D Printing & Laser Cutting at Tinkerers' Lab
 
-3D printing and laser cutting skills learned and practised at Tinkerers' Lab, Sanjivani University. On the website this is **Part II — Fab Lab Notebook**, placed after the ClayBreeze project story.
+3D printing and laser cutting skills learned and practised at Tinkerers' Lab, Sanjivani University. On the website this is **Part II — Makerspace Workbench** (nav item "Workbench"), placed after the ClayBreeze project story.
 
-> **Learning reference:** [Dr. Kiran Wakchaure's Fab Academy documentation](https://fabacademy.org/2022/labs/vigyanashram/students/kiran-wakchaure/about.html) (Fab Academy 2022, Vigyan Ashram). Everything here is written in our own words; no text or images are copied from it. Bambu Lab text is paraphrased, and Bambu Lab images are used with credit.
+> **Learning reference:** [Dr. Kiran Wakchaure's Fab Academy documentation](https://fabacademy.org/2022/labs/vigyanashram/students/kiran-wakchaure/about.html). Everything here is written in our own words; no text or images are copied from it. Bambu Lab text is paraphrased, and Bambu Lab images are used with credit.
 
 | Process | Status |
 |---|---|
 | 3D printing | Skills learned and practised at Tinkerers' Lab on the Bambu Lab H2D, P1S, A1 and A1 mini. Photographs: `media/fabrication-lab/` and Drive folder 02. |
-| Laser cutting | **Laser-cutting work in progress — photographs and details will be added.** |
+| Laser cutting | Practice pieces done (photographs in `media/fabrication-lab/`). **Applied in ClayBreeze:** the electronics enclosure is being cut now — *laser cutting in progress* (see section C). |
 
 **Lab machines:** Bambu Lab **H2D**, **P1S**, **A1** and **A1 mini** 3D printers, and a **SIL CO2 (carbon dioxide) laser cutter, 100 W**.
 
@@ -36,7 +36,7 @@
 | PVC | Polyvinyl chloride |
 | PMMA | Poly(methyl methacrylate), i.e. acrylic |
 
-## A. 3D printing (FDM)
+## A. 3D printing: FDM — Fused Deposition Modelling (also called FFF, Fused Filament Fabrication)
 
 An FDM printer melts a plastic wire called filament in a heated nozzle and lays it down line by line, layer by layer.
 
@@ -48,9 +48,29 @@ An FDM printer melts a plastic wire called filament in a heated nozzle and lays 
 4. **Print** — clean the plate, load filament (or the AMS), start and watch the first layer.
 5. **Post-process** — let it cool, flex the plate to release the part, remove supports and brim, smooth edges, test-fit.
 
+### Two ways an FDM printer moves
+
+Every FDM printer must move the nozzle relative to the part in X (left–right), Y (front–back) and Z (up, one layer at a time). Our four printers use two different motion systems; the website shows both side by side, printing the same part in step, with labelled X/Y/Z axes.
+
+| | Bed-slinger (Cartesian) | CoreXY (enclosed) |
+|---|---|---|
+| X (left–right) | Toolhead moves along the gantry | Toolhead moves on a fixed frame at the top |
+| Y (front–back) | **Heatbed** slides front–back (the part rides on it) | **Toolhead** moves front–back; two fixed motors and crossed belts drive X and Y together |
+| Z (each layer) | Toolhead and gantry **rise** | Heatbed **moves down** |
+| Our lab | **A1**, **A1 mini** | **P1S**, **H2D** |
+
+Classification checked against Bambu Lab sources on 27 November 2026: the A1 and A1 mini product pages describe them as "bed slinger" printers; the P1 series page (P1S) states CoreXY; the Bambu Lab Wiki H2D introduction states the H2D "is based on the Core-XY architecture" ([references.md](references.md), items 18–20 and 23).
+
 ### How FDM works (six steps, as animated on the site)
 
-Spool → extruder gears push the filament → hotend melts it → nozzle lays a thin bead → layers stack as the plate steps down → the fan cools each layer so it holds its shape.
+1. **Filament feeds from the spool** — the 1.75 mm filament is pulled through a tube to the toolhead only as fast as the nozzle uses it.
+2. **Extruder gears push it** — two toothed gears grip the filament and push it at an exact rate; they pause during travel moves and retract slightly to stop drips.
+3. **The hotend melts it** — the heater block melts the plastic (about 190–240 °C for PLA); a cooled heat break above keeps the filament solid until the hot zone.
+4. **The nozzle traces the toolpath** — molten plastic leaves the 0.4 mm nozzle as a thin line along the slicer's path.
+5. **Layers stack** — after each layer the gantry rises (bed-slinger) or the bed lowers (CoreXY) by one layer height.
+6. **The cooling fan sets each line** — the part-cooling fan hardens the fresh plastic so it holds its shape.
+
+The website animation has a cut-away of the toolhead, Prev/Next, auto-play and a bed-slinger / CoreXY toggle linked to the comparison above.
 
 ### Key settings, one line each
 
@@ -91,6 +111,7 @@ Values from official Bambu Lab pages ([references.md](references.md), items 15�
 | | H2D | P1S | A1 | A1 mini |
 |---|---|---|---|---|
 | Strength | Dual-nozzle enclosed flagship | Enclosed all-rounder | Open-frame workhorse | Compact starter |
+| Motion system | CoreXY | CoreXY | Bed-slinger | Bed-slinger |
 | Build volume (W × D × H) | 325 × 320 × 325 mm (one nozzle); 300 × 320 × 320 mm (both) | 256 × 256 × 256 mm | 256 × 256 × 256 mm | 180 × 180 × 180 mm |
 | Enclosure | Enclosed, chamber heating to 65 °C | Enclosed | Open frame (see manufacturer) | Open frame (see manufacturer) |
 | Nozzle(s) | Two; 0.4 mm included | One; 0.4 mm included | One; 0.4 mm included | One; 0.4 mm included |
@@ -105,15 +126,13 @@ The website marks these on Bambu Lab's official H2D front image (positions appro
 1. **Dual nozzles and hotend** — two nozzles on one head; each can carry a different material or colour.
 2. **Extruder** — gears that push filament into the hotend at a controlled rate.
 3. **Heated build plate** — removable, heated plate the part is built on.
-4. **Motion system (gantry)** — rails and belts that move the head; the plate steps down each layer.
+4. **Motion system (CoreXY)** — two fixed motors and crossed belts move the head in X and Y; the plate steps down each layer.
 5. **Enclosure and door** — keep warm air in (chamber heating to 65 °C) for ABS/ASA.
 6. **Touchscreen** — start prints, load filament, read errors.
 7. **Filament and AMS** — the AMS 2 Pro holds four spools and feeds them automatically.
 8. **Camera and lighting** — built-in cameras (the spec lists a nozzle camera) and chamber light.
 
 ## B. Laser cutting (CO2)
-
-**Laser-cutting work in progress — photographs and details will be added.**
 
 A CO2 (carbon dioxide) laser focuses an infrared beam onto a sheet to burn a line through it (cutting) or mark its surface (engraving).
 
@@ -126,6 +145,23 @@ A CO2 (carbon dioxide) laser focuses an infrared beam onto a sheet to burn a lin
 5. **Cut / engrave** — lid closed, extraction and air assist on, test on scrap, stay with the machine.
 6. **Inspect** — check cut-through before moving the sheet, test fits, measure kerf, record settings.
 
+### How the laser head moves
+
+The laser tube stays fixed at the back of the machine; only mirrors move.
+
+- **X axis** — the head travels left–right **along the gantry**.
+- **Y axis** — the **gantry** travels front–back on two side rails.
+- **Beam path** — tube → **mirror 1** (fixed, back corner) → along the Y rail to **mirror 2** (rides on the gantry) → along the gantry to **mirror 3** in the head → down through the **focusing lens** to a point on the sheet surface.
+
+Because the beam path changes length as the head moves, all three mirrors must be aligned so the beam hits the lens centre anywhere on the bed. The website animation shows this from above (tracing one panel of our enclosure) with a side cut-away of the head.
+
+### Unidirectional vs bidirectional engraving
+
+A raster engraving is built from many parallel lines.
+
+- **Unidirectional** — the laser fires only in one direction (for example left to right), then returns without firing and steps down. Every line starts from the same side, so edges line up cleanly, but the empty return passes make it slower (about twice the passes).
+- **Bidirectional** — the laser fires on both passes, so the job takes about half the time. Lines engraved in opposite directions only line up if the **scan offset (scan-gap) calibration** is right; otherwise edges look doubled or jagged.
+
 ### Key settings
 
 | Setting | What it does |
@@ -137,6 +173,7 @@ A CO2 (carbon dioxide) laser focuses an infrared beam onto a sheet to burn a lin
 | **Kerf** | The width of material the beam burns away; half comes off each side of the line, so tabs shrink and slots grow. |
 | Kerf compensation | Offsetting paths by half the measured kerf so press-fit parts come out at size. |
 | Vector cut vs raster engrave | Vector follows a line (cut or score); raster sweeps back and forth to engrave an area. |
+| Uni- / bidirectional | Raster firing on one pass direction only, or on both; bidirectional needs scan-offset calibration. |
 | Air assist | An air jet that blows away smoke and flame and protects the lens. |
 | Passes | Repeating a path; two gentle passes can char less than one slow pass. |
 
@@ -160,7 +197,28 @@ The learning reference characterised its own laser by cutting a grid of test squ
 | Bed size | [to confirm from machine label] |
 | Model / other specifications | [to confirm from machine label] |
 
-## C. Safety checklist (both machines)
+## C. Applied in ClayBreeze: electronics enclosure
+
+| | |
+|---|---|
+| Purpose | Houses the ESP32, the relay module and the DHT11 wiring |
+| Status | **Laser cutting in progress** |
+| DXF | [`cad/dxf-enclosure/basic-box-120x150x100-3mm.dxf`](../cad/dxf-enclosure/basic-box-120x150x100-3mm.dxf) |
+| Box size | 120 × 150 × 100 mm (from the file name and panel sizes) |
+| Material | 3 mm MDF — from the file names (`…-3mm.dxf`, "Laser Cutting MDF to store electronics") |
+| Photograph | `media/Laser Cutting for project/Laser Cutting MDF to store electronics.jpeg` |
+
+The DXF (read with `ezdxf`) holds **6 closed, finger-jointed panels** (432 line segments, units mm), nested on a 426 × 253 mm area:
+
+| Panels (named by size only) | Outer size | Qty |
+|---|---|---|
+| Top and bottom | 120 × 150 mm | 2 |
+| Long sides | 150 × 100 mm | 2 |
+| Short sides | 120 × 100 mm | 2 |
+
+Cable and sensor cut-outs and which panel is the top are not yet decided.
+
+## D. Safety checklist (both machines)
 
 - [ ] Fume extraction / ventilation on; ABS/ASA only in an enclosed printer in a ventilated room.
 - [ ] Sheet is on the allowed list — no PVC, vinyl, polycarbonate or coated metal.
@@ -171,7 +229,8 @@ The learning reference characterised its own laser by cutting a grid of test squ
 
 ## Photographs and videos
 
-- Team photographs: `media/fabrication-lab/` (3D printing: `3DP_*`; laser lab practice: `Laser_*`), shown in the website gallery under **3D Printing** and **Laser Cutting** and in the "In our lab" strips.
-- Two short lab videos of printed parts are embedded in the notebook.
+- Team photographs: `media/fabrication-lab/` and `media/Laser Cutting for project/`. Captions on the website are the cleaned-up file names — rename a file to relabel it.
+- The website has two separate galleries: the **project gallery** (ClayBreeze build, CAD, water system, enclosure, team — 25 images) and the **Workbench gallery** at the end of Part II (27 images: 3D Printing 11, Laser Cutting 12 including the enclosure cutting photo, Printers 4).
+- Two short lab videos (Mahadev idol, race car outline) are embedded in the Workbench.
 - Official printer images: `media/fabrication-lab/bambu/` — **Image: © Bambu Lab**, from the official store pages (references item 21).
-- Upcoming laser photographs: a ready-to-fill entry is at the end of `assets/js/gallery-data.js`.
+- To add a photo: copy it into `media/fabrication-lab/`, run `python tools/make-web-images.py`, and add an entry to `assets/js/gallery-data.js`.

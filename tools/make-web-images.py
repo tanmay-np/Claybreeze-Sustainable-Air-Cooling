@@ -1,6 +1,6 @@
 """Create WebP copies of the site images in media/web/ (originals are not touched).
 
-Photos (media/photos/*.jpeg and media/fabrication-lab/*.jpeg) get 800 px and native-width copies; the photos are at most
+Photos (media/photos/, media/fabrication-lab/ and media/Laser Cutting for project/, *.jpeg) get 800 px and native-width copies; the photos are at most
 1280 px wide, so they are never upscaled. CAD screenshots (media/cad-screenshots/*.png,
 1917 px wide) get 800 px and 1600 px copies. Output names replace spaces with hyphens:
 media/web/<name>-<width>.webp. Run from the repository root: python tools/make-web-images.py
@@ -13,6 +13,7 @@ OUT = ROOT / "media" / "web"
 SETS = [
     (ROOT / "media" / "photos", ("*.jpeg", "*.jpg"), 80),
     (ROOT / "media" / "fabrication-lab", ("*.jpeg", "*.jpg"), 80),
+    (ROOT / "media" / "Laser Cutting for project", ("*.jpeg", "*.jpg"), 80),
     (ROOT / "media" / "cad-screenshots", ("*.png",), 88),
 ]
 
@@ -23,6 +24,7 @@ def widths_for(width):
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
+    made = set()
     for folder, patterns, quality in SETS:
         for pattern in patterns:
             for src in sorted(folder.glob(pattern)):
@@ -31,8 +33,18 @@ def main():
                     for w in widths_for(im.width):
                         h = round(im.height * w / im.width)
                         dest = OUT / f"{src.stem.replace(' ', '-')}-{w}.webp"
+                        made.add(dest.name)
+                        if dest.exists() and dest.stat().st_mtime >= src.stat().st_mtime:
+                            continue
                         im.resize((w, h), Image.LANCZOS).save(dest, "WEBP", quality=quality, method=6)
                         print(f"{dest.relative_to(ROOT)}  {w}x{h}  {dest.stat().st_size // 1024} KB")
+
+
+    # Delete WebP copies whose source photo was renamed or removed.
+    for old in sorted(OUT.glob("*.webp")):
+        if old.name not in made:
+            old.unlink()
+            print(f"removed orphan {old.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

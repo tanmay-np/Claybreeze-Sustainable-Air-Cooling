@@ -6,8 +6,10 @@
  * Never use stock or AI-generated images as if they were photographs of the build.
  *
  * category must be one of:
- *   frame-fabrication | rods-mounts | painting | clay-pots | electronics | water-system | cad | testing
- *   | team | 3d-printing | laser-cutting
+ *   Project gallery:   frame-fabrication | rods-mounts | painting | clay-pots | electronics | water-system
+ *                      | cad | testing | team | enclosure
+ *   Workbench gallery: 3d-printing | laser-cutting | printers
+ *   (enclosure photos appear in both galleries; in the Workbench gallery they sit under Laser Cutting)
  *
  * kind labels what the image is: "photo" | "cad-drawing" | "cad-render".
  * width/height are the file's pixel size (lets the browser reserve space).
@@ -244,46 +246,104 @@ window.CLAYBREEZE_GALLERY = [
     alt: "SolidWorks part view of a double-cone clay pot model, named kullad_part, with a top opening and a smaller side hole",
     description: "The clay-pot part model (kullad_part): a double-cone body with an open mouth and a small side hole for the rod."
   },
-  // --- Fab Lab Notebook (media/fabrication-lab/): 3D printing and laser cutting skills learned and practised at Tinkerers' Lab ---
+  // --- ClayBreeze electronics enclosure (media/Laser Cutting for project/): shown in BOTH galleries ---
+  {
+    src: "media/Laser Cutting for project/Laser Cutting MDF to store electronics.jpeg",
+    title: "Laser cutting MDF to store electronics",
+    category: "enclosure",
+    kind: "photo",
+    width: 1280, height: 960,
+    alt: "The laser head cutting finger-jointed box panels out of a brown MDF sheet on the honeycomb bed, with a bright spot where the beam meets the sheet",
+    description: "Cutting the finger-jointed MDF panels of the ClayBreeze electronics enclosure (DXF: cad/dxf-enclosure/basic-box-120x150x100-3mm.dxf). Laser cutting in progress."
+  },
+  // --- Makerspace Workbench (media/fabrication-lab/): 3D printing and laser cutting practised at Tinkerers' Lab ---
+  // Titles are the cleaned-up file names. To relabel a photo, rename the file and update its entry here.
+  // Printers
   {
     src: "media/fabrication-lab/3DP_Bambu_H2D_With_AMS.jpeg",
     title: "Bambu Lab H2D with AMS",
-    category: "3d-printing",
+    category: "printers",
     kind: "photo",
     width: 960, height: 1280,
     alt: "An enclosed Bambu Lab H2D 3D printer with a touchscreen and a multi-spool AMS unit on top, and a yellow filament spool hanging on its side",
-    description: "The lab's Bambu Lab H2D, an enclosed dual-nozzle printer, with an AMS filament unit on top."
+    description: "The lab's Bambu Lab H2D, an enclosed dual-nozzle CoreXY printer, with an AMS filament unit on top."
   },
   {
     src: "media/fabrication-lab/3DP_Bambu_P1S.jpeg",
     title: "Bambu Lab P1S",
-    category: "3d-printing",
+    category: "printers",
     kind: "photo",
     width: 960, height: 1280,
     alt: "An enclosed black Bambu Lab P1S 3D printer with a glass door and a small display, beside a window",
-    description: "The lab's Bambu Lab P1S, an enclosed single-nozzle printer."
+    description: "The lab's Bambu Lab P1S, an enclosed single-nozzle CoreXY printer."
   },
   {
     src: "media/fabrication-lab/3DP_Bambu_A1_With_AMS_Lite.jpeg",
     title: "Bambu Lab A1 with AMS lite",
-    category: "3d-printing",
+    category: "printers",
     kind: "photo",
     width: 1280, height: 960,
     alt: "An open-frame Bambu Lab A1 3D printer next to its AMS lite stand holding four filament spools, with tubes running to the print head",
-    description: "The lab's Bambu Lab A1, an open-frame printer, with the AMS lite feeding four spools."
+    description: "The lab's Bambu Lab A1, an open-frame bed-slinger, with the AMS lite feeding four spools."
   },
   {
     src: "media/fabrication-lab/3DP_Bambu_A1_Mini.jpeg",
     title: "Bambu Lab A1 mini",
-    category: "3d-printing",
+    category: "printers",
     kind: "photo",
     width: 960, height: 1280,
     alt: "A compact open Bambu Lab A1 mini 3D printer with a single vertical column, a small build plate and a touchscreen, on a desk",
-    description: "The lab's Bambu Lab A1 mini, the smallest of the four printers."
+    description: "The lab's Bambu Lab A1 mini, a compact bed-slinger and the smallest of the four printers."
+  },
+  // 3D printing
+  {
+    src: "media/fabrication-lab/3D printed saraswati yantra.jpeg",
+    title: "3D printed Saraswati yantra",
+    category: "3d-printing",
+    kind: "photo",
+    width: 1280, height: 720,
+    alt: "A black picture frame holding a white 3D-printed Saraswati yantra, a lattice of triangles and spirals, on a blue patterned background",
+    description: "A framed 3D-printed Saraswati yantra in white on a blue background."
+  },
+  {
+    src: "media/fabrication-lab/3D printed saraswati yantrawith mantra.jpeg",
+    title: "3D printed Saraswati yantra with mantra",
+    category: "3d-printing",
+    kind: "photo",
+    width: 1280, height: 960,
+    alt: "A gold-edged picture frame held in a hand, with a white 3D-printed Saraswati yantra and two lines of white Devanagari text on an orange and maroon background",
+    description: "A framed 3D-printed Saraswati yantra with a two-line mantra."
+  },
+  {
+    src: "media/fabrication-lab/3DP_Crank Slider Mechanism along with electronics.jpeg",
+    title: "Crank slider mechanism along with electronics",
+    category: "3d-printing",
+    kind: "photo",
+    width: 1280, height: 960,
+    alt: "A grey 3D-printed crank slider housing with a yellow printed crank arm on a desk, wired to a motor-driver board and a microcontroller on a breadboard, with a laptop and a bench power supply behind",
+    description: "A 3D-printed crank slider mechanism wired to a motor driver and a microcontroller."
+  },
+  {
+    src: "media/fabrication-lab/3DP_Humidifier.jpeg",
+    title: "Humidifier",
+    category: "3d-printing",
+    kind: "photo",
+    width: 960, height: 1280,
+    alt: "A white and yellow 3D-printed humidifier body made of several stacked parts with a pointed top and side vents, with a white cable plugged into it, on a desk",
+    description: "A 3D-printed humidifier body assembled from several white and yellow printed parts."
+  },
+  {
+    src: "media/fabrication-lab/3DP_Phone Stand Sanjivani University.jpeg",
+    title: "Phone stand, Sanjivani University",
+    category: "3d-printing",
+    kind: "photo",
+    width: 960, height: 1280,
+    alt: "A blue 3D-printed phone stand with a raised Sanjivani University emblem and lettering on its base, on a desk next to a keyboard",
+    description: "A blue 3D-printed phone stand with the Sanjivani University emblem in relief."
   },
   {
     src: "media/fabrication-lab/3DP_Assorted_Prints_Tray.jpeg",
-    title: "A tray of practice prints",
+    title: "Assorted prints tray",
     category: "3d-printing",
     kind: "photo",
     width: 960, height: 1280,
@@ -292,7 +352,7 @@ window.CLAYBREEZE_GALLERY = [
   },
   {
     src: "media/fabrication-lab/3DP_Phoenix_On_P1S.jpeg",
-    title: "Printed phoenix figurine",
+    title: "Phoenix on P1S",
     category: "3d-printing",
     kind: "photo",
     width: 960, height: 1280,
@@ -301,7 +361,7 @@ window.CLAYBREEZE_GALLERY = [
   },
   {
     src: "media/fabrication-lab/3DP_Faceted_Turtle.jpeg",
-    title: "Printed faceted turtle",
+    title: "Faceted turtle",
     category: "3d-printing",
     kind: "photo",
     width: 960, height: 1280,
@@ -310,7 +370,7 @@ window.CLAYBREEZE_GALLERY = [
   },
   {
     src: "media/fabrication-lab/3DP_Articulated_Dragon.jpeg",
-    title: "Printed articulated dragon",
+    title: "Articulated dragon",
     category: "3d-printing",
     kind: "photo",
     width: 960, height: 1280,
@@ -319,7 +379,7 @@ window.CLAYBREEZE_GALLERY = [
   },
   {
     src: "media/fabrication-lab/3DP_Textured_Egg.jpeg",
-    title: "Printed textured egg",
+    title: "Textured egg",
     category: "3d-printing",
     kind: "photo",
     width: 960, height: 1280,
@@ -328,70 +388,26 @@ window.CLAYBREEZE_GALLERY = [
   },
   {
     src: "media/fabrication-lab/3DP_Balancing_Bird.jpeg",
-    title: "Printed balancing bird",
+    title: "Balancing bird",
     category: "3d-printing",
     kind: "photo",
     width: 960, height: 1280,
     alt: "A dark-red 3D-printed bird with long drooping wings balanced by its beak on top of a printed tree-trunk stand",
     description: "A dark-red printed balancing bird resting by its beak on a printed stand."
   },
-  {
-    src: "media/fabrication-lab/3DP_University_Emblem_Plaque.jpeg",
-    title: "Printed university emblem plaque",
-    category: "3d-printing",
-    kind: "photo",
-    width: 960, height: 1280,
-    alt: "A blue 3D-printed plaque with a raised Sanjivani University emblem and lettering, on a desk",
-    description: "A blue printed plaque with the Sanjivani University emblem in relief."
-  },
-  {
-    src: "media/fabrication-lab/3DP_Rocket_Model.jpeg",
-    title: "Printed rocket model",
-    category: "3d-printing",
-    kind: "photo",
-    width: 960, height: 1280,
-    alt: "A white and yellow 3D-printed rocket-shaped model made of several parts, on a desk with a cable behind it",
-    description: "A two-colour rocket-shaped model assembled from several printed parts."
-  },
-  {
-    src: "media/fabrication-lab/3DP_Framed_Motif_Blue.jpeg",
-    title: "Framed white motif on blue",
-    category: "3d-printing",
-    kind: "photo",
-    width: 1280, height: 720,
-    alt: "A black picture frame holding a white lattice motif of triangles and spirals on a blue patterned background",
-    description: "A framed white lattice motif on a blue background. The motif appears to be printed; how it was made is not recorded."
-  },
-  {
-    src: "media/fabrication-lab/3DP_Framed_Motif_Verse.jpeg",
-    title: "Framed motif with Sanskrit verse",
-    category: "3d-printing",
-    kind: "photo",
-    width: 1280, height: 960,
-    alt: "A gold-edged picture frame held in a hand, with a white lattice motif and two lines of white Devanagari text on an orange and maroon background",
-    description: "A framed white lattice motif with a two-line Sanskrit verse. The white relief appears to be printed; how it was made is not recorded."
-  },
-  {
-    src: "media/fabrication-lab/3DP_Mechanism_With_Electronics.jpeg",
-    title: "Printed mechanism wired to a breadboard",
-    category: "3d-printing",
-    kind: "photo",
-    width: 1280, height: 960,
-    alt: "A grey 3D-printed housing with a yellow printed crank arm on a desk, wired to a motor-driver board and a microcontroller on a breadboard, with a laptop and a bench power supply behind",
-    description: "A practice mechanism with a printed housing and crank arm, wired to a motor driver and a microcontroller."
-  },
+  // Laser cutting
   {
     src: "media/fabrication-lab/Laser_SIL_CO2_Cutter.jpeg",
-    title: "SIL CO2 laser cutter",
+    title: "Laser: SIL CO₂ cutter",
     category: "laser-cutting",
     kind: "photo",
     width: 1280, height: 960,
     alt: "A large grey SIL laser cutter with its blue lid raised, in a lab room with safety posters on the wall",
-    description: "The lab's SIL CO2 laser cutter (100 W) with the lid open."
+    description: "The lab's SIL CO₂ laser cutter (100 W) with the lid open."
   },
   {
     src: "media/fabrication-lab/Laser_Bed_And_Head.jpeg",
-    title: "Laser bed, gantry and head",
+    title: "Laser bed and head",
     category: "laser-cutting",
     kind: "photo",
     width: 1280, height: 960,
@@ -400,7 +416,7 @@ window.CLAYBREEZE_GALLERY = [
   },
   {
     src: "media/fabrication-lab/Laser_Engraving_In_Progress.jpeg",
-    title: "Engraving in progress",
+    title: "Laser engraving in progress",
     category: "laser-cutting",
     kind: "photo",
     width: 960, height: 1280,
@@ -408,26 +424,44 @@ window.CLAYBREEZE_GALLERY = [
     description: "An engraving job running on a light-coloured sheet; earlier shapes have been cut from the same sheet."
   },
   {
-    src: "media/fabrication-lab/Laser_Acrylic_Hackathon_Trophy.jpeg",
-    title: "Edge-lit acrylic trophy",
+    src: "media/fabrication-lab/Laser Engraved Acrylic Trophy.jpeg",
+    title: "Laser engraved acrylic trophy",
     category: "laser-cutting",
     kind: "photo",
     width: 960, height: 1280,
     alt: "A clear acrylic trophy engraved with the Sanjivani University emblem and the words Smart Kopargaon Hackathon 2026 Winners, lit from an LED base",
-    description: "An engraved acrylic trophy for the Smart Kopargaon Hackathon 2026, lit from its base."
+    description: "A laser-engraved acrylic trophy, lit from its base."
   },
   {
-    src: "media/fabrication-lab/Laser_Acrylic_Edge_Lit_Artwork.jpeg",
-    title: "Edge-lit engraved acrylic artwork",
+    src: "media/fabrication-lab/Laser Engraved Acrylic Momento1.jpeg",
+    title: "Laser engraved acrylic memento",
     category: "laser-cutting",
     kind: "photo",
     width: 720, height: 1280,
-    alt: "A clear acrylic panel engraved with a detailed face motif, scrolls and campus buildings, glowing on a lit base against a dark background",
-    description: "A detailed engraving on clear acrylic, lit from its base."
+    alt: "A clear acrylic memento engraved with a detailed face motif, scrolls and campus buildings, glowing on a lit base against a dark background",
+    description: "A laser-engraved acrylic memento, lit from its base."
+  },
+  {
+    src: "media/fabrication-lab/Laser Cut Clock in Wood.jpeg",
+    title: "Laser cut clock in wood",
+    category: "laser-cutting",
+    kind: "photo",
+    width: 1280, height: 960,
+    alt: "A large wall clock cut from wooden sheet, with many interlocking gears of different sizes around a circular spoked dial, mounted on a white wall",
+    description: "A laser-cut wooden gear clock with interlocking gears around the dial."
+  },
+  {
+    src: "media/fabrication-lab/Laser Cut Cardboard Stand to keep 3d printed items.jpeg",
+    title: "Laser cut cardboard stand to keep 3D printed items",
+    category: "laser-cutting",
+    kind: "photo",
+    width: 960, height: 1280,
+    alt: "A painted red and black laser-cut cardboard display stand with two round top lobes and three shelves holding small colourful 3D-printed items, with more prints on the desk in front",
+    description: "A laser-cut cardboard display stand holding 3D-printed items from the lab."
   },
   {
     src: "media/fabrication-lab/Laser_Acrylic_SKH_Bulb.jpeg",
-    title: "Acrylic “SKH” bulb cut-out",
+    title: "Laser acrylic SKH bulb",
     category: "laser-cutting",
     kind: "photo",
     width: 720, height: 1280,
@@ -436,7 +470,7 @@ window.CLAYBREEZE_GALLERY = [
   },
   {
     src: "media/fabrication-lab/Laser_Acrylic_Lab_Badge.jpeg",
-    title: "Engraved Tinkerers' Lab badge",
+    title: "Laser acrylic lab badge",
     category: "laser-cutting",
     kind: "photo",
     width: 720, height: 1280,
@@ -445,7 +479,7 @@ window.CLAYBREEZE_GALLERY = [
   },
   {
     src: "media/fabrication-lab/Laser_Cut_Lettering.jpeg",
-    title: "Cut lettering",
+    title: "Laser cut lettering",
     category: "laser-cutting",
     kind: "photo",
     width: 720, height: 1280,
@@ -454,25 +488,21 @@ window.CLAYBREEZE_GALLERY = [
   },
   {
     src: "media/fabrication-lab/Laser_MDF_Pen_Holder.jpeg",
-    title: "MDF finger-joint pen holder",
+    title: "Laser MDF pen holder",
     category: "laser-cutting",
     kind: "photo",
     width: 720, height: 1280,
     alt: "A small square pen holder made of laser-cut MDF panels joined with finger joints, holding a pen, on a desk",
     description: "A pen holder assembled from laser-cut MDF panels with finger joints, a typical press-fit exercise."
   }
-  // --- READY SLOT: upcoming laser-cutting photos (work in progress) ---
-  // 1. Copy the photo into media/fabrication-lab/ with a URL-safe name, e.g. Laser_<Short_Description>.jpeg
-  // 2. Run: python tools/make-web-images.py   (creates the WebP copies)
-  // 3. Uncomment the entry below (remove the leading "//" and keep the comma after the previous entry),
-  //    describe only what is visible, and set width/height to the photo's pixel size.
-  // ,{
-  //   src: "media/fabrication-lab/Laser_<Short_Description>.jpeg",
-  //   title: "<What was cut or engraved>",
-  //   category: "laser-cutting",
-  //   kind: "photo",
-  //   width: 960, height: 1280,
-  //   alt: "<Accessible description of what is visible>",
-  //   description: "<One or two modest sentences>"
-  // }
+  // To add a photo: copy it into media/fabrication-lab/ (or media/Laser Cutting for project/), run
+  // python tools/make-web-images.py, then add an entry above whose title is the cleaned file name.
+];
+
+/*
+ * Lab videos ("Prints from the lab" in the Makerspace Workbench). Captions are the cleaned file names.
+ */
+window.CLAYBREEZE_VIDEOS = [
+  { src: "media/fabrication-lab/Mahadev idol.mp4", poster: "media/fabrication-lab/3DP_Mahadev Idol.webp", title: "Mahadev idol", width: 576, height: 1024, label: "Short video turning around a black 3D-printed Mahadev idol" },
+  { src: "media/fabrication-lab/3DP_Race_Car_Outline_Video.mp4", poster: "media/fabrication-lab/3DP_Race_Car_Outline_Video-poster.webp", title: "Race car outline", width: 576, height: 1024, label: "Short video of a red 3D-printed race-car outline held in front of a printer" }
 ];

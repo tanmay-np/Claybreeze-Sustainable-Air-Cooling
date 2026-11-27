@@ -18,7 +18,7 @@
   // WebP copies made by tools/make-web-images.py: media/web/<name>-<width>.webp at
   // 800 px and up to 1600 px (never upscaled). The original file stays as the fallback.
   function webSrcset(item) {
-    const m = /^media\/(?:photos|cad-screenshots|fabrication-lab)\/(.+)\.(?:jpe?g|png)$/i.exec(item.src);
+    const m = /^media\/(?:photos|cad-screenshots|fabrication-lab|Laser Cutting for project)\/(.+)\.(?:jpe?g|png)$/i.exec(item.src);
     if (!m || !item.width) return "";
     const base = `media/web/${m[1].replace(/ /g, "-")}`;
     return [...new Set([Math.min(800, item.width), Math.min(1600, item.width)])].map((w) => `${base}-${w}.webp ${w}w`).join(", ");
@@ -53,30 +53,66 @@
     zoomButton.setAttribute("aria-pressed", String(on));
     zoomButton.textContent = on ? "Fit" : "Zoom";
   }
-  function openViewer(item) {
-    if (!dialog || !item) return;
+  // The viewer steps only through the group it was opened from (one gallery's current filter,
+  // or one grid of photos); a single image shows no arrows.
+  const prevButton = $("#dialog-prev");
+  const nextButton = $("#dialog-next");
+  const posLabel = $("#dialog-pos");
+  let viewerGroup = [];
+  let viewerIndex = 0;
+  function showInViewer(item) {
     dialogImage.src = item.src;
     dialogImage.alt = item.alt || item.title || "";
     $("#dialog-title").textContent = item.title || "";
     $("#dialog-kind").textContent = KIND_LABEL[item.kind] || "Image";
     $("#dialog-description").textContent = item.description || "";
+    const many = viewerGroup.length > 1;
+    if (prevButton) prevButton.hidden = !many;
+    if (nextButton) nextButton.hidden = !many;
+    if (posLabel) { posLabel.hidden = !many; posLabel.textContent = many ? `${viewerIndex + 1} / ${viewerGroup.length}` : ""; }
     setZoom(false);
-    if (typeof dialog.showModal === "function") dialog.showModal();
   }
+  function stepViewer(delta) {
+    if (viewerGroup.length < 2) return;
+    viewerIndex = (viewerIndex + delta + viewerGroup.length) % viewerGroup.length;
+    showInViewer(viewerGroup[viewerIndex]);
+  }
+  function openViewer(item, group) {
+    if (!dialog || !item) return;
+    const list = typeof group === "function" ? group() : group;
+    viewerGroup = Array.isArray(list) && list.includes(item) ? list.slice() : [item];
+    viewerIndex = viewerGroup.indexOf(item);
+    showInViewer(item);
+    if (typeof dialog.showModal === "function" && !dialog.open) dialog.showModal();
+  }
+  prevButton?.addEventListener("click", () => stepViewer(-1));
+  nextButton?.addEventListener("click", () => stepViewer(1));
+  dialog?.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") { event.preventDefault(); stepViewer(-1); }
+    if (event.key === "ArrowRight") { event.preventDefault(); stepViewer(1); }
+  });
   zoomButton?.addEventListener("click", () => setZoom(!dialogWrap.classList.contains("is-zoomed")));
   dialogImage?.addEventListener("click", () => setZoom(!dialogWrap.classList.contains("is-zoomed")));
   $("#dialog-close")?.addEventListener("click", () => dialog.close());
   dialog?.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); });
   $$("[data-gallery-src]").forEach((button) => button.addEventListener("click", () => openViewer(bySrc(button.dataset.gallerySrc))));
 
-  function viewerButton(item, className, opts) {
+  // group: the array (or a function returning it) the viewer may step through from this image.
+  function viewerButton(item, className, opts, group) {
     const button = el("button", className);
     button.type = "button";
     button.setAttribute("aria-label", `Open ${KIND_LABEL[item.kind] ? KIND_LABEL[item.kind].toLowerCase() : "image"}: ${item.title}`);
     button.append(imageFor(item, opts));
-    button.addEventListener("click", () => openViewer(item));
+    button.addEventListener("click", () => openViewer(item, group));
     return button;
   }
+
+  // Tables that stack into cards on narrow screens (no horizontal scrolling): each cell
+  // carries its column heading so it can be shown above the value.
+  $$("table.stack-sm").forEach((table) => {
+    const heads = $$("thead th", table).map((th) => th.textContent.trim());
+    $$("tbody tr", table).forEach((tr) => [...tr.children].forEach((cell, i) => { if (cell.tagName === "TD" && heads[i]) cell.dataset.label = heads[i]; }));
+  });
 
   // ---------------- 04 Engineering journey ----------------
   const stepsList = $("#journey-steps");
@@ -93,7 +129,7 @@
         const [main, ...rest] = items;
         if (main.width > main.height) li.classList.add("step-landscape");
         const figure = el("figure", "step-figure");
-        figure.append(viewerButton(main, "step-photo", { sizes: main.width > main.height ? "(min-width: 1200px) 990px, 100vw" : "(min-width: 1200px) 580px, (min-width: 900px) 55vw, 100vw" }));
+        figure.append(viewerButton(main, "step-photo", { sizes: main.width > main.height ? "(min-width: 1200px) 990px, 100vw" : "(min-width: 1200px) 580px, (min-width: 900px) 55vw, 100vw" }, items));
         const cap = el("figcaption", "step-caption");
         cap.append(el("span", "label-chip", KIND_LABEL[main.kind] || "Photo"), document.createTextNode(` ${main.description}`));
         figure.append(cap);
@@ -102,7 +138,7 @@
           const strip = el("div", "step-more");
           rest.forEach((item) => {
             const wrap = el("div", "step-more-item");
-            wrap.append(viewerButton(item, "step-thumb", { sizes: "(min-width: 900px) 220px, 50vw" }), el("span", "step-thumb-caption", item.title));
+            wrap.append(viewerButton(item, "step-thumb", { sizes: "(min-width: 900px) 220px, 50vw" }, items), el("span", "step-thumb-caption", item.title));
             strip.append(wrap);
           });
           li.append(strip);
@@ -127,9 +163,10 @@
     specRows?.append(tr);
   });
   const cadGrid = $("#cad-grid");
-  galleryItems.filter((g) => g.category === "cad" && g.src !== "media/cad-screenshots/Drawing Sheet_With_Dimensions.png").forEach((item) => {
+  const cadItems = galleryItems.filter((g) => g.category === "cad" && g.src !== "media/cad-screenshots/Drawing Sheet_With_Dimensions.png");
+  cadItems.forEach((item) => {
     const fig = el("figure", "cad-item");
-    fig.append(viewerButton(item, "cad-thumb", { sizes: "(min-width: 1180px) 380px, (min-width: 700px) 50vw, 100vw" }));
+    fig.append(viewerButton(item, "cad-thumb", { sizes: "(min-width: 1180px) 380px, (min-width: 700px) 50vw, 100vw" }, cadItems));
     const cap = el("figcaption", "");
     cap.append(el("span", "label-chip", KIND_LABEL[item.kind]), document.createTextNode(` ${item.title}`));
     fig.append(cap);
@@ -155,8 +192,8 @@
     notesBody.append(el("p", "", "The electronics are not modelled: their placement is not documented."));
   }
 
-  // Shared with assets/js/fablab.js (Fab Lab Notebook), which reuses the image viewer.
-  window.ClayBreezeUI = { viewerButton, bySrc, el };
+  // Shared with assets/js/workbench.js (Makerspace Workbench), which reuses the image viewer.
+  window.ClayBreezeUI = { viewerButton, bySrc, el, imageFor };
 
   // ---------------- Footer: team photo ----------------
   const teamPhoto = $("#team-photo");
@@ -179,45 +216,55 @@
     componentList?.append(details);
   });
 
-  // ---------------- 11 Gallery (project photos first, then Fab Lab) ----------------
-  const galleryGrid = $("#gallery-grid");
-  const galleryCount = $("#gallery-count");
-  const emptyNote = $("#gallery-empty-note");
-  let activeFilter = "all";
-  function renderGallery() {
-    if (!galleryGrid) return;
-    galleryGrid.replaceChildren();
-    const isFabLab = (item) => (item.category === "3d-printing" || item.category === "laser-cutting" ? 1 : 0);
-    const visible = galleryItems
-      .filter((item) => activeFilter === "all" || item.category === activeFilter)
-      .sort((a, b) => isFabLab(a) - isFabLab(b));
-    galleryCount.textContent = `${visible.length} ${visible.length === 1 ? "image" : "images"}`;
-    visible.forEach((item) => {
-      const card = el("figure", "gallery-card");
-      card.append(viewerButton(item, "gallery-thumb", { sizes: "(min-width: 1180px) 280px, (min-width: 600px) 33vw, 100vw" }));
-      const cap = el("figcaption");
-      cap.append(el("span", "label-chip", KIND_LABEL[item.kind] || "Image"), el("strong", "gallery-title", item.title));
-      card.append(cap);
-      galleryGrid.append(card);
-    });
-  }
-  const emptyCategories = [];
-  $$(".gallery-filter").forEach((button) => {
-    const value = button.dataset.filter;
-    if (value !== "all" && !galleryItems.some((item) => item.category === value)) {
-      button.disabled = true;
-      button.title = "No images in this category yet";
-      emptyCategories.push(button.textContent);
+  // ---------------- Galleries: project (Sec 11) and Makerspace Workbench (end of Part II) ----------------
+  // Each gallery has its own filters, and the viewer steps only through that gallery's current filter.
+  const PROJECT_CATEGORIES = ["frame-fabrication", "rods-mounts", "painting", "clay-pots", "cad", "electronics", "water-system", "enclosure", "testing", "team"];
+  const WORKBENCH_FILTERS = { "3d-printing": ["3d-printing"], "laser-cutting": ["laser-cutting", "enclosure"], printers: ["printers"] };
+  const WORKBENCH_ORDER = ["printers", "3d-printing", "laser-cutting", "enclosure"];
+  const GALLERIES = {
+    project: { items: galleryItems.filter((g) => PROJECT_CATEGORIES.includes(g.category)), match: (item, f) => item.category === f },
+    workbench: {
+      items: galleryItems.filter((g) => WORKBENCH_ORDER.includes(g.category))
+        .sort((a, b) => WORKBENCH_ORDER.indexOf(a.category) - WORKBENCH_ORDER.indexOf(b.category)),
+      match: (item, f) => (WORKBENCH_FILTERS[f] || [f]).includes(item.category)
     }
-    button.addEventListener("click", () => {
-      if (button.disabled) return;
-      activeFilter = value;
-      $$(".gallery-filter").forEach((b) => { b.classList.toggle("is-active", b === button); b.setAttribute("aria-pressed", String(b === button)); });
-      renderGallery();
+  };
+  $$("[data-gallery]").forEach((box) => {
+    const cfg = GALLERIES[box.dataset.gallery];
+    if (!cfg) return;
+    const grid = $(".gallery-grid", box), count = $(".gallery-count", box), emptyNote = $(".gallery-empty-note", box);
+    const buttons = $$(".gallery-filter", box);
+    let activeFilter = "all";
+    const visibleItems = () => cfg.items.filter((item) => activeFilter === "all" || cfg.match(item, activeFilter));
+    function render() {
+      const visible = visibleItems();
+      grid.replaceChildren();
+      count.textContent = `${visible.length} ${visible.length === 1 ? "image" : "images"}`;
+      visible.forEach((item) => {
+        const card = el("figure", "gallery-card");
+        card.append(viewerButton(item, "gallery-thumb", { sizes: "(min-width: 1200px) 290px, (min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw" }, visibleItems));
+        const cap = el("figcaption");
+        cap.append(el("span", "label-chip", KIND_LABEL[item.kind] || "Image"), el("strong", "gallery-title", item.title));
+        card.append(cap);
+        grid.append(card);
+      });
+    }
+    const empty = [];
+    buttons.forEach((button) => {
+      const value = button.dataset.filter;
+      const n = value === "all" ? cfg.items.length : cfg.items.filter((item) => cfg.match(item, value)).length;
+      button.dataset.count = String(n);
+      if (!n) { button.disabled = true; button.title = "No images in this category yet"; empty.push(button.textContent.trim()); }
+      button.addEventListener("click", () => {
+        if (button.disabled) return;
+        activeFilter = value;
+        buttons.forEach((b) => { b.classList.toggle("is-active", b === button); b.setAttribute("aria-pressed", String(b === button)); });
+        render();
+      });
     });
+    if (emptyNote) emptyNote.textContent = empty.length ? `${empty.join(", ")}: no photographs added yet, so ${empty.length === 1 ? "this filter is" : "these filters are"} disabled.` : "";
+    render();
   });
-  if (emptyNote) emptyNote.textContent = emptyCategories.length ? `${emptyCategories.join(", ")}: no photographs added yet, so these filters are disabled.` : "";
-  renderGallery();
 
   // ---------------- 10 Status ----------------
   const statusGroups = $("#status-groups");

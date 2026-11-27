@@ -1,0 +1,3 @@
+# Keep CAD exchange files byte-for-byte as created (no line-ending conversion).
+*.dxf binary
+*.DXF binary

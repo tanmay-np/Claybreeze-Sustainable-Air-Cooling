@@ -74,6 +74,7 @@ window.CLAYBREEZE_PROJECT = {
       tone: "next",
       items: [
         "Secure and terminate all fan and pump cables before powered testing.",
+        "Finish laser cutting the 3 mm MDF electronics enclosure (DXF in cad/dxf-enclosure/; cutting in progress) and fit the ESP32, relay module and DHT11 wiring inside it.",
         "Run a dry-pot baseline and wetted-pot runs: inlet and outlet temperature and humidity, airflow and water use.",
         "Record the raw readings in the CSV template and publish the measured results.",
         "Measure the as-built frame and update the SolidWorks model and drawing.",

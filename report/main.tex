@@ -197,6 +197,7 @@ The frame was designed in SolidWorks. Table~\ref{tab:dims} lists the design dime
 \centering
 \caption{Design dimensions (SolidWorks drawing and model).}
 \label{tab:dims}
+\small
 \begin{tabular}{@{}ll@{}}
 \toprule
 \textbf{Parameter} & \textbf{Value} \\
@@ -223,11 +224,11 @@ Fan-mount members & centred 132.5\,mm in from each side member \\
 \begin{figure}[H]
 \centering
 \begin{subfigure}[b]{0.56\linewidth}\centering
-\includegraphics[width=\linewidth, trim=780 40 560 120, clip]{Assembly_Isometric_View.png}
+\includegraphics[width=\linewidth, trim=468 24 336 100, clip]{Assembly_Isometric_View.png}
 \caption{Assembly, isometric view}
 \end{subfigure}\hfill
 \begin{subfigure}[b]{0.4\linewidth}\centering
-\includegraphics[width=\linewidth, trim=700 40 520 160, clip]{Assebly_Front_View.png}
+\includegraphics[width=\linewidth, trim=420 24 270 96, clip]{Assebly_Front_View.png}
 \caption{Assembly, front view (5 $\times$ 6 pots)}
 \end{subfigure}
 \caption{SolidWorks assembly: frame, rear extension, rods and the 30-pot array.}
@@ -237,15 +238,15 @@ Fan-mount members & centred 132.5\,mm in from each side member \\
 \begin{figure}[H]
 \centering
 \begin{subfigure}[b]{0.32\linewidth}\centering
-\includegraphics[width=\linewidth, trim=700 120 500 160, clip]{Frame.png}
+\includegraphics[width=\linewidth, trim=420 72 300 96, clip]{Frame.png}
 \caption{Frame with extension}
 \end{subfigure}\hfill
 \begin{subfigure}[b]{0.32\linewidth}\centering
-\includegraphics[width=\linewidth, trim=700 250 500 250, clip]{Rod.png}
+\includegraphics[width=\linewidth, trim=420 150 300 150, clip]{Rod.png}
 \caption{Retaining rod}
 \end{subfigure}\hfill
 \begin{subfigure}[b]{0.32\linewidth}\centering
-\includegraphics[width=\linewidth, trim=750 200 550 200, clip]{Clay_Pot.png}
+\includegraphics[width=\linewidth, trim=450 120 330 120, clip]{Clay_Pot.png}
 \caption{Clay pot (kullad\_part)}
 \end{subfigure}
 \caption{SolidWorks part models. The rod file is named ``20mm\_rod'', but the drawing calls it out at \dia12\,mm, matching the physical rods.}
@@ -377,6 +378,8 @@ The ESP32 reads temperature and relative humidity from the DHT11 and drives a th
 \caption{Functional architecture of the control electronics (not a wiring diagram).}
 \label{fig:arch}
 \end{figure}
+
+\noindent\textbf{Enclosure (laser cutting in progress).} A laser-cut box will house the ESP32, the relay module and the DHT11 wiring: six finger-jointed panels for a 120 $\times$ 150 $\times$ 100\,mm box in 3\,mm MDF. The DXF is in the repository (\texttt{cad/dxf-enclosure/}); details in Section~\ref{sec:enclosure}.
 
 \section{Implemented control logic}
 \begin{table}[H]
@@ -530,11 +533,11 @@ ClayBreeze addresses a real problem --- affordable cooling for hot Indian homes,
 \item GitHub repository: \url{https://github.com/tanmay-np/Claybreeze-Sustainable-Air-Cooling}
 \end{itemize}
 
-% ======================= 14 DIGITAL FABRICATION (FAB LAB NOTEBOOK) =======================
-\chapter{Digital Fabrication: 3D Printing and Laser Cutting}
+% ======================= 14 MAKERSPACE WORKBENCH =======================
+\chapter{Makerspace Workbench --- 3D Printing \& Laser Cutting at Tinkerers' Lab}
 \label{ch:digifab}
 
-This chapter is the report's \emph{Fab Lab Notebook}: 3D printing and laser cutting skills learned and practised at Tinkerers' Lab, Sanjivani University. The lab has four Bambu Lab printers that use \textbf{FDM --- Fused Deposition Modelling} (also called \textbf{FFF, Fused Filament Fabrication}) and a \textbf{CO$_2$ (carbon dioxide) laser cutter}. Learning reference: Dr.\ Kiran Wakchaure's Fab Academy documentation~\cite{wakchaure}; everything here is in our own words. \textbf{Laser-cutting work in progress --- photographs and details will be added.}
+This chapter records the 3D printing and laser cutting skills learned and practised at Tinkerers' Lab, Sanjivani University, and where they feed back into ClayBreeze. The lab has four Bambu Lab printers that use \textbf{FDM --- Fused Deposition Modelling (also called FFF, Fused Filament Fabrication)} and a \textbf{CO$_2$ (carbon dioxide) laser cutter}. Learning reference: Dr.\ Kiran Wakchaure's Fab Academy documentation~\cite{wakchaure}; everything here is in our own words. Practice pieces are done, and the ClayBreeze electronics enclosure is being laser-cut now (Section~\ref{sec:enclosure}).
 
 \begin{table}[H]
 \centering\small
@@ -548,7 +551,7 @@ STL & Stereolithography (triangle-mesh file) & DXF & Drawing Exchange Format \\
 3MF & 3D Manufacturing Format & SVG & Scalable Vector Graphics \\
 PLA & Polylactic acid & CO$_2$ & Carbon dioxide \\
 PETG & Polyethylene terephthalate glycol-modified & PPI & Pulses per inch \\
-ABS & Acrylonitrile butadiene styrene & PPE & Personal protective equipment \\
+ABS & Acrylonitrile butadiene styrene & MDF & Medium-density fibreboard \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -563,10 +566,86 @@ ABS & Acrylonitrile butadiene styrene & PPE & Personal protective equipment \\
 \label{fig:bambu}
 \end{figure}
 
-\section{3D printing (FDM)}
+\section{3D printing: FDM --- Fused Deposition Modelling (also called FFF, Fused Filament Fabrication)}
 An FDM printer melts a plastic wire called filament and lays it down line by line, layer by layer.
 \textbf{Workflow:} CAD model $\rightarrow$ export STL or 3MF $\rightarrow$ slice in Bambu Studio $\rightarrow$ print, watching the first layer $\rightarrow$ post-process (cool, release, remove supports and brim, smooth, test-fit).
-\textbf{How it works:} spool $\rightarrow$ extruder gears push the filament $\rightarrow$ the hotend melts it $\rightarrow$ the nozzle lays a thin bead $\rightarrow$ layers stack as the plate steps down $\rightarrow$ the fan cools each layer.
+
+\subsection{Two ways an FDM printer moves}
+Every FDM printer must move the nozzle relative to the part in X (left--right), Y (front--back) and Z (up, one layer at a time). Our printers use two motion systems (Figure~\ref{fig:motion}, Table~\ref{tab:motion}). The classification was checked against Bambu Lab sources: the A1 and A1 mini product pages call them ``bed slinger'' printers~\cite{bambua1,bambua1mini}, the P1 series page states CoreXY~\cite{bambup1s}, and the Bambu Lab Wiki states that the H2D ``is based on the Core-XY architecture''~\cite{bambuh2dwiki}.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.49\linewidth}\centering
+\begin{tikzpicture}[x={(1cm,0)}, y={(0.42cm,0.28cm)}, z={(0,1cm)}, scale=0.78, font=\sffamily\scriptsize, line join=round]
+  \draw[fill=gray!12, draw=gray!60] (0,-0.4,0) -- (4.4,-0.4,0) -- (4.4,3.0,0) -- (0,3.0,0) -- cycle;
+  \draw[gray!70, line width=1.2pt] (2.2,-0.4,0.05) -- (2.2,3.0,0.05);
+  \draw[line width=2.4pt, gray!70] (-0.15,1.3,0) -- (-0.15,1.3,2.7);
+  \draw[line width=2.4pt, gray!70] (4.55,1.3,0) -- (4.55,1.3,2.7);
+  \draw[fill=gray!45, draw=gray!80] (0.8,0.1,0.2) -- (3.6,0.1,0.2) -- (3.6,2.5,0.2) -- (0.8,2.5,0.2) -- cycle;
+  \draw[fill=cbwater!45] (1.8,0.9,0.2) -- (2.6,0.9,0.2) -- (2.6,0.9,0.85) -- (1.8,0.9,0.85) -- cycle;
+  \draw[fill=cbwater!65] (2.6,0.9,0.2) -- (2.6,1.7,0.2) -- (2.6,1.7,0.85) -- (2.6,0.9,0.85) -- cycle;
+  \draw[fill=cbwater!25] (1.8,0.9,0.85) -- (2.6,0.9,0.85) -- (2.6,1.7,0.85) -- (1.8,1.7,0.85) -- cycle;
+  \draw[line width=2.4pt, gray!70] (-0.15,1.3,1.85) -- (4.55,1.3,1.85);
+  \draw[fill=white] (1.95,1.1,1.15) -- (2.45,1.1,1.15) -- (2.45,1.1,1.75) -- (1.95,1.1,1.75) -- cycle;
+  \draw[fill=cbclay] (2.12,1.3,1.15) -- (2.28,1.3,1.15) -- (2.2,1.3,0.9) -- cycle;
+  \draw[{Latex}-{Latex}, cbclay, very thick] (1.2,1.3,2.2) -- (3.2,1.3,2.2) node[right]{\textbf{X}};
+  \draw[{Latex}-{Latex}, cbwater, very thick] (4.1,-0.2,0.25) -- (4.1,2.7,0.25) node[right]{\textbf{Y}};
+  \draw[-{Latex}, cbok, very thick] (4.9,1.3,1.0) -- (4.9,1.3,2.1) node[right]{\textbf{Z}};
+  \node[anchor=north west, align=left] at (0,-0.4,0) {heatbed slides in Y};
+  \node[anchor=east, align=right] at (1.9,1.1,1.5) {toolhead};
+\end{tikzpicture}
+\caption{Bed-slinger (Cartesian): the \textcolor{cbwater}{heatbed moves front--back (Y)}, the \textcolor{cbclay}{toolhead moves left--right (X)}, the \textcolor{cbok}{toolhead and gantry rise (Z)}. Our lab: A1, A1 mini.}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.49\linewidth}\centering
+\begin{tikzpicture}[x={(1cm,0)}, y={(0.42cm,0.28cm)}, z={(0,1cm)}, scale=0.78, font=\sffamily\scriptsize, line join=round]
+  \draw[gray!60, dashed] (0,3,0) -- (4.4,3,0) (0,3,0) -- (0,3,3) (4.4,3,0) -- (4.4,3,3) (0,0,0) -- (0,3,0) (4.4,0,0) -- (4.4,3,0) (0,0,3) -- (0,3,3) (4.4,0,3) -- (4.4,3,3) (0,3,3) -- (4.4,3,3);
+  \draw[gray!55, densely dotted, thick] (0.6,2.8,0) -- (0.6,2.8,2.85) (3.8,2.8,0) -- (3.8,2.8,2.85) (2.2,0.2,0) -- (2.2,0.2,2.85);
+  \draw[line width=1.6pt, gray!70] (0.15,0,2.85) -- (0.15,3,2.85) (4.25,0,2.85) -- (4.25,3,2.85);
+  \draw[fill=gray!45, draw=gray!80] (0.8,0.3,1.2) -- (3.6,0.3,1.2) -- (3.6,2.7,1.2) -- (0.8,2.7,1.2) -- cycle;
+  \draw[fill=cbwater!45] (1.8,1.1,1.2) -- (2.6,1.1,1.2) -- (2.6,1.1,1.85) -- (1.8,1.1,1.85) -- cycle;
+  \draw[fill=cbwater!65] (2.6,1.1,1.2) -- (2.6,1.9,1.2) -- (2.6,1.9,1.85) -- (2.6,1.1,1.85) -- cycle;
+  \draw[fill=cbwater!25] (1.8,1.1,1.85) -- (2.6,1.1,1.85) -- (2.6,1.9,1.85) -- (1.8,1.9,1.85) -- cycle;
+  \draw[line width=2.4pt, gray!70] (0.15,1.5,2.85) -- (4.25,1.5,2.85);
+  \draw[gray!70, thick] (2.2,1.5,2.85) -- (2.2,1.5,2.6);
+  \draw[fill=white] (1.95,1.3,2.05) -- (2.45,1.3,2.05) -- (2.45,1.3,2.6) -- (1.95,1.3,2.6) -- cycle;
+  \draw[fill=cbclay] (2.12,1.5,2.05) -- (2.28,1.5,2.05) -- (2.2,1.5,1.87) -- cycle;
+  \draw[gray!80, thick] (0,0,0) rectangle (4.4,0,3);
+  \draw[{Latex}-{Latex}, cbclay, very thick] (1.2,0,3.3) -- (3.2,0,3.3) node[right]{\textbf{X}};
+  \draw[{Latex}-{Latex}, cbwater, very thick] (4.75,0.2,2.85) -- (4.75,2.8,2.85) node[right]{\textbf{Y}};
+  \draw[-{Latex}, cbok, very thick] (4.8,0,1.7) -- (4.8,0,0.7) node[right]{\textbf{Z}};
+  \node[anchor=north west] at (0,0,0) {heatbed moves down in Z};
+\end{tikzpicture}
+\caption{CoreXY (enclosed): the \textcolor{cbclay}{toolhead moves in X} and \textcolor{cbwater}{Y} on a fixed frame; the \textcolor{cbok}{heatbed moves down (Z)} after each layer. Our lab: P1S, H2D.}
+\end{subfigure}
+\caption{The two FDM motion systems in our lab, printing the same part (layer height exaggerated). The website animates both side by side.}
+\label{fig:motion}
+\end{figure}
+
+\begin{table}[H]
+\centering\small
+\caption{Bed-slinger vs CoreXY.}
+\label{tab:motion}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}lXX@{}}
+\toprule
+ & \textbf{Bed-slinger (Cartesian)} & \textbf{CoreXY (enclosed)} \\
+\midrule
+X (left--right) & Toolhead moves along the gantry & Toolhead moves on a fixed frame at the top \\
+Y (front--back) & Heatbed slides; the part rides on it & Toolhead moves; two fixed motors and crossed belts drive X and Y together \\
+Z (each layer) & Toolhead and gantry rise & Heatbed moves down \\
+Our lab & A1, A1 mini & P1S, H2D \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{How FDM works}
+\begin{enumerate}[itemsep=1pt]
+\item \textbf{Filament feeds from the spool} --- the 1.75\,mm filament is pulled through a tube only as fast as the nozzle uses it.
+\item \textbf{Extruder gears push it} --- two toothed gears grip the filament and push it at an exact rate; they pause on travel moves and retract slightly to stop drips.
+\item \textbf{The hotend melts it} --- about 190--240\degC{} for PLA~\cite{bambuwiki}; a cooled heat break keeps the filament solid until the hot zone.
+\item \textbf{The nozzle traces the toolpath} --- molten plastic leaves the 0.4\,mm nozzle as a thin line along the slicer's path.
+\item \textbf{Layers stack} --- after each layer the gantry rises (bed-slinger) or the bed lowers (CoreXY) by one layer height.
+\item \textbf{The cooling fan sets each line} --- the part-cooling fan hardens the fresh plastic so it holds its shape.
+\end{enumerate}
 
 \begin{figure}[H]
 \centering
@@ -586,7 +665,7 @@ An FDM printer melts a plastic wire called filament and lays it down line by lin
 \item \textbf{Dual nozzles and hotend} --- melt the filament (up to 350\degC); two materials or colours in one print.
 \item \textbf{Extruder} --- gears push filament into the hotend at a controlled rate.
 \item \textbf{Heated build plate} --- holds the first layer down (up to 120\degC).
-\item \textbf{Motion system (gantry)} --- rails and belts move the head; the plate steps down each layer.
+\item \textbf{Motion system (CoreXY)} --- two fixed motors and crossed belts move the head in X and Y; the plate steps down each layer.
 \item \textbf{Enclosure and door} --- keep warm air in (chamber heating to 65\degC).
 \item \textbf{Touchscreen} --- start prints, load filament, read errors.
 \item \textbf{Filament and AMS} --- the AMS 2 Pro holds four spools and feeds them automatically.
@@ -636,11 +715,12 @@ TPU 95A HF & 200--250\degC & 30--45\degC & Open or enclosed. Flexible parts; too
 
 \begin{table}[H]
 \centering\small
-\caption{Lab printers, from official Bambu Lab pages~\cite{bambuh2d,bambup1s,bambua1,bambua1mini}.}
+\caption{Lab printers, from official Bambu Lab pages~\cite{bambuh2d,bambup1s,bambua1,bambua1mini,bambuh2dwiki}.}
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}@{}}
 \toprule
  & H2D & P1S & A1 & A1 mini \\
 \midrule
+Motion system & CoreXY & CoreXY & Bed-slinger & Bed-slinger \\
 Build volume (mm) & 325$\times$320$\times$325 (one nozzle); 300$\times$320$\times$320 (both) & 256$\times$256$\times$256 & 256$\times$256$\times$256 & 180$\times$180$\times$180 \\
 Enclosure & Enclosed, chamber heating to 65\degC & Enclosed & Open frame (see manufacturer) & Open frame (see manufacturer) \\
 Nozzle(s) & Two, 0.4\,mm included & One, 0.4\,mm & One, 0.4\,mm & One, 0.4\,mm \\
@@ -653,18 +733,106 @@ AMS support & AMS 2 Pro, AMS HT & AMS & AMS lite & AMS lite \\
 
 \begin{figure}[H]
 \centering
-\begin{subfigure}[b]{0.24\linewidth}\centering\includegraphics[height=40mm,width=\linewidth,keepaspectratio]{3DP_Bambu_H2D_With_AMS.jpeg}\caption{H2D in the lab}\end{subfigure}\hfill
-\begin{subfigure}[b]{0.24\linewidth}\centering\includegraphics[height=40mm,width=\linewidth,keepaspectratio]{3DP_Bambu_A1_Mini.jpeg}\caption{A1 mini in the lab}\end{subfigure}\hfill
-\begin{subfigure}[b]{0.24\linewidth}\centering\includegraphics[height=40mm,width=\linewidth,keepaspectratio]{3DP_Assorted_Prints_Tray.jpeg}\caption{Practice prints}\end{subfigure}\hfill
-\begin{subfigure}[b]{0.24\linewidth}\centering\includegraphics[height=40mm,width=\linewidth,keepaspectratio]{Laser_Engraving_In_Progress.jpeg}\caption{Laser engraving}\end{subfigure}
-\caption{Our own photographs from Tinkerers' Lab.}
+\begin{subfigure}[b]{0.24\linewidth}\centering\includegraphics[height=40mm,width=\linewidth,keepaspectratio]{3DP_Bambu_H2D_With_AMS.jpeg}\caption{Bambu Lab H2D with AMS}\end{subfigure}\hfill
+\begin{subfigure}[b]{0.24\linewidth}\centering\includegraphics[height=40mm,width=\linewidth,keepaspectratio]{3DP_Bambu_A1_Mini.jpeg}\caption{Bambu Lab A1 mini}\end{subfigure}\hfill
+\begin{subfigure}[b]{0.24\linewidth}\centering\includegraphics[height=40mm,width=\linewidth,keepaspectratio]{3DP_Phone Stand Sanjivani University.jpeg}\caption{Phone stand, Sanjivani University}\end{subfigure}\hfill
+\begin{subfigure}[b]{0.24\linewidth}\centering\includegraphics[height=40mm,width=\linewidth,keepaspectratio]{3DP_Humidifier.jpeg}\caption{Humidifier}\end{subfigure}
+\caption{Our own photographs from Tinkerers' Lab (captions are the photos' file names).}
 \label{fig:digifab}
 \end{figure}
 
 \section{Laser cutting (CO$_2$)}
-\textbf{Laser-cutting work in progress --- photographs and details will be added.}
 A CO$_2$ laser focuses an infrared beam onto a sheet to burn a line through it (cutting) or mark its surface (engraving).
 \textbf{Workflow:} 2D design as DXF or SVG $\rightarrow$ laser software (power, speed and job per colour) $\rightarrow$ material setup (allowed sheet, flat on the honeycomb) $\rightarrow$ focus (beam narrowest at the surface) $\rightarrow$ cut or engrave with extraction and air assist on, after a test on scrap $\rightarrow$ inspect cut-through, fit and kerf.
+
+\subsection{How the laser head moves}
+The laser tube stays fixed at the back of the machine; only mirrors move (Figure~\ref{fig:lasermotion}). The \textcolor{cbclay}{\textbf{head travels left--right along the gantry (X)}} and the \textcolor{cbwater}{\textbf{gantry travels front--back on two rails (Y)}}. The beam goes from the tube to mirror~1 (fixed), along the Y rail to mirror~2 (on the gantry), along the gantry to mirror~3 in the head, and down through the focusing lens to a point on the sheet. Because the beam path changes length as the head moves, the three mirrors must be aligned so the beam reaches the lens centre anywhere on the bed.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.82, font=\sffamily\scriptsize, line join=round]
+  \draw[fill=gray!10, draw=gray!60, rounded corners=2pt] (0,0) rectangle (9.4,6.2);
+  \node[gray!70!black] at (4.7,6.45) {back of the machine};
+  \draw[fill=brown!30, draw=brown!60] (1.6,0.5) rectangle (8.2,4.8);
+  \draw[brown!70!black, thick] (3.4,1.6) -- (3.7,1.6) -- (3.7,1.5) -- (4.1,1.5) -- (4.1,1.6) -- (4.5,1.6) -- (4.5,1.5) -- (4.9,1.5) -- (4.9,1.6) -- (5.3,1.6) -- (5.3,1.5) -- (5.7,1.5) -- (5.7,1.6) -- (6.4,1.6) -- (6.4,3.5) -- (3.4,3.5) -- cycle;
+  \draw[line width=2.4pt, gray!60] (0.45,0.3) -- (0.45,5.2) (8.95,0.3) -- (8.95,5.2);
+  \draw[fill=cyan!20, draw=cyan!50!black, rounded corners=4pt] (2.4,5.45) rectangle (8.2,5.85);
+  \node at (5.3,5.65) {CO$_2$ laser tube (fixed)};
+  \draw[fill=gray!45, draw=gray!70, opacity=0.9] (0.3,2.35) rectangle (9.1,2.65);
+  \draw[red!80!black, very thick, densely dashed] (2.4,5.65) -- (0.6,5.65) -- (0.6,2.5) -- (6.4,2.5);
+  \draw[fill=white, draw=cyan!50!black, rotate around={45:(0.6,5.65)}] (0.45,5.5) rectangle (0.75,5.8);
+  \draw[fill=white, draw=cyan!50!black, rotate around={45:(0.6,2.5)}] (0.45,2.35) rectangle (0.75,2.65);
+  \draw[fill=white, draw=black] (6.1,2.2) rectangle (6.7,2.8);
+  \draw[fill=cyan!25, draw=cyan!50!black] (6.4,2.5) circle (0.12);
+  \node[anchor=west] at (0.8,5.25) {mirror 1 (fixed)};
+  \node[anchor=south west, fill=white, inner sep=1pt] at (0.8,2.7) {mirror 2 (rides on the gantry)};
+  \node[anchor=north east, fill=white, inner sep=1pt] at (6.05,2.2) {head: mirror 3 + lens};
+  \draw[{Latex}-{Latex}, cbclay, very thick] (3.2,-0.35) -- (7.2,-0.35);
+  \node[cbclay, anchor=north] at (5.2,-0.45) {\textbf{X: head travels along the gantry}};
+  \draw[{Latex}-{Latex}, cbwater, very thick] (9.75,0.8) -- (9.75,4.6);
+  \node[cbwater, rotate=90, anchor=north] at (9.95,2.7) {\textbf{Y: gantry travels front--back}};
+  % side cut-away of the head
+  \begin{scope}[shift={(11.4,0.3)}]
+    \draw[fill=gray!15, draw=gray!60, rounded corners=2pt] (0,1.6) rectangle (1.4,5.2);
+    \draw[fill=gray!15, draw=gray!60] (0.25,1.6) -- (1.15,1.6) -- (0.85,0.75) -- (0.55,0.75) -- cycle;
+    \draw[red!80!black, very thick, densely dashed] (-1.0,4.6) -- (0.7,4.6);
+    \draw[red!70, line width=3pt, opacity=0.6] (0.7,4.6) -- (0.7,2.55);
+    \fill[red!70, opacity=0.5] (0.55,2.45) -- (0.85,2.45) -- (0.7,0.5) -- cycle;
+    \draw[black, line width=1.6pt] (0.4,4.9) -- (1.0,4.3);
+    \draw[fill=cyan!25, draw=cyan!50!black] (0.7,2.5) ellipse (0.55 and 0.12);
+    \draw[fill=brown!30, draw=brown!60] (-0.6,0.2) rectangle (2.0,0.5);
+    \fill[yellow!80!orange] (0.7,0.5) circle (0.08);
+    \node[anchor=west] at (1.5,4.6) {mirror 3 (45\textdegree)};
+    \node[anchor=west] at (1.5,2.5) {focusing lens};
+    \node[anchor=north, align=center] at (0.7,0.15) {focal point on\\the sheet surface};
+    \node[anchor=south] at (-0.4,4.65) {beam};
+  \end{scope}
+\end{tikzpicture}
+\caption{How the laser head moves: top view (left) and side cut-away of the head (right). The head traces one side panel of our enclosure.}
+\label{fig:lasermotion}
+\end{figure}
+
+\subsection{Unidirectional vs bidirectional engraving}
+A raster engraving is built from many parallel lines (Figure~\ref{fig:scan}).
+\textbf{Unidirectional} engraving fires in one direction only and returns without firing, so every line starts from the same side: slower (about twice the passes) but with clean edges.
+\textbf{Bidirectional} engraving fires on both passes and takes about half the time, but lines engraved in opposite directions only line up if the \emph{scan offset} (scan-gap) is calibrated; otherwise edges look doubled or jagged.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\sffamily\scriptsize, >={Latex[length=1.6mm]}]
+  \foreach \px/\ttl/\md in {0/Unidirectional/uni, 5.2/Bidirectional (calibrated)/bi, 10.4/Bidirectional (uncalibrated)/bad} {
+    \begin{scope}[shift={(\px,0)}]
+      \draw[fill=brown!20, draw=brown!50] (0,0) rectangle (4.4,2.6);
+      \node[anchor=south] at (2.2,2.65) {\textbf{\ttl}};
+      \foreach \i in {0,...,5} {
+        \pgfmathsetmacro{\y}{2.25-\i*0.36}
+        \pgfmathsetmacro{\sh}{0}
+        \ifnum\i=1 \def\odd{1}\else\ifnum\i=3 \def\odd{1}\else\ifnum\i=5 \def\odd{1}\else\def\odd{0}\fi\fi\fi
+        \def\uni{uni}\def\bad{bad}
+        \ifx\md\uni
+          \draw[brown!40!black, line width=2.4pt] (1.0,\y) -- (3.4,\y);
+          \draw[->, cbclay, thin] (0.25,\y+0.12) -- (4.15,\y+0.12);
+          \draw[->, gray, thin, densely dashed] (4.15,\y-0.1) -- (0.25,\y-0.1);
+        \else
+          \ifx\md\bad
+            \ifnum\odd=1 \pgfmathsetmacro{\sh}{-0.18}\else\pgfmathsetmacro{\sh}{0.18}\fi
+          \fi
+          \draw[brown!40!black, line width=2.4pt] (1.0+\sh,\y) -- (3.4+\sh,\y);
+          \ifnum\odd=1
+            \draw[->, cbclay, thin] (4.15,\y+0.12) -- (0.25,\y+0.12);
+          \else
+            \draw[->, cbclay, thin] (0.25,\y+0.12) -- (4.15,\y+0.12);
+          \fi
+        \fi
+      }
+    \end{scope}
+  }
+  \draw[->, cbclay, thin] (0,-0.35) -- (0.6,-0.35) node[right, black] {pass with the laser firing};
+  \draw[->, gray, thin, densely dashed] (5.2,-0.35) -- (5.8,-0.35) node[right, black] {return pass, laser off};
+\end{tikzpicture}
+\caption{Raster engraving. Unidirectional: clean edges, empty return passes. Bidirectional: half the passes; without scan-offset calibration, alternate lines shift and the edges become jagged.}
+\label{fig:scan}
+\end{figure}
 
 \begin{table}[H]
 \centering\small
@@ -679,6 +847,7 @@ Focus / focal length & The distance at which the beam is narrowest; the sheet su
 Kerf & The width of material the beam burns away; half comes off each side of the line, so tabs shrink and slots grow. \\
 Kerf compensation & Offsetting paths by half the measured kerf so press-fit parts come out at size. \\
 Vector vs raster & A vector cut follows a line through the sheet; a raster engrave sweeps line by line to burn an image into the surface. \\
+Uni- / bidirectional & Raster firing on one pass direction only, or on both; bidirectional needs scan-offset calibration. \\
 Air assist, passes & An air jet clears smoke and flame and protects the lens; two gentle passes can char less than one slow pass. \\
 \bottomrule
 \end{tabularx}
@@ -687,6 +856,43 @@ Air assist, passes & An air jet clears smoke and flame and protects the lens; tw
 \noindent\textbf{Allowed:} MDF (medium-density fibreboard), plywood, acrylic, cardboard, paper. \textbf{Never cut:} PVC or vinyl (chlorine gas), polycarbonate (burns and discolours), coated metals (not cut by CO$_2$; coatings reflect or fume), or any unidentified sheet.
 
 \noindent\textbf{Lab machine:} SIL CO$_2$ laser cutter, 100\,W. Bed size and other specifications: [to confirm from machine label].
+
+\section{Applied in ClayBreeze: electronics enclosure}
+\label{sec:enclosure}
+The laser-cutting practice is being put to work on the project: a finger-jointed box to house the ESP32, the relay module and the DHT11 wiring. \textbf{Status: laser cutting in progress.} The cutting file is \texttt{cad/dxf-enclosure/basic-box-120x150x100-3mm.dxf} in the GitHub repository. Read with \texttt{ezdxf}, it holds \textbf{six closed, finger-jointed panels} (432 line segments, millimetres) nested on a 426 $\times$ 253\,mm area, for a 120 $\times$ 150 $\times$ 100\,mm box (Table~\ref{tab:enclosure}, Figure~\ref{fig:enclosure}). Material: 3\,mm MDF, as stated in the file names. Which panel is the top, and the cable and sensor cut-outs, are not yet decided.
+
+\begin{table}[H]
+\centering\small
+\caption{Panels in the enclosure DXF (outer bounding size; named by size only).}
+\label{tab:enclosure}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Panels & Size (mm) & Qty \\
+\midrule
+Top and bottom & 120 $\times$ 150 & 2 \\
+Long sides & 150 $\times$ 100 & 2 \\
+Short sides & 120 $\times$ 100 & 2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.52\linewidth}\centering
+\begin{tikzpicture}[x=0.19mm, y=0.19mm, font=\sffamily\tiny]
+\input{../latex-shared/enclosure-dxf.tex}
+\node at (60,178) {120$\times$150}; \node at (183,178) {120$\times$150}; \node at (306,153) {120$\times$100};
+\node at (75,50) {150$\times$100}; \node at (228,50) {150$\times$100}; \node at (366,50) {120$\times$100};
+\end{tikzpicture}
+\caption{The DXF, drawn from its own line data.}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.44\linewidth}\centering
+\includegraphics[width=\linewidth]{enclosure-cutting.jpg}
+\caption{Laser cutting MDF to store electronics.}
+\end{subfigure}
+\caption{ClayBreeze electronics enclosure: six finger-jointed panels in 3\,mm MDF (laser cutting in progress).}
+\label{fig:enclosure}
+\end{figure}
 
 \section{Safety checklist}
 \begin{itemize}
@@ -712,11 +918,12 @@ Air assist, passes & An air jet clears smoke and flame and protects the lens; tw
 \bibitem{epa} U.S. Environmental Protection Agency. \emph{Transitioning to Low-GWP Alternatives in Residential and Light Commercial Air Conditioning}. \url{https://www.epa.gov/snap/transitioning-low-gwp-alternatives-residential-and-light-commercial-air-conditioning}
 \bibitem{energystar} ENERGY STAR. \emph{Room Air Conditioners}. \url{https://www.energystar.gov/products/room_air_conditioners}
 \bibitem{toi} The Times of India / ETimes Trending Desk. Inside Project Vayu: Delhi students turn kulhads and scrap wood into eco-coolers for underprivileged government school kids. 8 May 2026. (Inspiration only.)
-\bibitem{wakchaure} K.~Wakchaure. Fab Academy 2022 documentation, Vigyan Ashram: about page, Week~3 (computer-controlled cutting) and Week~5 (3D scanning and printing). \url{https://fabacademy.org/2022/labs/vigyanashram/students/kiran-wakchaure/about.html} (learning reference; paraphrased)
+\bibitem{wakchaure} K.~Wakchaure. Fab Academy documentation (2022), Vigyan Ashram: about page, Week~3 (computer-controlled cutting) and Week~5 (3D scanning and printing). \url{https://fabacademy.org/2022/labs/vigyanashram/students/kiran-wakchaure/about.html} (learning reference; paraphrased)
 \bibitem{bambuh2d} Bambu Lab. H2D technical specifications and product page. \url{https://bambulab.com/en/h2d/tech-specs}, \url{https://bambulab.com/en/h2d} (accessed 26 Nov 2026)
-\bibitem{bambup1s} Bambu Lab. P1S product page, parameters comparison; P1 series page. \url{https://us.store.bambulab.com/products/p1s}, \url{https://bambulab.com/en/p1} (accessed 26 Nov 2026)
-\bibitem{bambua1} Bambu Lab. A1 technical specifications and product page. \url{https://bambulab.com/en/a1/tech-specs}, \url{https://bambulab.com/en/a1} (accessed 26 Nov 2026)
-\bibitem{bambua1mini} Bambu Lab. A1 mini technical specifications and product page. \url{https://bambulab.com/en/a1-mini/tech-specs}, \url{https://bambulab.com/en/a1-mini} (accessed 26 Nov 2026)
+\bibitem{bambup1s} Bambu Lab. P1S product page, parameters comparison; P1 series page (CoreXY). \url{https://us.store.bambulab.com/products/p1s}, \url{https://bambulab.com/en/p1} (accessed 26 Nov 2026)
+\bibitem{bambua1} Bambu Lab. A1 technical specifications and product page (``bed slinger''). \url{https://bambulab.com/en/a1/tech-specs}, \url{https://bambulab.com/en/a1} (accessed 26--27 Nov 2026)
+\bibitem{bambua1mini} Bambu Lab. A1 mini technical specifications and product page (``bed slinger''). \url{https://bambulab.com/en/a1-mini/tech-specs}, \url{https://bambulab.com/en/a1-mini} (accessed 26--27 Nov 2026)
+\bibitem{bambuh2dwiki} Bambu Lab Wiki. Introduction to H2D --- Core XY movement system. \url{https://wiki.bambulab.com/en/h2/manual/h2d-intro} (accessed 27 Nov 2026)
 \bibitem{bambuwiki} Bambu Lab Wiki. Filament guide --- printer, nozzle, AMS, build plate, glue compatibility and required parameters. \url{https://wiki.bambulab.com/en/general/filament-guide-material-table} (accessed 26 Nov 2026)
 \bibitem{bambuimages} Bambu Lab. Official product images of the H2D, P1S, A1 and A1 mini, from the official store pages \url{https://us.store.bambulab.com/products/h2d}, \url{https://us.store.bambulab.com/products/p1s}, \url{https://us.store.bambulab.com/products/a1}, \url{https://us.store.bambulab.com/products/a1-mini}. Images \textcopyright\ Bambu Lab (accessed 26 Nov 2026)
 \bibitem{afn} Action For Nature. 2026 International Young Eco-Hero Award listing describing Project Vaayu. \url{https://actionfornature.org/eco-hero-winners/tag/Terracotta%2BCooling}

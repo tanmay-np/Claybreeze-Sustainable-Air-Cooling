@@ -15,6 +15,8 @@ Firmware source will be added to this repository.
 | **Two exhaust fans** | Mounted at the rear, blowing room air forward through the pot array. Switched in two stages on temperature (Section 3). |
 | **Water pump (motor) + tubing + reservoir** | Installed. Lifts water from the reservoir to the pots. Switched on humidity (Section 4). |
 
+**Electronics enclosure — laser cutting in progress.** A laser-cut box will house the ESP32, the relay module and the DHT11 wiring: six finger-jointed panels for a 120 × 150 × 100 mm box in 3 mm MDF (material from the file names). DXF: [`cad/dxf-enclosure/basic-box-120x150x100-3mm.dxf`](../cad/dxf-enclosure/basic-box-120x150x100-3mm.dxf). Details: [digital-fabrication.md, section C](digital-fabrication.md#c-applied-in-claybreeze-electronics-enclosure).
+
 ## 2. System Architecture (Functional, Not a Wiring Diagram)
 
 The diagram below shows the functional relationship between the components — what reads what, and what controls what. It is **not** a wiring or pin-connection diagram, and it does not specify voltages, logic levels, GPIO numbers or relay channels.
@@ -74,6 +76,7 @@ These are not yet documented — do not treat any of them as decided:
 | Two-stage fan control (Section 3) | **IMPLEMENTED** — running on the ESP32 |
 | Humidity-based pump control (Section 4) | **IMPLEMENTED** — running on the ESP32 |
 | Water pump, tubing and reservoir | **Installed** |
+| Laser-cut electronics enclosure (3 mm MDF) | **Laser cutting in progress** |
 | Firmware source in this repository | To be added |
 | Performance testing | **Next** — see `docs/testing-and-results.md` |
 
