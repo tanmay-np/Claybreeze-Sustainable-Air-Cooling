@@ -6,7 +6,7 @@
 
 > A Makerspace prototype exploring porous clay as a wetted medium for direct evaporative cooling.
 
-**Project status: Build complete — control logic running.** The metal frame is fabricated and painted, the six 12 mm pot-retaining rods are attached, the rear fan-mount extension carries both exhaust fans, and 30 clay pots (5 columns × 6 rows) are fixed into the frame. The water pump with tubing and the reservoir are installed. An ESP32, a DHT11 sensor and a 3-channel relay module are integrated, and the control logic is running on the ESP32 with hysteresis: Fan 1 ON above 26 °C and OFF at or below 25 °C; Fan 2 ON above 30 °C and OFF at or below 29 °C; the water motor ON below 60 % RH and OFF at or above 62 % RH; between the limits each output keeps its previous state. The firmware is in [`firmware/`](firmware/). No cooling-performance result is claimed.
+**Project status: Build complete — control logic running.** The metal frame is fabricated and painted, the six 12 mm pot-retaining rods are attached, the rear fan-mount extension carries both exhaust fans, and 30 clay pots (5 columns × 6 rows) are fixed into the frame. The water pump with tubing and the reservoir are installed. An ESP32, a DHT11 sensor and a 3-channel relay module are integrated, and the control logic is running on the ESP32 with hysteresis: Fan 1 ON above 26 °C and OFF at or below 25 °C; Fan 2 ON above 30 °C and OFF at or below 29 °C; the water motor ON below 75 % RH and OFF at or above 77 % RH; between the limits each output keeps its previous state. The firmware is in [`firmware/`](firmware/). No cooling-performance result is claimed.
 
 ## Student
 
@@ -40,7 +40,7 @@ Inspired by reporting on Project Vaayu, a separate student initiative — see [`
 | Frame finish | Spray-painted |
 | Fan mount | Rear extension frame, fabricated; both exhaust fans mounted on it |
 | Electronics | ESP32 + DHT11 + 3-channel relay module on a breadboard (wiring below); control logic running; firmware in `firmware/` |
-| Water circuit | Water pump with tubing, plus reservoir: installed. Water motor ON below 60 % RH, OFF at or above 62 % RH |
+| Water circuit | Water pump with tubing, plus reservoir: installed. Water motor ON below 75 % RH, OFF at or above 77 % RH |
 | Airflow | Two exhaust fans on the rear extension frame, blowing room air forward through and around the pots and out of the front (direction confirmed by the team); Fan 1 ON above 26 °C / OFF at or below 25 °C, Fan 2 ON above 30 °C / OFF at or below 29 °C, via the ESP32 + relay |
 
 ## ESP32 Wiring
@@ -69,7 +69,7 @@ Relay module:
 |---|---|---|---|
 | Fan 1 (IN1, GPIO25) | above 26 °C | at or below 25 °C | keeps its previous state |
 | Fan 2 (IN2, GPIO26) | above 30 °C | at or below 29 °C | keeps its previous state |
-| Water motor (IN3, GPIO27) | below 60 % RH | at or above 62 % RH | keeps its previous state |
+| Water motor (IN3, GPIO27) | below 75 % RH | at or above 77 % RH | keeps its previous state |
 
 The website's **Circuit & Control Lab** animates this circuit and runs the same logic (simulator — not connected to hardware).
 
@@ -106,7 +106,7 @@ Completed:
 - Water pump with tubing, plus reservoir, installed
 - ESP32, DHT11 and 3-channel relay module integrated
 - Prototype fully assembled
-- Control logic running on the ESP32 with hysteresis (Fan 1: 26/25 °C, Fan 2: 30/29 °C, water motor: 60/62 % RH)
+- Control logic running on the ESP32 with hysteresis (Fan 1: 26/25 °C, Fan 2: 30/29 °C, water motor: 75/77 % RH)
 - ESP32 firmware in this repository (`firmware/claybreeze_controller/`), compiled for the ESP32 Dev Module
 
 ## Future Scope

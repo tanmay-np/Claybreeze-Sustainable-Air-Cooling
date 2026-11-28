@@ -41,7 +41,7 @@ window.CLAYBREEZE_PROJECT = {
     { name: "3-channel relay module", status: "COMPLETED", role: "Active-low (LOW = ON). IN1 (GPIO25) switches Fan 1, IN2 (GPIO26) Fan 2 and IN3 (GPIO27) the water motor. VCC from the module's rated supply (5 V typical), GND to common ground." },
     { name: "Two exhaust fans", status: "COMPLETED", role: "Mounted on the rear extension frame, blowing room air forward through the pot array. Each fan has its own relay channel and its own temperature thresholds." },
     { name: "Water pump, tubing and reservoir", status: "COMPLETED", role: "The water motor (pump) and its tubing are installed with the reservoir. The pump is switched on humidity by the ESP32 and relay." },
-    { name: "Control logic", status: "IMPLEMENTED", role: "Running on the ESP32, with hysteresis. Fan 1: ON above 26 °C, OFF at or below 25 °C. Fan 2: ON above 30 °C, OFF at or below 29 °C. Water motor: ON below 60 % RH, OFF at or above 62 % RH. Between the two limits each output keeps its previous state." }
+    { name: "Control logic", status: "IMPLEMENTED", role: "Running on the ESP32, with hysteresis. Fan 1: ON above 26 °C, OFF at or below 25 °C. Fan 2: ON above 30 °C, OFF at or below 29 °C. Water motor: ON below 75 % RH, OFF at or above 77 % RH. Between the two limits each output keeps its previous state." }
   ],
 
   // Current status, grouped in plain English (Section 10). Do not repeat the journey here.
@@ -64,7 +64,7 @@ window.CLAYBREEZE_PROJECT = {
       items: [
         "Fan 1: ON above 26 °C, OFF at or below 25 °C.",
         "Fan 2: ON above 30 °C, OFF at or below 29 °C.",
-        "Water motor: ON below 60 % RH, OFF at or above 62 % RH.",
+        "Water motor: ON below 75 % RH, OFF at or above 77 % RH.",
         "Between the two limits each output keeps its previous state (hysteresis)."
       ]
     },
@@ -153,7 +153,7 @@ window.CLAYBREEZE_PROJECT = {
         "media/photos/Water_System_Tub_Front_Left_View.jpeg",
         "media/photos/Water_System_Tub_Side_View.jpeg"
       ],
-      text: "The water motor (pump) and its tubing were installed with the reservoir, and an ESP32, a DHT11 sensor and a 3-channel relay module were integrated to switch the fans and the pump. The control logic now runs on the ESP32 with hysteresis: Fan 1 ON above 26 °C and OFF at or below 25 °C, Fan 2 ON above 30 °C and OFF at or below 29 °C, and the pump ON below 60 % relative humidity and OFF at or above 62 %. With this step the prototype is fully assembled."
+      text: "The water motor (pump) and its tubing were installed with the reservoir, and an ESP32, a DHT11 sensor and a 3-channel relay module were integrated to switch the fans and the pump. The control logic now runs on the ESP32 with hysteresis: Fan 1 ON above 26 °C and OFF at or below 25 °C, Fan 2 ON above 30 °C and OFF at or below 29 °C, and the pump ON below 75 % relative humidity and OFF at or above 77 %. With this step the prototype is fully assembled."
     }
   ],
 
@@ -200,7 +200,7 @@ window.CLAYBREEZE_CONTROL = {
   // Hysteresis: ON past the first limit, OFF past the second, previous state in between.
   fan1: { onAboveC: 26, offAtOrBelowC: 25 },
   fan2: { onAboveC: 30, offAtOrBelowC: 29 },
-  pump: { onBelowRH: 60, offAtOrAboveRH: 62 },
+  pump: { onBelowRH: 75, offAtOrAboveRH: 77 },
   readIntervalS: 2,
   note: "The same thresholds and hysteresis as the sketch running on the ESP32."
 };

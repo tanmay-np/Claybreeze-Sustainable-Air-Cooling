@@ -38,7 +38,7 @@ Arrange the actual pots without forcing them into place. Check spacing, alignmen
 
 ### 6. Integrate the Control Electronics — done
 
-The DHT11, ESP32 and 3-channel relay module are integrated and drive the two fans and the water pump. The control logic running on the ESP32 switches the outputs with hysteresis — Fan 1 ON above 26 °C and OFF at or below 25 °C; Fan 2 ON above 30 °C and OFF at or below 29 °C; the water motor ON below 60 % RH and OFF at or above 62 % RH; between the limits each output keeps its previous state (see `docs/electronics-and-control.md`, which also gives the breadboard wiring). Firmware: `firmware/claybreeze_controller/`. Keep breadboard and connections away from any splash or runoff path.
+The DHT11, ESP32 and 3-channel relay module are integrated and drive the two fans and the water pump. The control logic running on the ESP32 switches the outputs with hysteresis — Fan 1 ON above 26 °C and OFF at or below 25 °C; Fan 2 ON above 30 °C and OFF at or below 29 °C; the water motor ON below 75 % RH and OFF at or above 77 % RH; between the limits each output keeps its previous state (see `docs/electronics-and-control.md`, which also gives the breadboard wiring). Firmware: `firmware/claybreeze_controller/`. Keep breadboard and connections away from any splash or runoff path.
 
 ### 7. Update CAD to Match the As-Built Assembly — future scope
 

@@ -24,7 +24,7 @@ Every ~2 s (timed with `millis()`, no blocking delay) the ESP32 reads the DHT11.
 |---|---|---|---|---|
 | Fan 1 | IN1 | GPIO25 | T > 26 °C | T ≤ 25 °C |
 | Fan 2 | IN2 | GPIO26 | T > 30 °C | T ≤ 29 °C |
-| Water motor | IN3 | GPIO27 | RH < 60 % | RH ≥ 62 % |
+| Water motor | IN3 | GPIO27 | RH < 75 % | RH ≥ 77 % |
 
 At start-up each relay pin is written HIGH **before** `pinMode(OUTPUT)`, so every relay starts OFF and none clicks on during boot.
 

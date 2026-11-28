@@ -18,7 +18,7 @@ These checks are part of the test method. See `docs/electronics-and-control.md` 
 
 - Compare DHT11 readings against a separate reference thermometer/hygrometer at the same location, to characterise sensor accuracy.
 - Record the fan states observed at the DHT11 reading: Fan 1 ON above 26 °C and OFF at or below 25 °C; Fan 2 ON above 30 °C and OFF at or below 29 °C.
-- Record the water-motor state: ON below 60 % RH, OFF at or above 62 % RH.
+- Record the water-motor state: ON below 75 % RH, OFF at or above 77 % RH.
 - Confirm the hysteresis: between the two limits each output keeps its previous state, so the relays do not chatter near a threshold (e.g. 25 → 26.5 → 25.5 → 24.5 °C gives Fan 1 OFF/ON/ON/OFF).
 - Record sensor placement (whether the DHT11 reads ambient, inlet or outlet air) and startup behaviour.
 

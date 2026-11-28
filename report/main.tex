@@ -96,7 +96,7 @@ Tanmay Mhaske\\
 \begin{abstract}
 \noindent Summer heat in Indian homes, classrooms and workshops is a real and growing problem, and affordable cooling is limited: the Government of India's \emph{India Cooling Action Plan} notes that India has one of the lowest levels of access to cooling in the world~\cite{icap}. Air conditioners are expensive to buy and run and use refrigerants with climate impact; evaporative coolers are cheaper but depend on honeycomb, cellulose or grass pads that clog, degrade, can harbour mould and must be replaced.
 
-\medskip\noindent ClayBreeze is a Makerspace prototype that replaces the consumable pad with \textbf{30 porous, unglazed terracotta pots} --- a natural, locally made, reusable and biodegradable material --- held in a welded 20\,mm square-pipe frame (480 $\times$ 560 $\times$ 150\,mm). A pump in a tub below the frame recirculates water through tubing to the top of the pots, and two rear-mounted exhaust fans blow room air through and around the wet pots. An ESP32 microcontroller reads a DHT11 temperature and humidity sensor and switches the fans and pump through a three-channel relay with hysteresis: Fan~1 switches on above 26\degC{} and off at or below 25\degC, Fan~2 on above 30\degC{} and off at or below 29\degC, and the water motor on below 60\,\% relative humidity and off at or above 62\,\%; between the two limits each output keeps its previous state.
+\medskip\noindent ClayBreeze is a Makerspace prototype that replaces the consumable pad with \textbf{30 porous, unglazed terracotta pots} --- a natural, locally made, reusable and biodegradable material --- held in a welded 20\,mm square-pipe frame (480 $\times$ 560 $\times$ 150\,mm). A pump in a tub below the frame recirculates water through tubing to the top of the pots, and two rear-mounted exhaust fans blow room air through and around the wet pots. An ESP32 microcontroller reads a DHT11 temperature and humidity sensor and switches the fans and pump through a three-channel relay with hysteresis: Fan~1 switches on above 26\degC{} and off at or below 25\degC, Fan~2 on above 30\degC{} and off at or below 29\degC, and the water motor on below 75\,\% relative humidity and off at or above 77\,\%; between the two limits each output keeps its previous state.
 
 \medskip\noindent The prototype is fully built and its control logic is running. This report documents the problem, background, design and CAD, materials, fabrication, water system, electronics, safety and the test method. \textbf{No performance results are reported}: low cost, low power, no pad replacement and an eco-friendly build are the design aims, and they will be checked by the measurements described in Chapter~\ref{ch:testing}.
 \end{abstract}
@@ -442,13 +442,13 @@ The ESP32 reads temperature and relative humidity from the DHT11 and drives a th
 \midrule
 Fan 1 & IN1 / GPIO25 & $> 26$\degC & $\le 25$\degC \\
 Fan 2 & IN2 / GPIO26 & $> 30$\degC & $\le 29$\degC \\
-Water motor & IN3 / GPIO27 & $< 60$\,\% RH & $\ge 62$\,\% RH \\
+Water motor & IN3 / GPIO27 & $< 75$\,\% RH & $\ge 77$\,\% RH \\
 \bottomrule
 \end{tabular}
 \end{table}
 \label{tab:pump}
 
-\noindent The 1\,\degC{} and 2\,\% bands stop the relays from switching on and off rapidly when a reading sits near a threshold. For example, 25 $\rightarrow$ 26.5 $\rightarrow$ 25.5 $\rightarrow$ 24.5\degC{} gives Fan~1 OFF, ON, ON, OFF; and 59 $\rightarrow$ 61 $\rightarrow$ 62 $\rightarrow$ 61 $\rightarrow$ 59\,\% RH gives the water motor ON, ON, OFF, OFF, ON. All relays start OFF at power-on. Two physical points matter when interpreting this logic:
+\noindent The 1\,\degC{} and 2\,\% bands stop the relays from switching on and off rapidly when a reading sits near a threshold. For example, 25 $\rightarrow$ 26.5 $\rightarrow$ 25.5 $\rightarrow$ 24.5\degC{} gives Fan~1 OFF, ON, ON, OFF; and 59 $\rightarrow$ 61 $\rightarrow$ 77 $\rightarrow$ 61 $\rightarrow$ 59\,\% RH gives the water motor ON, ON, OFF, OFF, ON. All relays start OFF at power-on. Two physical points matter when interpreting this logic:
 \begin{itemize}
 \item Direct evaporative cooling has less potential in humid air~\cite{watson}, so stopping the pump at high RH avoids pumping water for little benefit.
 \item Stopping the pump does not instantly dry the pots; their surfaces keep evaporating for some time, so humidity and cooling lag the pump's on/off state.

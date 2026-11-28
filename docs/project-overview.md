@@ -57,7 +57,7 @@ The project must also establish whether the pots wet consistently, whether exces
 
 ### Proposed solution
 
-ClayBreeze replaces the pad with **30 porous, unglazed terracotta pots** (5 × 6) held on six ⌀12 mm rods in a welded 20 mm square-pipe frame. A pump in a tub under the frame lifts water through tubing to the top of the pots; excess water drains back to the tub. Two exhaust fans on a rear extension frame blow room air forward through and around the wet pots. An **ESP32** reads a **DHT11** sensor and switches the fans and pump through a **3-channel relay**: Fan 1 ON above 26 °C and OFF at or below 25 °C; Fan 2 ON above 30 °C and OFF at or below 29 °C; the water motor ON below 60 % RH and OFF at or above 62 % RH; between the limits each output keeps its previous state. Clay is natural, locally made, reusable and biodegradable, so there is no pad to replace. Low cost, low power and an eco-friendly build are the **design aims**; they will be checked by testing.
+ClayBreeze replaces the pad with **30 porous, unglazed terracotta pots** (5 × 6) held on six ⌀12 mm rods in a welded 20 mm square-pipe frame. A pump in a tub under the frame lifts water through tubing to the top of the pots; excess water drains back to the tub. Two exhaust fans on a rear extension frame blow room air forward through and around the wet pots. An **ESP32** reads a **DHT11** sensor and switches the fans and pump through a **3-channel relay**: Fan 1 ON above 26 °C and OFF at or below 25 °C; Fan 2 ON above 30 °C and OFF at or below 29 °C; the water motor ON below 75 % RH and OFF at or above 77 % RH; between the limits each output keeps its previous state. Clay is natural, locally made, reusable and biodegradable, so there is no pad to replace. Low cost, low power and an eco-friendly build are the **design aims**; they will be checked by testing.
 
 ## 5. Working Principle: Evaporative Cooling with Porous Clay
 
@@ -96,7 +96,7 @@ The current concept places the clay-pot array inside a fabricated square-pipe fr
 | Clay elements | Small hollow-through, unglazed clay pots | Pots are fixed in place. |
 | Fan mount | Rear extension frame | **Completed**; both exhaust fans are mounted on it. |
 | Electronics | ESP32, relay module, DHT11 sensor, breadboard and jumper wires | Integrated (with a 3-channel relay module); fan and water-motor control with hysteresis **IMPLEMENTED** and running; breadboard wiring and firmware documented. See `docs/electronics-and-control.md`. |
-| Water delivery | Pump, tubing, and a top distribution arrangement | Pump and tubing: **installed**. Pump ON below 60 % RH, OFF at or above 62 % RH. |
+| Water delivery | Pump, tubing, and a top distribution arrangement | Pump and tubing: **installed**. Pump ON below 75 % RH, OFF at or above 77 % RH. |
 | Reservoir | Bottom tub to collect return water | **Installed**. |
 | Air movement | Two exhaust fans on the rear extension frame, behind the pots | Fan 1: ON above 26 °C, OFF at or below 25 °C. Fan 2: ON above 30 °C, OFF at or below 29 °C (ESP32 + relay). |
 

@@ -63,9 +63,9 @@ Example for Fan 1: 25 → 26.5 → 25.5 → 24.5 °C gives OFF → ON → ON →
 
 | Output | ON | OFF | Between the limits |
 |---|---|---|---|
-| **Water motor** (IN3, GPIO27) | below 60 % RH | at or above 62 % RH | keeps its previous state |
+| **Water motor** (IN3, GPIO27) | below 75 % RH | at or above 77 % RH | keeps its previous state |
 
-Example: 59 → 61 → 62 → 61 → 59 % RH gives ON → ON → OFF → OFF → ON.
+Example: 74 → 76 → 77 → 76 → 74 % RH gives ON → ON → OFF → OFF → ON.
 
 Two physical effects are worth keeping in mind when interpreting this logic:
 
@@ -82,7 +82,7 @@ Two physical effects are worth keeping in mind when interpreting this logic:
 ## 7. Engineering Notes
 
 - **Sensor placement:** where the DHT11 sits (ambient, inlet or outlet air) affects what the thresholds respond to.
-- **Threshold choice:** the 26/25 °C, 30/29 °C and 60/62 % RH values set when each output switches; performance measurement will show how well they suit the cooler (see `docs/testing-and-results.md`).
+- **Threshold choice:** the 26/25 °C, 30/29 °C and 75/77 % RH values set when each output switches; performance measurement will show how well they suit the cooler (see `docs/testing-and-results.md`).
 
 ## 8. Status Summary
 
