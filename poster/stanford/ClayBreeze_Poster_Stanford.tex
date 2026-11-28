@@ -182,8 +182,8 @@ Fan 2 & \textcolor{cbok}{\textbf{$> 30$\degC}} & $\le 29$\degC \\
 \begin{block}{Electronics}
 \begin{itemize}
 \item \textbf{ESP32} on a breadboard --- runs the logic
-\item \textbf{DHT11} --- DATA on GPIO4 (13J), 3.3V rail
-\item \textbf{3-channel relay} (5V rail) --- IN1 GPIO19 Fan 1, IN2 GPIO21 Fan 2, IN3 GPIO22 water motor
+\item \textbf{DHT11} --- DATA on GPIO32 (7A), VCC from ESP32 3.3V
+\item \textbf{3-channel relay} (active-low) --- IN1 GPIO25 Fan 1, IN2 GPIO26 Fan 2, IN3 GPIO27 water motor
 \item \textbf{Firmware} --- \texttt{firmware/claybreeze\_controller}
 \end{itemize}
 \end{block}

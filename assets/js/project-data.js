@@ -36,9 +36,9 @@ window.CLAYBREEZE_PROJECT = {
 
   // Component list for the Electronics section. Pins follow the confirmed wiring table (Section 07).
   components: [
-    { name: "ESP32 microcontroller", status: "COMPLETED", role: "Straddles the breadboard centre gap (antenna at top, USB at bottom). Reads the DHT11 on GPIO4, runs the control logic and drives the relay inputs on GPIO19, GPIO21 and GPIO22." },
-    { name: "DHT11 sensor", status: "COMPLETED", role: "Measures temperature and relative humidity. VCC on the 3.3 V rail, GND on the ground rail, DATA to 13J (GPIO4)." },
-    { name: "3-channel relay module", status: "COMPLETED", role: "VCC/DC+ on the 5 V rail, GND/DC− on common ground. IN1 (8J, GPIO19) switches Fan 1, IN2 (6J, GPIO21) Fan 2 and IN3 (3J, GPIO22) the water motor." },
+    { name: "ESP32 microcontroller", status: "COMPLETED", role: "Mounted on the breadboard. Reads the DHT11 on GPIO32 (7A), runs the control logic and drives the relay inputs on GPIO25, GPIO26 and GPIO27 (9A, 10A, 11A); GND at 14A." },
+    { name: "DHT11 sensor", status: "COMPLETED", role: "Measures temperature and relative humidity. VCC to ESP32 3.3V, GND to common ground, DATA to GPIO32 (7A)." },
+    { name: "3-channel relay module", status: "COMPLETED", role: "Active-low (LOW = ON). IN1 (GPIO25) switches Fan 1, IN2 (GPIO26) Fan 2 and IN3 (GPIO27) the water motor. VCC from the module's rated supply (5 V typical), GND to common ground." },
     { name: "Two exhaust fans", status: "COMPLETED", role: "Mounted on the rear extension frame, blowing room air forward through the pot array. Each fan has its own relay channel and its own temperature thresholds." },
     { name: "Water pump, tubing and reservoir", status: "COMPLETED", role: "The water motor (pump) and its tubing are installed with the reservoir. The pump is switched on humidity by the ESP32 and relay." },
     { name: "Control logic", status: "IMPLEMENTED", role: "Running on the ESP32, with hysteresis. Fan 1: ON above 26 °C, OFF at or below 25 °C. Fan 2: ON above 30 °C, OFF at or below 29 °C. Water motor: ON below 60 % RH, OFF at or above 62 % RH. Between the two limits each output keeps its previous state." }

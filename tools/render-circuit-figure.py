@@ -5,6 +5,7 @@ Needs a local web server at the repository root (e.g. python -m http.server 4317
 """
 import argparse
 import subprocess
+import tempfile
 from pathlib import Path
 
 from PIL import Image
@@ -21,7 +22,8 @@ def main():
     ap.add_argument("--rh", default="55")
     a = ap.parse_args()
     url = f"http://127.0.0.1:{a.port}/tools/circuit-figure.html?t={a.t}&rh={a.rh}"
-    subprocess.run([EDGE, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--force-device-scale-factor=1",
+    profile = tempfile.mkdtemp(prefix="cb-edge-")  # fresh profile: never reuse cached scripts
+    subprocess.run([EDGE, "--headless=new", f"--user-data-dir={profile}", "--disable-gpu", "--hide-scrollbars", "--force-device-scale-factor=1",
                     "--window-size=1040,1300", "--virtual-time-budget=3000", f"--screenshot={OUT}", url],
                    check=True, capture_output=True, timeout=60)
     with Image.open(OUT) as im:

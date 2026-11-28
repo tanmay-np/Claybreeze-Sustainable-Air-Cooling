@@ -602,6 +602,8 @@ body.presentation-mode .s-label { font-size: 19px; }
 .cl-xs { font-size: 10px; } .cl-sm { font-size: 12px; } .cl-md { font-size: 14px; font-weight: 600; }
 .cl-muted { fill: var(--muted); }
 .cl-rownum { stroke: var(--surface-2); stroke-width: 4; paint-order: stroke; }
+.cl-ground { fill: none; stroke: var(--cgnd); stroke-width: 2; stroke-linecap: round; }
+.cl-stub-t { fill: var(--muted); }
 .cl-sign { font-size: 15px; font-weight: 700; }
 .cl-rail-3v3-t { fill: var(--c3v3); } .cl-rail-gnd-t { fill: var(--cgnd); } .cl-rail-5v-t { fill: var(--c5v); }
 .cl-board { fill: var(--surface-2); stroke: var(--line-strong); stroke-width: 1.5; }

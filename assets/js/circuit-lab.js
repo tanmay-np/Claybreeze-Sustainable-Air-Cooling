@@ -10,6 +10,8 @@
  * firmware/claybreeze_controller): each output switches ON past one limit and OFF
  * past the other, and keeps its previous state in between (hysteresis).
  *
+ * The relay module is active-low: a GPIO at LOW switches its channel ON.
+ *
  * Animation runs only while the figure is on screen and stops under
  * prefers-reduced-motion or the ?reducedmotion test flag.
  */
@@ -40,92 +42,81 @@
   function resetLogic() { state.fan1 = state.fan2 = state.pump = false; } // the sketch starts with every relay OFF
 
   // ------------------------------------------------------------------ drawing
-  // Breadboard grid: rows 1–19 top to bottom (antenna end at the top), columns A–J.
+  // Breadboard grid: rows 1–19 top to bottom. Column A is drawn on the right-hand side, next to
+  // the ESP32 pins in use (7A, 9A, 10A, 11A, 14A). Supply and ground connections that have no
+  // breadboard position in the wiring table are drawn as labelled stubs and ground symbols.
   const Y = (r) => 58 + (r - 1) * 19;
-  const COL = { A: 66, B: 84, C: 102, D: 120, E: 138, F: 162, G: 180, H: 198, I: 216, J: 234 };
-  const RAIL = { lp: 24, ln: 42, rn: 258, rp: 276 }; // left +3.3V, left GND, right GND, right +5V
+  const COL = { J: 66, I: 84, H: 102, G: 120, F: 138, E: 162, D: 180, C: 198, B: 216, A: 234 };
+  const STUB = 318;
 
   const WIRES = [
-    { id: "v5", cls: "w-5v", d: `M${COL.J},${Y(1)} H${RAIL.rp}`, info: "1J · V5 (5V) → right positive rail (5V)" },
-    { id: "g3v3", cls: "w-3v3", d: `M${COL.B},${Y(19)} H${RAIL.lp}`, info: "19B · 3V3 → left positive rail (3.3V)" },
-    { id: "gndL", cls: "w-gnd", d: `M${COL.B},${Y(14)} H${RAIL.ln}`, info: "14B · GND → left negative rail (GND)" },
-    { id: "gndR", cls: "w-gnd", d: `M${COL.J},${Y(7)} H${RAIL.rn}`, info: "7J · GND → right negative rail (GND)" },
-    { id: "g4", cls: "w-data", d: `M340,${Y(13)} H${COL.J}`, info: "13J · GPIO4 (G4) → DHT11 DATA" },
-    { id: "g19", cls: "w-sig", out: "fan1", d: `M${COL.J},${Y(8)} H330`, info: "8J · GPIO19 (G19) → Relay IN1 – Fan 1" },
-    { id: "g21", cls: "w-sig", out: "fan2", d: `M${COL.J},${Y(6)} H330`, info: "6J · GPIO21 (G21) → Relay IN2 – Fan 2" },
-    { id: "g22", cls: "w-sig", out: "pump", d: `M${COL.J},${Y(3)} H330`, info: "3J · GPIO22 (G22) → Relay IN3 – Water motor" },
-    { id: "dhtGnd", cls: "w-gnd", d: `M340,${Y(14)} H${RAIL.rn}`, info: "DHT11 GND → GND rail (the ground rails are connected together)" },
-    { id: "dhtVcc", cls: "w-3v3", d: `M340,${Y(15)} H310 V458 H${RAIL.lp} V430`, info: "DHT11 VCC → 3.3V rail" },
-    { id: "rlyVcc", cls: "w-5v", d: `M330,44 H${RAIL.rp}`, info: "Relay VCC/DC+ → 5V rail" },
-    { id: "rlyGnd", cls: "w-gnd", d: `M330,66 H${RAIL.rn}`, info: "Relay GND/DC− → common GND" },
-    { id: "out1", cls: "w-load", out: "fan1", d: `M444,${Y(8)} H482 V470 H90 V514`, info: "Relay channel 1 (IN1) contacts → Fan 1 (supply wiring simplified)" },
-    { id: "out2", cls: "w-load", out: "fan2", d: `M444,${Y(6)} H494 V478 H250 V514`, info: "Relay channel 2 (IN2) contacts → Fan 2 (supply wiring simplified)" },
-    { id: "out3", cls: "w-load", out: "pump", d: `M444,${Y(3)} H506 V486 H420 V560`, info: "Relay channel 3 (IN3) contacts → water motor (supply wiring simplified)" }
+    { id: "g32", cls: "w-data", d: `M340,${Y(7)} H${COL.A}`, info: "7A · GPIO32 → DHT11 DATA" },
+    { id: "g25", cls: "w-sig", out: "fan1", d: `M${COL.A},${Y(9)} H340`, info: "9A · GPIO25 → Relay IN1 – Fan 1 (active-low: LOW = ON)" },
+    { id: "g26", cls: "w-sig", out: "fan2", d: `M${COL.A},${Y(10)} H340`, info: "10A · GPIO26 → Relay IN2 – Fan 2 (active-low: LOW = ON)" },
+    { id: "g27", cls: "w-sig", out: "pump", d: `M${COL.A},${Y(11)} H340`, info: "11A · GPIO27 → Relay IN3 – Water motor (active-low: LOW = ON)" },
+    { id: "gnd", cls: "w-gnd", d: `M${COL.A},${Y(14)} H264`, info: "14A · GND → common ground" },
+    { id: "dhtVcc", cls: "w-3v3", d: `M340,134 H${STUB} V108`, info: "DHT11 VCC → ESP32 3.3V" },
+    { id: "dhtGnd", cls: "w-gnd", d: `M340,153 H${STUB}`, info: "DHT11 GND → common GND" },
+    { id: "rlyVcc", cls: "w-5v", d: `M340,274 H${STUB}`, info: "Relay VCC → the module's rated supply (5 V typical)" },
+    { id: "rlyGnd", cls: "w-gnd", d: `M340,293 H${STUB}`, info: "Relay GND → common GND" },
+    { id: "out1", cls: "w-load", out: "fan1", d: "M452,306 H482 V470 H90 V514", info: "Relay channel 1 (IN1) contacts → Fan 1 (supply wiring simplified)" },
+    { id: "out2", cls: "w-load", out: "fan2", d: "M452,262 H494 V478 H250 V514", info: "Relay channel 2 (IN2) contacts → Fan 2 (supply wiring simplified)" },
+    { id: "out3", cls: "w-load", out: "pump", d: "M452,218 H506 V486 H420 V560", info: "Relay channel 3 (IN3) contacts → water motor (supply wiring simplified)" }
   ];
-  // Labelled ESP32 header pins (from the wiring table); the other pins are left unconnected.
-  const PINS = [
-    { side: "R", r: 1, t: "V5" }, { side: "R", r: 3, t: "G22" }, { side: "R", r: 6, t: "G21" }, { side: "R", r: 7, t: "GND" },
-    { side: "R", r: 8, t: "G19" }, { side: "R", r: 13, t: "G4" }, { side: "L", r: 14, t: "GND" }, { side: "L", r: 19, t: "3V3" }
+  // Labelled ESP32 pins (from the wiring table); the other pins are left unconnected.
+  const PINS = [{ r: 7, t: "G32" }, { r: 9, t: "G25" }, { r: 10, t: "G26" }, { r: 11, t: "G27" }, { r: 14, t: "GND" }];
+  const CHANNELS = [ // inY: header pin height; y: the channel's relay block
+    { out: "fan1", inY: Y(9), y: 306, pin: "IN1", load: "Fan 1" },
+    { out: "fan2", inY: Y(10), y: 262, pin: "IN2", load: "Fan 2" },
+    { out: "pump", inY: Y(11), y: 218, pin: "IN3", load: "Pump" }
   ];
-  const CHANNELS = [ // relay channels, drawn at the height of their IN pin
-    { out: "fan1", y: Y(8), pin: "IN1", load: "Fan 1" },
-    { out: "fan2", y: Y(6), pin: "IN2", load: "Fan 2" },
-    { out: "pump", y: Y(3), pin: "IN3", load: "Pump" }
-  ];
+  const ground = (x, y) => `<path class="cl-ground" d="M${x},${y} v6 M${x - 8},${y + 6} h16 M${x - 5},${y + 10} h10 M${x - 2},${y + 14} h4"/>`;
 
   let svg = "";
   svg += `<defs><filter id="cl-glow" filterUnits="userSpaceOnUse" x="0" y="0" width="520" height="650"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
   // breadboard
-  svg += `<rect class="cl-board" x="10" y="20" width="280" height="420" rx="6"/>`;
+  svg += `<rect class="cl-board" x="24" y="20" width="230" height="420" rx="6"/>`;
   svg += `<rect class="cl-gap" x="144" y="24" width="12" height="412"/>`;
-  [["lp", "cl-rail-3v3", "+"], ["ln", "cl-rail-gnd", "−"], ["rn", "cl-rail-gnd", "−"], ["rp", "cl-rail-5v", "+"]].forEach(([k, cls, sign]) => {
-    svg += `<line class="cl-rail ${cls}" x1="${RAIL[k]}" y1="30" x2="${RAIL[k]}" y2="430"/>`;
-    svg += `<text class="cl-t cl-sign ${cls}-t" x="${RAIL[k]}" y="14" text-anchor="middle">${sign}</text>`;
-  });
-  for (let r = 1; r <= 19; r++) {
-    const y = Y(r);
-    ["A", "B", "I", "J"].forEach((c) => { svg += `<circle class="cl-hole" cx="${COL[c]}" cy="${y}" r="2.3"/>`; });
-    Object.values(RAIL).forEach((x) => { svg += `<circle class="cl-hole" cx="${x}" cy="${y}" r="2"/>`; });
-  }
-  ["A", "B", "I", "J"].forEach((c) => { svg += `<text class="cl-t cl-xs cl-muted" x="${COL[c]}" y="45" text-anchor="middle">${c}</text>`; });
-  // ESP32 board (straddles the centre gap; antenna at top, USB at bottom)
+  for (let r = 1; r <= 19; r++) ["J", "I", "B", "A"].forEach((c) => { svg += `<circle class="cl-hole" cx="${COL[c]}" cy="${Y(r)}" r="2.3"/>`; });
+  ["J", "I", "B", "A"].forEach((c) => { svg += `<text class="cl-t cl-xs cl-muted" x="${COL[c]}" y="45" text-anchor="middle">${c}</text>`; });
+  // ESP32 board
   svg += `<g class="cl-esp"><rect class="cl-pcb" x="94" y="26" width="112" height="410" rx="4"/>`;
   svg += `<path class="cl-antenna" d="M118,34 h8 v8 h8 v-8 h8 v8 h8 v-8 h8 v8 h8 v-8 h6"/>`;
   svg += `<rect class="cl-can" id="cl-can" x="116" y="52" width="52" height="98" rx="2"/>`;
   svg += `<text class="cl-t cl-chip-t" x="142" y="98" text-anchor="middle">ESP32</text>`;
-  svg += `<text class="cl-t cl-xs cl-muted" x="150" y="14" text-anchor="middle">▲ antenna</text>`;
   svg += `<rect class="cl-usb" x="134" y="422" width="32" height="16" rx="2"/><text class="cl-t cl-xs cl-on-dark" x="150" y="414" text-anchor="middle">USB</text>`;
   for (let r = 1; r <= 19; r++) svg += `<circle class="cl-pin" cx="${COL.C}" cy="${Y(r)}" r="2.6"/><circle class="cl-pin" cx="${COL.H}" cy="${Y(r)}" r="2.6"/>`;
-  PINS.forEach((p) => {
-    svg += p.side === "R"
-      ? `<text class="cl-t cl-pin-t" x="${COL.H - 6}" y="${Y(p.r) + 4}" text-anchor="end">${p.t}</text>`
-      : `<text class="cl-t cl-pin-t" x="${COL.C + 6}" y="${Y(p.r) + 4}">${p.t}</text>`;
-  });
+  PINS.forEach((p) => { svg += `<text class="cl-t cl-pin-t" x="${COL.C - 6}" y="${Y(p.r) + 4}" text-anchor="end">${p.t}</text>`; });
   svg += `</g>`;
-  // relay module
-  svg += `<g class="cl-relay"><rect class="cl-relay-pcb" x="330" y="30" width="110" height="190" rx="5"/>`;
-  [["DC+", 44], ["DC−", 66]].forEach(([t, y]) => { svg += `<circle class="cl-pin" cx="330" cy="${y}" r="3"/><text class="cl-t cl-pin-t" x="337" y="${y + 4}">${t}</text>`; });
+  // DHT11 (pins: VCC, GND, DATA)
+  svg += `<text class="cl-t cl-sm" x="382" y="112" text-anchor="middle">DHT11</text>`;
+  svg += `<text class="cl-t cl-sm cl-reading" id="cl-reading" x="382" y="74" text-anchor="middle"></text>`;
+  svg += `<g class="cl-dht"><rect class="cl-dht-body" x="340" y="120" width="84" height="72" rx="4"/>`;
+  for (let gx = 0; gx < 4; gx++) for (let gy = 0; gy < 5; gy++) svg += `<rect class="cl-grille" x="${382 + gx * 10}" y="${126 + gy * 12}" width="6" height="8" rx="1"/>`;
+  [["VCC", 134], ["GND", 153], ["DATA", Y(7)]].forEach(([t, y]) => { svg += `<circle class="cl-pin" cx="340" cy="${y}" r="3"/><text class="cl-t cl-pin-t" x="346" y="${y + 4}">${t}</text>`; });
+  svg += `</g>`;
+  // relay module (header: IN1, IN2, IN3, VCC, GND)
+  svg += `<g class="cl-relay"><rect class="cl-relay-pcb" x="340" y="200" width="112" height="128" rx="5"/>`;
+  CHANNELS.forEach((ch) => { svg += `<circle class="cl-pin" cx="340" cy="${ch.inY}" r="3"/><text class="cl-t cl-pin-t" x="346" y="${ch.inY + 4}">${ch.pin}</text>`; });
+  [["VCC", 274], ["GND", 293]].forEach(([t, y]) => { svg += `<circle class="cl-pin" cx="340" cy="${y}" r="3"/><text class="cl-t cl-pin-t" x="346" y="${y + 4}">${t}</text>`; });
   CHANNELS.forEach((ch) => {
-    svg += `<circle class="cl-pin" cx="330" cy="${ch.y}" r="3"/><text class="cl-t cl-pin-t" x="337" y="${ch.y + 4}">${ch.pin}</text>`;
-    svg += `<circle class="cl-led" data-out="${ch.out}" cx="371" cy="${ch.y}" r="4.5"/>`;
-    svg += `<rect class="cl-cube" x="382" y="${ch.y - 15}" width="48" height="30" rx="2"/><text class="cl-t cl-pin-t" x="406" y="${ch.y + 4}" text-anchor="middle">${ch.load}</text>`;
-    svg += `<rect class="cl-term" x="432" y="${ch.y - 8}" width="12" height="16" rx="1"/>`;
+    svg += `<circle class="cl-led" data-out="${ch.out}" cx="381" cy="${ch.y}" r="4.5"/>`;
+    svg += `<rect class="cl-cube" x="390" y="${ch.y - 15}" width="48" height="30" rx="2"/><text class="cl-t cl-pin-t" x="414" y="${ch.y + 4}" text-anchor="middle">${ch.load}</text>`;
+    svg += `<rect class="cl-term" x="440" y="${ch.y - 8}" width="12" height="16" rx="1"/>`;
   });
-  svg += `</g><text class="cl-t cl-sm" x="385" y="238" text-anchor="middle">3-channel relay</text>`;
-  // DHT11
-  svg += `<g class="cl-dht"><rect class="cl-dht-body" x="340" y="268" width="84" height="74" rx="4"/>`;
-  for (let gx = 0; gx < 4; gx++) for (let gy = 0; gy < 5; gy++) svg += `<rect class="cl-grille" x="${380 + gx * 10}" y="${276 + gy * 12}" width="6" height="8" rx="1"/>`;
-  [["DATA", Y(13)], ["GND", Y(14)], ["VCC", Y(15)]].forEach(([t, y]) => { svg += `<circle class="cl-pin" cx="340" cy="${y}" r="3"/><text class="cl-t cl-pin-t" x="346" y="${y + 4}">${t}</text>`; });
-  svg += `</g><text class="cl-t cl-sm" x="382" y="360" text-anchor="middle">DHT11</text>`;
-  svg += `<text class="cl-t cl-sm cl-reading" id="cl-reading" x="382" y="378" text-anchor="middle"></text>`;
+  svg += `</g><text class="cl-t cl-sm" x="396" y="346" text-anchor="middle">3-channel relay</text><text class="cl-t cl-xs cl-muted" x="396" y="362" text-anchor="middle">active-low: LOW = ON</text>`;
   // wires (halo + visible + wide invisible hit area)
   WIRES.forEach((w) => {
     svg += `<g class="cl-wire ${w.cls}" data-wire="${w.id}"${w.out ? ` data-out="${w.out}"` : ""} tabindex="0" aria-label="${w.info}">`;
     svg += `<path class="halo" d="${w.d}"/><path class="vis" d="${w.d}"/><path class="hit" d="${w.d}"/>`;
     svg += `<circle class="end" cx="${w.d.match(/^M([\d.]+),([\d.]+)/)[1]}" cy="${w.d.match(/^M([\d.]+),([\d.]+)/)[2]}" r="3.4"/></g>`;
   });
+  // supply labels and ground symbols
+  svg += `<text class="cl-t cl-xs cl-stub-t" x="${STUB}" y="100" text-anchor="middle">ESP32 3.3V</text>`;
+  svg += `<text class="cl-t cl-xs cl-stub-t" x="${STUB - 6}" y="278" text-anchor="end">5 V</text>`;
+  svg += ground(STUB, 153) + ground(STUB, 293) + ground(264, Y(14));
   // row numbers on top of the wires, with a halo so a jumper never hides them
-  for (let r = 1; r <= 19; r++) svg += `<text class="cl-t cl-xs cl-muted cl-rownum" x="54" y="${Y(r) + 3.5}" text-anchor="middle">${r}</text>`;
+  for (let r = 1; r <= 19; r++) svg += `<text class="cl-t cl-xs cl-muted cl-rownum" x="46" y="${Y(r) + 3.5}" text-anchor="middle">${r}</text>`;
   // loads
   const fan = (out, cx, label) => {
     let g = `<g class="cl-load" data-out="${out}"><circle class="cl-fan-ring" cx="${cx}" cy="560" r="46"/><g class="cl-blades" id="cl-blades-${out}">`;
@@ -141,12 +132,12 @@
   svg += `<text class="cl-t cl-xs cl-muted" x="474" y="512" text-anchor="middle">to pots</text>`;
   svg += `<text class="cl-t cl-md" x="420" y="626" text-anchor="middle">Water motor</text><text class="cl-t cl-sm cl-state" x="420" y="644" text-anchor="middle">OFF</text></g>`;
   // pulses
-  svg += `<path id="cl-path-data" class="cl-ghost" d="M340,${Y(13)} H${COL.H} L142,150"/>`;
-  CHANNELS.forEach((ch) => { svg += `<path id="cl-path-${ch.out}" class="cl-ghost" d="M142,150 L${COL.H},${ch.y} H330"/>`; });
+  svg += `<path id="cl-path-data" class="cl-ghost" d="M340,${Y(7)} H${COL.C} L142,150"/>`;
+  CHANNELS.forEach((ch) => { svg += `<path id="cl-path-${ch.out}" class="cl-ghost" d="M142,150 L${COL.C},${ch.inY} H340"/>`; });
   svg += `<circle class="cl-pulse cl-pulse-data" id="cl-pulse-data" r="5" cx="-20" cy="-20"/>`;
   CHANNELS.forEach((ch) => { svg += `<circle class="cl-pulse cl-pulse-sig" id="cl-pulse-${ch.out}" r="5" cx="-20" cy="-20"/>`; });
 
-  host.innerHTML = `<svg class="cl-svg" viewBox="0 0 520 650" xmlns="${NS}" role="group" aria-label="Breadboard wiring of the ClayBreeze controller: ESP32, DHT11 on GPIO4, 3-channel relay on GPIO19, 21 and 22, two fans and the water motor">${svg}</svg>`;
+  host.innerHTML = `<svg class="cl-svg" viewBox="0 0 520 650" xmlns="${NS}" role="group" aria-label="Breadboard wiring of the ClayBreeze controller: ESP32, DHT11 on GPIO32, active-low 3-channel relay on GPIO25, 26 and 27, two fans and the water motor">${svg}</svg>`;
   const root = host.firstElementChild;
   const q = (sel) => root.querySelector(sel);
   const qa = (sel) => [...root.querySelectorAll(sel)];
@@ -224,8 +215,8 @@
 
   function render() {
     const { t, rh, fan1, fan2, pump } = state;
-    fanOutputs.replaceChildren(chip("Fan 1", fan1), chip("Fan 2", fan2));
-    pumpOutputs.replaceChildren(chip("Water motor", pump));
+    fanOutputs.replaceChildren(chip(`Fan 1 · IN1 ${fan1 ? "LOW" : "HIGH"}`, fan1), chip(`Fan 2 · IN2 ${fan2 ? "LOW" : "HIGH"}`, fan2));
+    pumpOutputs.replaceChildren(chip(`Water motor · IN3 ${pump ? "LOW" : "HIGH"}`, pump));
     paintRow(fanRows[0], zoneFan(t, C.fan1), fan1);
     paintRow(fanRows[1], zoneFan(t, C.fan2), fan2);
     paintRow(pumpRows[0], zonePump(rh), pump);
@@ -234,7 +225,7 @@
     pumpExplain.textContent = z === "on" ? `${rr} is below ${C.pump.onBelowRH} %, so the water motor is ON.`
       : z === "off" ? `${rr} is at or above ${C.pump.offAtOrAboveRH} %, so the water motor is OFF.`
         : `${rr} is between ${C.pump.onBelowRH} and ${C.pump.offAtOrAboveRH} %, so the water motor keeps its previous state: ${pump ? "ON" : "OFF"}.`;
-    if (readout) readout.textContent = `Reading ${fmt(t)}${deg} · ${fmt(rh)} % RH → Fan 1 ${fan1 ? "ON" : "OFF"} · Fan 2 ${fan2 ? "ON" : "OFF"} · Water motor ${pump ? "ON" : "OFF"}`;
+    if (readout) readout.textContent = `Reading ${fmt(t)}${deg} · ${fmt(rh)} % RH  |  IN1 ${fan1 ? "LOW → Fan 1 ON" : "HIGH → Fan 1 OFF"} · IN2 ${fan2 ? "LOW → Fan 2 ON" : "HIGH → Fan 2 OFF"} · IN3 ${pump ? "LOW → Water motor ON" : "HIGH → Water motor OFF"}`;
     // circuit
     const on = { fan1, fan2, pump };
     qa("[data-out]").forEach((n) => n.classList.toggle("is-on", !!on[n.dataset.out]));

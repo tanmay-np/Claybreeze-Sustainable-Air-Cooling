@@ -1,121 +1,120 @@
+/*
+ * ClayBreeze controller — ESP32 + DHT11 + 3-channel relay module
+ *
+ * Pins
+ *   DHT11 DATA          GPIO32  (breadboard 7A)
+ *   Relay IN1 – Fan 1   GPIO25  (9A)
+ *   Relay IN2 – Fan 2   GPIO26  (10A)
+ *   Relay IN3 – Motor   GPIO27  (11A)
+ *   GND                 common ground (14A)
+ *
+ * Relay module is ACTIVE-LOW: LOW = ON, HIGH = OFF.
+ *
+ * Control logic with hysteresis (between the limits each output keeps its state)
+ *   Fan 1: ON when T > 26 °C, OFF when T <= 25 °C
+ *   Fan 2: ON when T > 30 °C, OFF when T <= 29 °C
+ *   Motor: ON when RH < 60 %, OFF when RH >= 62 %
+ *
+ * The DHT11 is read about every 2 s (millis(), no blocking delay).
+ * A failed reading (NaN) is skipped and the outputs stay as they are.
+ *
+ * Library: "DHT sensor library" by Adafruit (+ "Adafruit Unified Sensor").
+ */
 
 #include "DHT.h"
 
-// ===== DHT11 SENSOR =====
-#define DHTPIN 4
+// ===== PINS =====
+const uint8_t DHT_PIN   = 32;
+const uint8_t FAN1_PIN  = 25;  // relay IN1
+const uint8_t FAN2_PIN  = 26;  // relay IN2
+const uint8_t MOTOR_PIN = 27;  // relay IN3
+
 #define DHTTYPE DHT11
-DHT dht(DHTPIN, DHTTYPE);
+DHT dht(DHT_PIN, DHTTYPE);
 
-// ===== RELAY GPIO PINS =====
-#define FAN1_RELAY 19
-#define FAN2_RELAY 21
-#define WATER_RELAY 22
+// ===== ACTIVE-LOW RELAY MODULE =====
+const uint8_t RELAY_ON  = LOW;
+const uint8_t RELAY_OFF = HIGH;
 
-// ===== ACTIVE LOW RELAY =====
-#define RELAY_ON LOW
-#define RELAY_OFF HIGH
+// ===== THRESHOLDS =====
+const float FAN1_ON_ABOVE_C      = 26.0;
+const float FAN1_OFF_AT_OR_BELOW = 25.0;
+const float FAN2_ON_ABOVE_C      = 30.0;
+const float FAN2_OFF_AT_OR_BELOW = 29.0;
+const float MOTOR_ON_BELOW_RH    = 60.0;
+const float MOTOR_OFF_AT_OR_ABOVE_RH = 62.0;
 
-// ===== RELAY STATES =====
-bool fan1State = false;
-bool fan2State = false;
-bool waterState = false;
+const unsigned long READ_INTERVAL_MS = 2000;
+
+// ===== STATE =====
+bool fan1On = false;
+bool fan2On = false;
+bool motorOn = false;
+unsigned long lastReadMs = 0;
+
+void setRelay(uint8_t pin, bool on) {
+  digitalWrite(pin, on ? RELAY_ON : RELAY_OFF);
+}
+
+void setupRelayPin(uint8_t pin) {
+  digitalWrite(pin, RELAY_OFF);  // set HIGH (OFF) first ...
+  pinMode(pin, OUTPUT);          // ... then make it an output, so the relay never clicks on at boot
+}
 
 void setup() {
+  setupRelayPin(FAN1_PIN);
+  setupRelayPin(FAN2_PIN);
+  setupRelayPin(MOTOR_PIN);
+
   Serial.begin(115200);
-
-  // Configure relay pins
-  pinMode(FAN1_RELAY, OUTPUT);
-  pinMode(FAN2_RELAY, OUTPUT);
-  pinMode(WATER_RELAY, OUTPUT);
-
-  // Keep all relays OFF at startup
-  digitalWrite(FAN1_RELAY, RELAY_OFF);
-  digitalWrite(FAN2_RELAY, RELAY_OFF);
-  digitalWrite(WATER_RELAY, RELAY_OFF);
-
-  // Initialize DHT11
   dht.begin();
 
   Serial.println("==================================");
   Serial.println("     CLAYBREEZE CONTROLLER");
   Serial.println("==================================");
-  Serial.println("System Started");
+  Serial.println("All relays OFF. Reading DHT11 every 2 s.");
+
+  lastReadMs = millis() - READ_INTERVAL_MS;  // first reading straight away
 }
 
 void loop() {
+  unsigned long now = millis();
+  if (now - lastReadMs < READ_INTERVAL_MS) return;
+  lastReadMs = now;
 
-  // Read sensor
   float temperature = dht.readTemperature();
   float humidity = dht.readHumidity();
 
-  // Check sensor reading
   if (isnan(temperature) || isnan(humidity)) {
-    Serial.println("ERROR: DHT11 reading failed!");
-    delay(2000);
+    Serial.println("DHT11 read failed - outputs unchanged");
     return;
   }
 
-  // ===== FAN 1 CONTROL =====
-  // ON above 26 C
-  // OFF at or below 25 C
-  if (temperature > 26.0) {
-    fan1State = true;
-  }
-  else if (temperature <= 25.0) {
-    fan1State = false;
-  }
+  // ===== FAN 1 =====
+  if (temperature > FAN1_ON_ABOVE_C) fan1On = true;
+  else if (temperature <= FAN1_OFF_AT_OR_BELOW) fan1On = false;
 
-  // ===== FAN 2 CONTROL =====
-  // ON above 30 C
-  // OFF at or below 29 C
-  if (temperature > 30.0) {
-    fan2State = true;
-  }
-  else if (temperature <= 29.0) {
-    fan2State = false;
-  }
+  // ===== FAN 2 =====
+  if (temperature > FAN2_ON_ABOVE_C) fan2On = true;
+  else if (temperature <= FAN2_OFF_AT_OR_BELOW) fan2On = false;
 
-  // ===== WATER MOTOR CONTROL =====
-  // ON below 60% humidity
-  // OFF at or above 62% humidity
-  if (humidity < 60.0) {
-    waterState = true;
-  }
-  else if (humidity >= 62.0) {
-    waterState = false;
-  }
+  // ===== WATER MOTOR =====
+  if (humidity < MOTOR_ON_BELOW_RH) motorOn = true;
+  else if (humidity >= MOTOR_OFF_AT_OR_ABOVE_RH) motorOn = false;
 
-  // ===== APPLY RELAY OUTPUTS =====
-  digitalWrite(FAN1_RELAY,
-               fan1State ? RELAY_ON : RELAY_OFF);
+  setRelay(FAN1_PIN, fan1On);
+  setRelay(FAN2_PIN, fan2On);
+  setRelay(MOTOR_PIN, motorOn);
 
-  digitalWrite(FAN2_RELAY,
-               fan2State ? RELAY_ON : RELAY_OFF);
-
-  digitalWrite(WATER_RELAY,
-               waterState ? RELAY_ON : RELAY_OFF);
-
-  // ===== SERIAL MONITOR DISPLAY =====
-  Serial.println("----------------------------------");
-
-  Serial.print("Temperature: ");
-  Serial.print(temperature);
-  Serial.println(" C");
-
-  Serial.print("Humidity: ");
-  Serial.print(humidity);
-  Serial.println(" %");
-
-  Serial.print("Fan 1: ");
-  Serial.println(fan1State ? "ON" : "OFF");
-
-  Serial.print("Fan 2: ");
-  Serial.println(fan2State ? "ON" : "OFF");
-
-  Serial.print("Water Motor: ");
-  Serial.println(waterState ? "ON" : "OFF");
-
-  Serial.println("----------------------------------");
-
-  delay(2000);
+  // ===== SERIAL =====
+  Serial.print("T: ");
+  Serial.print(temperature, 1);
+  Serial.print(" C | RH: ");
+  Serial.print(humidity, 1);
+  Serial.print(" % | Fan1: ");
+  Serial.print(fan1On ? "ON" : "OFF");
+  Serial.print(" | Fan2: ");
+  Serial.print(fan2On ? "ON" : "OFF");
+  Serial.print(" | Motor: ");
+  Serial.println(motorOn ? "ON" : "OFF");
 }

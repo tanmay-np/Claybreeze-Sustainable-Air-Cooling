@@ -45,36 +45,31 @@ Inspired by reporting on Project Vaayu, a separate student initiative — see [`
 
 ## ESP32 Wiring
 
-Board orientation: antenna at top, USB at bottom; the ESP32 straddles the breadboard centre gap.
-
-| Breadboard | ESP32 pin | Connection |
+| Breadboard | ESP32 GPIO | Connected to |
 |---|---|---|
-| 1J | V5 (5V) | Right positive rail (5V) |
-| 19B | 3V3 | Left positive rail (3.3V) |
-| 14B | GND | Left negative rail (GND) |
-| 7J | GND | Right negative rail (GND) |
-| 13J | GPIO4 (G4) | DHT11 DATA |
-| 8J | GPIO19 (G19) | Relay IN1 – Fan 1 |
-| 6J | GPIO21 (G21) | Relay IN2 – Fan 2 |
-| 3J | GPIO22 (G22) | Relay IN3 – Water motor |
+| 7A | GPIO32 | DHT11 DATA |
+| 9A | GPIO25 | Relay IN1 – Fan 1 |
+| 10A | GPIO26 | Relay IN2 – Fan 2 |
+| 11A | GPIO27 | Relay IN3 – Water motor |
+| 14A | GND | Common ground |
 
-Peripheral power:
+DHT11:
 
-- DHT11 VCC → 3.3V rail; GND → GND rail; DATA → 13J (GPIO4)
-- Relay VCC/DC+ → 5V rail; GND/DC− → common GND; IN1/IN2/IN3 → 8J/6J/3J
+- VCC → ESP32 3.3V; DATA → GPIO32 (7A); GND → common GND
 
-Notes:
+Relay module:
 
-- Keep the 3.3V and 5V positive rails separate; ground rails are connected together.
-- Do not connect CLK, SD2, SD3, CMD, SD1 or SD0.
+- IN1/IN2/IN3 → GPIO25/26/27
+- VCC → the module's rated supply (5 V typical); GND → common GND
+- Active-low (LOW = ON)
 
 ## Control Logic (with hysteresis)
 
 | Output | ON | OFF | Between the limits |
 |---|---|---|---|
-| Fan 1 (IN1, GPIO19) | above 26 °C | at or below 25 °C | keeps its previous state |
-| Fan 2 (IN2, GPIO21) | above 30 °C | at or below 29 °C | keeps its previous state |
-| Water motor (IN3, GPIO22) | below 60 % RH | at or above 62 % RH | keeps its previous state |
+| Fan 1 (IN1, GPIO25) | above 26 °C | at or below 25 °C | keeps its previous state |
+| Fan 2 (IN2, GPIO26) | above 30 °C | at or below 29 °C | keeps its previous state |
+| Water motor (IN3, GPIO27) | below 60 % RH | at or above 62 % RH | keeps its previous state |
 
 The website's **Circuit & Control Lab** animates this circuit and runs the same logic (simulator — not connected to hardware).
 
@@ -89,7 +84,7 @@ The website's **Circuit & Control Lab** animates this circuit and runs the same 
 - [`docs/solidworks-to-dxf.md`](docs/solidworks-to-dxf.md) — From SolidWorks to Laser Cutter: exporting DXF files in eight steps (menu paths from the SOLIDWORKS help), with the enclosure as the worked example.
 - [`cad/dxf-enclosure/`](cad/dxf-enclosure/) — DXF of the laser-cut electronics enclosure: 6 finger-jointed panels for a 120 × 150 × 100 mm box in 3 mm MDF.
 - [`docs/electronics-and-control.md`](docs/electronics-and-control.md) — ESP32/relay/DHT11 roles, the breadboard wiring table and the implemented fan and pump control logic with hysteresis.
-- [`firmware/`](firmware/) — the ESP32 sketch [`claybreeze_controller.ino`](firmware/claybreeze_controller/claybreeze_controller.ino) and its [README](firmware/README.md) (pins, active-LOW relays, libraries, build).
+- [`firmware/`](firmware/) — the ESP32 sketch [`claybreeze_controller.ino`](firmware/claybreeze_controller/claybreeze_controller.ino) and its [README](firmware/README.md) (pins, active-low relays, libraries, upload).
 - [`docs/testing-and-results.md`](docs/testing-and-results.md) — test method, record sheet and calculation guidance.
 - [`docs/safety-and-maintenance.md`](docs/safety-and-maintenance.md) — practical safety and maintenance considerations.
 - [`docs/references.md`](docs/references.md) — research and background sources.

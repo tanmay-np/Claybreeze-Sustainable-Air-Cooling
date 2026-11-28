@@ -376,7 +376,7 @@ The assembled frame stands inside a grey plastic tub that acts as the reservoir.
 \label{ch:electronics}
 
 \section{Architecture}
-The ESP32 reads temperature and relative humidity from the DHT11 and drives a three-channel relay module that switches the two fans and the pump (Figure~\ref{fig:arch}). Table~\ref{tab:wiring} gives the confirmed breadboard wiring, and Figure~\ref{fig:circuit} draws it. The firmware is \url{firmware/claybreeze_controller/claybreeze_controller.ino} in the repository; it drives an active-LOW relay module (\texttt{RELAY\_ON LOW}) and reads the DHT11 every 2\,s, skipping failed (NaN) readings.
+The ESP32 reads temperature and relative humidity from the DHT11 and drives a three-channel relay module that switches the two fans and the pump (Figure~\ref{fig:arch}). Table~\ref{tab:wiring} gives the confirmed breadboard wiring, and Figure~\ref{fig:circuit} draws it. The firmware is \url{firmware/claybreeze_controller/claybreeze_controller.ino} in the repository; it drives an active-low relay module (LOW = ON), sets every relay pin HIGH (OFF) before making it an output, and reads the DHT11 about every 2\,s with \texttt{millis()}, skipping failed (NaN) readings.
 
 \begin{figure}[H]
 \centering
@@ -400,7 +400,6 @@ The ESP32 reads temperature and relative humidity from the DHT11 and drives a th
 \end{figure}
 
 \section{ESP32 wiring}
-Board orientation: antenna at top, USB at bottom; the ESP32 straddles the breadboard centre gap.
 
 \begin{table}[H]
 \centering
@@ -408,28 +407,25 @@ Board orientation: antenna at top, USB at bottom; the ESP32 straddles the breadb
 \label{tab:wiring}
 \begin{tabular}{@{}lll@{}}
 \toprule
-\textbf{Breadboard} & \textbf{ESP32 pin} & \textbf{Connection} \\
+\textbf{Breadboard} & \textbf{ESP32 GPIO} & \textbf{Connected to} \\
 \midrule
-1J & V5 (5V) & Right positive rail (5V) \\
-19B & 3V3 & Left positive rail (3.3V) \\
-14B & GND & Left negative rail (GND) \\
-7J & GND & Right negative rail (GND) \\
-13J & GPIO4 (G4) & DHT11 DATA \\
-8J & GPIO19 (G19) & Relay IN1 -- Fan 1 \\
-6J & GPIO21 (G21) & Relay IN2 -- Fan 2 \\
-3J & GPIO22 (G22) & Relay IN3 -- Water motor \\
+7A & GPIO32 & DHT11 DATA \\
+9A & GPIO25 & Relay IN1 -- Fan 1 \\
+10A & GPIO26 & Relay IN2 -- Fan 2 \\
+11A & GPIO27 & Relay IN3 -- Water motor \\
+14A & GND & Common ground \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\noindent\textbf{Peripheral power.} DHT11 VCC $\rightarrow$ 3.3V rail; GND $\rightarrow$ GND rail; DATA $\rightarrow$ 13J (GPIO4). Relay VCC/DC+ $\rightarrow$ 5V rail; GND/DC$-$ $\rightarrow$ common GND; IN1/IN2/IN3 $\rightarrow$ 8J/6J/3J.
+\noindent\textbf{DHT11.} VCC $\rightarrow$ ESP32 3.3V; DATA $\rightarrow$ GPIO32 (7A); GND $\rightarrow$ common GND.
 
-\noindent\textbf{Notes.} Keep the 3.3V and 5V positive rails separate; ground rails are connected together. Do not connect CLK, SD2, SD3, CMD, SD1 or SD0.
+\noindent\textbf{Relay module.} IN1/IN2/IN3 $\rightarrow$ GPIO25/26/27; VCC $\rightarrow$ the module's rated supply (5\,V typical); GND $\rightarrow$ common GND; active-low (LOW = ON).
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.62\linewidth]{circuit-lab.png}
-\caption{Breadboard circuit, drawn from Table~\ref{tab:wiring} (original illustration from the website's Circuit \& Control Lab, shown at 31\degC{} and 55\,\% RH: both fans and the water motor ON). Fan and pump supply wiring through the relay contacts is simplified.}
+\caption{Breadboard circuit, drawn from Table~\ref{tab:wiring} (original illustration from the website's Circuit \& Control Lab, shown at 31\degC{} and 55\,\% RH: IN1--IN3 LOW, so both fans and the water motor are ON). Supply and ground connections are drawn as labelled stubs; fan and pump wiring through the relay contacts is simplified.}
 \label{fig:circuit}
 \end{figure}
 
@@ -444,9 +440,9 @@ Board orientation: antenna at top, USB at bottom; the ESP32 straddles the breadb
 \toprule
 \textbf{Output} & \textbf{Relay / GPIO} & \textbf{ON} & \textbf{OFF} \\
 \midrule
-Fan 1 & IN1 / GPIO19 & $> 26$\degC & $\le 25$\degC \\
-Fan 2 & IN2 / GPIO21 & $> 30$\degC & $\le 29$\degC \\
-Water motor & IN3 / GPIO22 & $< 60$\,\% RH & $\ge 62$\,\% RH \\
+Fan 1 & IN1 / GPIO25 & $> 26$\degC & $\le 25$\degC \\
+Fan 2 & IN2 / GPIO26 & $> 30$\degC & $\le 29$\degC \\
+Water motor & IN3 / GPIO27 & $< 60$\,\% RH & $\ge 62$\,\% RH \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -356,32 +356,28 @@
         <div class="component-list" id="component-list"></div>
 
         <h3 class="subhead" id="wiring">ESP32 wiring</h3>
-        <p class="wiring-orient"><strong>Board orientation:</strong> antenna at top, USB at bottom; the ESP32 straddles the breadboard centre gap.</p>
         <div class="wiring-wrap">
           <table class="fab-table wiring-table" id="wiring-table">
             <caption>Breadboard connections</caption>
-            <thead><tr><th scope="col">Breadboard</th><th scope="col">ESP32 pin</th><th scope="col">Connection</th></tr></thead>
+            <thead><tr><th scope="col">Breadboard</th><th scope="col">ESP32 GPIO</th><th scope="col">Connected to</th></tr></thead>
             <tbody>
-                  <tr data-wire="v5"><td class="mono">1J</td><td class="mono">V5 (5V)</td><td>Right positive rail (5V)</td></tr>
-                  <tr data-wire="g3v3"><td class="mono">19B</td><td class="mono">3V3</td><td>Left positive rail (3.3V)</td></tr>
-                  <tr data-wire="gndL"><td class="mono">14B</td><td class="mono">GND</td><td>Left negative rail (GND)</td></tr>
-                  <tr data-wire="gndR"><td class="mono">7J</td><td class="mono">GND</td><td>Right negative rail (GND)</td></tr>
-                  <tr data-wire="g4"><td class="mono">13J</td><td class="mono">GPIO4 (G4)</td><td>DHT11 DATA</td></tr>
-                  <tr data-wire="g19"><td class="mono">8J</td><td class="mono">GPIO19 (G19)</td><td>Relay IN1 – Fan 1</td></tr>
-                  <tr data-wire="g21"><td class="mono">6J</td><td class="mono">GPIO21 (G21)</td><td>Relay IN2 – Fan 2</td></tr>
-                  <tr data-wire="g22"><td class="mono">3J</td><td class="mono">GPIO22 (G22)</td><td>Relay IN3 – Water motor</td></tr>
+                  <tr data-wire="g32"><td class="mono">7A</td><td class="mono">GPIO32</td><td>DHT11 DATA</td></tr>
+                  <tr data-wire="g25"><td class="mono">9A</td><td class="mono">GPIO25</td><td>Relay IN1 – Fan 1</td></tr>
+                  <tr data-wire="g26"><td class="mono">10A</td><td class="mono">GPIO26</td><td>Relay IN2 – Fan 2</td></tr>
+                  <tr data-wire="g27"><td class="mono">11A</td><td class="mono">GPIO27</td><td>Relay IN3 – Water motor</td></tr>
+                  <tr data-wire="gnd"><td class="mono">14A</td><td class="mono">GND</td><td>Common ground</td></tr>
             </tbody>
           </table>
           <div class="wiring-notes">
-            <h4>Peripheral power</h4>
+            <h4>DHT11</h4>
             <ul>
-              <li>DHT11 VCC → 3.3V rail; GND → GND rail; DATA → 13J (GPIO4)</li>
-              <li>Relay VCC/DC+ → 5V rail; GND/DC− → common GND; IN1/IN2/IN3 → 8J/6J/3J</li>
+              <li>VCC → ESP32 3.3V; DATA → GPIO32 (7A); GND → common GND</li>
             </ul>
-            <h4>Notes</h4>
+            <h4>Relay module</h4>
             <ul>
-              <li>Keep the 3.3V and 5V positive rails separate; ground rails are connected together.</li>
-              <li>Do not connect CLK, SD2, SD3, CMD, SD1 or SD0.</li>
+              <li>IN1/IN2/IN3 → GPIO25/26/27</li>
+              <li>VCC → the module's rated supply (5&nbsp;V typical); GND → common GND</li>
+              <li>Active-low (LOW = ON)</li>
             </ul>
           </div>
         </div>
@@ -399,11 +395,11 @@
             <div class="circuit-svg" id="circuit-svg"></div>
             <figcaption>
               <ul class="circuit-legend" aria-label="Wire colours">
-                <li><i class="lg lg-5v"></i>5V rail</li>
-                <li><i class="lg lg-3v3"></i>3.3V rail</li>
-                <li><i class="lg lg-gnd"></i>GND rail</li>
+                <li><i class="lg lg-5v"></i>Relay supply (5 V typical)</li>
+                <li><i class="lg lg-3v3"></i>ESP32 3.3V</li>
+                <li><i class="lg lg-gnd"></i>Common ground (⏚)</li>
                 <li><i class="lg lg-data"></i>DHT11 data</li>
-                <li><i class="lg lg-sig"></i>GPIO line, glows when its output is ON</li>
+                <li><i class="lg lg-sig"></i>GPIO line, glows when it is LOW (relay is active-low, so the output is ON)</li>
               </ul>
               <p class="circuit-wire-info" id="circuit-wire-info" aria-live="polite">Hover over or tap a wire to see its connection.</p>
               <p class="circuit-note">Original illustration of our breadboard, drawn from the wiring table above; fan and pump supply wiring through the relay contacts is simplified. The real controller reads the DHT11 every 2&nbsp;s; the simulator applies each slider value at once.</p>

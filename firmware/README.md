@@ -1,26 +1,38 @@
 # ClayBreeze firmware
 
-`claybreeze_controller/claybreeze_controller.ino` is the team's ESP32 sketch, copied unchanged from the Arduino sketchbook (`Claybreeze1.ino`). It already implements the hysteresis control below.
+`claybreeze_controller/claybreeze_controller.ino` is the ESP32 sketch for the ClayBreeze controller.
 
-## What it does
+## Pins
 
-Every 2 s the ESP32 reads the DHT11 (temperature and relative humidity). Failed readings (NaN) are skipped with an error message, and then it sets three relay channels:
+| Breadboard | ESP32 GPIO | Connected to |
+|---|---|---|
+| 7A | GPIO32 | DHT11 DATA |
+| 9A | GPIO25 | Relay IN1 – Fan 1 |
+| 10A | GPIO26 | Relay IN2 – Fan 2 |
+| 11A | GPIO27 | Relay IN3 – Water motor |
+| 14A | GND | Common ground |
 
-| Output | Relay input | GPIO | ON | OFF | Between the limits |
-|---|---|---|---|---|---|
-| Fan 1 | IN1 | GPIO19 | above 26 °C | at or below 25 °C | keeps its previous state |
-| Fan 2 | IN2 | GPIO21 | above 30 °C | at or below 29 °C | keeps its previous state |
-| Water motor | IN3 | GPIO22 | below 60 % RH | at or above 62 % RH | keeps its previous state |
+- DHT11: VCC → ESP32 3.3V; DATA → GPIO32 (7A); GND → common GND.
+- Relay module: VCC → the module's rated supply (5 V typical); GND → common GND.
+- The relay module is **active-low**: LOW = ON, HIGH = OFF (`RELAY_ON = LOW`, `RELAY_OFF = HIGH`).
 
-All relays start OFF. The readings and the three states are printed to the Serial Monitor at 115200 baud.
+## Logic
 
-## Hardware assumptions in the sketch
+Every ~2 s (timed with `millis()`, no blocking delay) the ESP32 reads the DHT11. A failed reading (NaN) is skipped and the outputs stay as they are. Each output has hysteresis — between its two limits it keeps its previous state:
 
-- DHT11 DATA on **GPIO4** (`DHTPIN 4`, `DHTTYPE DHT11`).
-- Relays on **GPIO19 / GPIO21 / GPIO22** (`FAN1_RELAY`, `FAN2_RELAY`, `WATER_RELAY`).
-- **Active-LOW relay module:** `RELAY_ON LOW`, `RELAY_OFF HIGH`. For an active-HIGH module, swap these two lines.
+| Output | Relay input | GPIO | ON | OFF |
+|---|---|---|---|---|
+| Fan 1 | IN1 | GPIO25 | T > 26 °C | T ≤ 25 °C |
+| Fan 2 | IN2 | GPIO26 | T > 30 °C | T ≤ 29 °C |
+| Water motor | IN3 | GPIO27 | RH < 60 % | RH ≥ 62 % |
 
-The wiring table on the website (Section 07) and in [`docs/electronics-and-control.md`](../docs/electronics-and-control.md) matches these pins.
+At start-up each relay pin is written HIGH **before** `pinMode(OUTPUT)`, so every relay starts OFF and none clicks on during boot.
+
+Serial Monitor (115200 baud), one line per reading:
+
+```
+T: 27.0 C | RH: 58.0 % | Fan1: ON | Fan2: OFF | Motor: ON
+```
 
 ## Libraries
 
@@ -29,18 +41,23 @@ The wiring table on the website (Section 07) and in [`docs/electronics-and-contr
 
 Install both from the Arduino IDE Library Manager.
 
-## Build
+## Upload
 
-Arduino IDE: board **ESP32 Dev Module** (esp32 core by Espressif), open the sketch and click Verify/Upload.
+1. Arduino IDE → Boards Manager → install **esp32 by Espressif Systems**.
+2. Open `claybreeze_controller/claybreeze_controller.ino`.
+3. Tools → Board → **ESP32 Dev Module**; Tools → Port → the ESP32's COM port.
+4. Click **Upload** (if it waits at "Connecting…", hold the board's BOOT button until the upload starts).
+5. Open the Serial Monitor at **115200** baud.
 
-Command line (verified 28 Nov 2026 with arduino-cli 1.6.0 and esp32 core 4.0.0; compiled only, not flashed from this repository):
+Command line (compile verified 28 Nov 2026 with arduino-cli 1.6.0 and esp32 core 4.0.0: 294,105 bytes, 22 % of flash; not flashed from this repository):
 
 ```
 arduino-cli compile --fqbn esp32:esp32:esp32 firmware/claybreeze_controller
+arduino-cli upload  --fqbn esp32:esp32:esp32 -p COM3 firmware/claybreeze_controller
 ```
 
-Result: 294,073 bytes of program storage (22 %), 23,232 bytes of dynamic memory (7 %).
+Replace `COM3` with the board's port.
 
 ## Simulator
 
-The website's **Circuit & Control Lab** runs the same thresholds and hysteresis in the browser (values in `assets/js/project-data.js`, `window.CLAYBREEZE_CONTROL`). It is a simulator and is not connected to the hardware.
+The website's **Circuit & Control Lab** runs the same thresholds and hysteresis in the browser (values in `assets/js/project-data.js`, `window.CLAYBREEZE_CONTROL`). It is a simulator — not connected to hardware.
