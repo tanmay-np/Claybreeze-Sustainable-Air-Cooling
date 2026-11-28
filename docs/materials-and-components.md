@@ -26,4 +26,6 @@ For each component, record make/model (if present), rated voltage, rated power, 
 
 ## Cost Record
 
+The full cost sheet is in [`cost-sheet.md`](cost-sheet.md) (data: `data/cost-sheet.csv`): about ₹4,793 in materials.
+
 A project cost comparison should use actual receipts or recorded prices and define what is included. Do not claim the prototype is cheaper than a commercial system until the scope and cost basis are comparable.

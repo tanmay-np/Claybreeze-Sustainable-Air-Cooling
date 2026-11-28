@@ -76,6 +76,12 @@ window.CLAYBREEZE_PROJECT = {
         "Performance measurement: a dry-pot baseline and wetted-pot runs measuring inlet and outlet temperature and humidity, airflow and water use.",
         "Data logging: record the DHT11 readings and relay states over time (CSV template in data/).",
         "IoT monitoring: use the ESP32's Wi-Fi to show readings and fan/pump states on a phone.",
+        { text: "Next-stage material for water resistance:", sub: [
+          "MS + epoxy primer + powder coating: lowest cost.",
+          "GI square pipe with cold-galvanised weld joints: recommended.",
+          "Aluminium tube, bolted/riveted: light, rust-free.",
+          "SS304: most durable, highest cost."
+        ] },
         "Improvements: a water-level sensor with a dry-run cut-out for the pump, as-built measurements fed back into the SolidWorks model, and the electronics fitted in the laser-cut 3 mm MDF enclosure (DXF files)."
       ]
     }

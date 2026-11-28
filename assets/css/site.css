@@ -667,3 +667,21 @@ body.presentation-mode .s-label { font-size: 19px; }
   .cl-md { font-size: 17px; }
   .cl-sm { font-size: 14px; }
 }
+
+/* ---------- 10 Status: cost breakdown ---------- */
+.cost-wrap { margin-top: 8px; }
+.cost-table td.num, .cost-table th.num { text-align: right; font-family: var(--mono); white-space: nowrap; }
+.cost-table thead th:nth-child(2), .cost-table thead th:nth-child(4), .cost-table thead th:nth-child(5) { text-align: right; }
+.cost-table tfoot th, .cost-table tfoot td { border-bottom: 1px solid var(--line); color: var(--text); font-weight: 600; }
+.cost-table tfoot tr:first-child th, .cost-table tfoot tr:first-child td { border-top: 2px solid var(--line-strong); }
+.cost-table tr.cost-grand th, .cost-table tr.cost-grand td { font-size: 18px; color: var(--ok-ink); }
+.cost-badge { display: inline-block; font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 0.04em; padding: 2px 7px; border: 1px solid; white-space: nowrap; }
+.cost-actual { color: var(--ok-ink); border-color: var(--ok); }
+.cost-estimated { color: var(--clay-ink); border-color: var(--clay); }
+.cost-note { margin: 14px 0 0; max-width: 80ch; }
+.status-group li > ul { margin-top: 4px; }
+@media (max-width: 899px) {
+  .cost-table td.num { text-align: left; }
+  .cost-table tfoot tr { display: flex; justify-content: space-between; gap: 12px; }
+  .cost-table tfoot th, .cost-table tfoot td { border: 0; padding: 6px 0; }
+}

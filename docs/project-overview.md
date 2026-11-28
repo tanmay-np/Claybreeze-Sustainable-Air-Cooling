@@ -107,6 +107,8 @@ The current concept places the clay-pot array inside a fabricated square-pipe fr
 - **Completed:** the metal frame is fabricated and spray-painted; the six 12 mm pot-retaining rods are drilled and attached; the rear fan-mount extension is fabricated and both fans are mounted on it; 30 clay pots (5 × 6) are fixed into the frame. The water pump with tubing and the reservoir are installed. The ESP32, DHT11 and 3-channel relay module are integrated, and the control logic is running on the ESP32.
 - **Future scope — performance measurement:** temperature, humidity, airflow and water use (see `docs/testing-and-results.md`). Secure and terminate all fan and pump cables before powered testing.
 - **Future scope:** a leak-check, and as-built measurements of the frame and pot spacing (visual inspection done).
+- **Cost:** about ₹4,793 in materials (₹3,210 actual + ₹1,583 estimated; labour and machine time not included) — see [`cost-sheet.md`](cost-sheet.md).
+- **Next-stage material for water resistance (future scope):** MS + epoxy primer + powder coating (lowest cost); GI square pipe with cold-galvanised weld joints (recommended); aluminium tube, bolted/riveted (light, rust-free); SS304 (most durable, highest cost).
 - **CAD update (future scope):** the SolidWorks model and engineering drawing can be revised to match the **actual fabricated parts and measured dimensions**. This is a documentation task catching up to the build — it does not mean the physical prototype is incomplete.
 - **Electronics:** see `docs/electronics-and-control.md` for component roles, the breadboard wiring table and the implemented fan and pump control logic with hysteresis.
 

@@ -88,6 +88,7 @@ The website's **Circuit & Control Lab** animates this circuit and runs the same 
 - [`docs/testing-and-results.md`](docs/testing-and-results.md) — test method, record sheet and calculation guidance.
 - [`docs/safety-and-maintenance.md`](docs/safety-and-maintenance.md) — practical safety and maintenance considerations.
 - [`docs/references.md`](docs/references.md) — research and background sources.
+- [`docs/cost-sheet.md`](docs/cost-sheet.md) and [`data/cost-sheet.csv`](data/cost-sheet.csv) — materials cost: ₹3,210 actual + ₹1,583 estimated = **₹4,793** (labour and machine time not included).
 - [`data/test-data-template.csv`](data/test-data-template.csv) — blank CSV header for recording real measurements.
 - [`poster/`](poster/) — project poster [`ClayBreeze_Poster_Stanford.pdf`](poster/ClayBreeze_Poster_Stanford.pdf) (36 × 24 in, LaTeX source in `poster/stanford/`, built on the MIT-licensed [stanford_beamer_poster](https://github.com/sanhacheong/stanford_beamer_poster) template, without Stanford logos). The earlier A1 version is kept: [`ClayBreeze_Poster_A1.pdf`](poster/ClayBreeze_Poster_A1.pdf) (HTML source `claybreeze-poster.html`).
 - [`report/`](report/) — final project report [`ClayBreeze_Project_Report.pdf`](report/ClayBreeze_Project_Report.pdf), LaTeX source `report/main.tex`. Shared LaTeX figures (schematic, CAD crops, QR) are in `latex-shared/`. Build with `pdflatex` (MiKTeX/TeX Live), run twice.
@@ -114,6 +115,11 @@ Completed:
 - **Performance measurement:** dry-pot baseline and wetted-pot runs — inlet and outlet temperature and humidity, airflow, water use.
 - **Data logging:** record DHT11 readings and relay states over time (CSV template in `data/`).
 - **IoT monitoring:** use the ESP32's Wi-Fi to show readings and fan/pump states on a phone.
+- **Next-stage material for water resistance:**
+  - **MS + epoxy primer + powder coating:** lowest cost.
+  - **GI square pipe with cold-galvanised weld joints:** recommended.
+  - **Aluminium tube, bolted/riveted:** light, rust-free.
+  - **SS304:** most durable, highest cost.
 - **Improvements:** water-level sensor with a pump dry-run cut-out, as-built measurements fed back into the SolidWorks model, and the electronics fitted in the laser-cut 3 mm MDF enclosure (DXF files).
 
 ## Suggested First Test

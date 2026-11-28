@@ -268,7 +268,12 @@
   const statusGroups = $("#status-groups");
   function statusList(items) {
     const ul = el("ul");
-    items.forEach((item) => ul.append(el("li", "", item)));
+    items.forEach((item) => {
+      if (typeof item === "string") { ul.append(el("li", "", item)); return; }
+      const li = el("li", "", item.text); // { text, sub: [...] } renders a nested list
+      li.append(statusList(item.sub || []));
+      ul.append(li);
+    });
     return ul;
   }
   (project.statusGroups || []).forEach((group) => {

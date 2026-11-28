@@ -489,6 +489,42 @@
         </header>
         <p class="status-headline">Build complete — control logic running</p>
         <div class="status-groups" id="status-groups"></div>
+
+        <h3 class="subhead" id="cost">Cost breakdown</h3>
+        <p class="section-intro">Materials only, in Indian rupees. <span class="cost-badge cost-actual">Actual</span> amounts were paid by the team; <span class="cost-badge cost-estimated">Estimated</span> rows use market rates looked up on 28 Nov 2026 (sources in <a class="text-link" href="https://github.com/tanmay-np/Claybreeze-Sustainable-Air-Cooling/blob/main/docs/cost-sheet.md">cost-sheet.md</a>; data: <a class="text-link" href="data/cost-sheet.csv">cost-sheet.csv</a>).</p>
+        <div class="cost-wrap">
+          <!-- COST-TABLE:START -->
+          <table class="fab-table cost-table stack-sm" id="cost-table">
+            <caption>Materials cost (₹)</caption>
+            <thead><tr><th scope="col">Item</th><th scope="col">Qty</th><th scope="col">Unit</th><th scope="col">Rate (₹)</th><th scope="col">Amount (₹)</th><th scope="col">Basis</th></tr></thead>
+            <tbody>
+              <tr><td>Clay pots</td><td class="num">1</td><td>lot (30 pots)</td><td class="num">1,000</td><td class="num">1,000</td><td><span class="cost-badge cost-actual">Actual</span></td></tr>
+              <tr><td>Water pump</td><td class="num">1</td><td>pc</td><td class="num">250</td><td class="num">250</td><td><span class="cost-badge cost-actual">Actual</span></td></tr>
+              <tr><td>Tubing</td><td class="num">1</td><td>lot</td><td class="num">110</td><td class="num">110</td><td><span class="cost-badge cost-actual">Actual</span></td></tr>
+              <tr><td>Exhaust fans</td><td class="num">2</td><td>pc</td><td class="num">750</td><td class="num">1,500</td><td><span class="cost-badge cost-actual">Actual</span></td></tr>
+              <tr><td>Spray paint</td><td class="num">1</td><td>lot</td><td class="num">200</td><td class="num">200</td><td><span class="cost-badge cost-actual">Actual</span></td></tr>
+              <tr><td>Water tray / tub</td><td class="num">1</td><td>pc</td><td class="num">150</td><td class="num">150</td><td><span class="cost-badge cost-actual">Actual</span></td></tr>
+              <tr><td>MS square pipe 20 × 20 mm (1.2 mm wall assumed)</td><td class="num">5.4</td><td>kg</td><td class="num">60</td><td class="num">324</td><td><span class="cost-badge cost-estimated">Estimated</span></td></tr>
+              <tr><td>MS round rod Ø12 mm, 6 × 480 mm</td><td class="num">2.81</td><td>kg</td><td class="num">60</td><td class="num">169</td><td><span class="cost-badge cost-estimated">Estimated</span></td></tr>
+              <tr><td>ESP32 development board (38-pin)</td><td class="num">1</td><td>pc</td><td class="num">455</td><td class="num">455</td><td><span class="cost-badge cost-estimated">Estimated</span></td></tr>
+              <tr><td>DHT11 sensor module</td><td class="num">1</td><td>pc</td><td class="num">62</td><td class="num">62</td><td><span class="cost-badge cost-estimated">Estimated</span></td></tr>
+              <tr><td>3-channel 5 V relay module</td><td class="num">1</td><td>pc</td><td class="num">227</td><td class="num">227</td><td><span class="cost-badge cost-estimated">Estimated</span></td></tr>
+              <tr><td>Breadboard, 830 points</td><td class="num">1</td><td>pc</td><td class="num">68</td><td class="num">68</td><td><span class="cost-badge cost-estimated">Estimated</span></td></tr>
+              <tr><td>Jumper wire set (M-M, M-F, F-F)</td><td class="num">1</td><td>set</td><td class="num">142</td><td class="num">142</td><td><span class="cost-badge cost-estimated">Estimated</span></td></tr>
+              <tr><td>3 mm MDF for the enclosure</td><td class="num">1.28</td><td>sq ft</td><td class="num">13.55</td><td class="num">17</td><td><span class="cost-badge cost-estimated">Estimated</span></td></tr>
+              <tr><td>Welding electrodes 2.5 mm</td><td class="num">0.5</td><td>kg</td><td class="num">165</td><td class="num">83</td><td><span class="cost-badge cost-estimated">Estimated</span></td></tr>
+              <tr><td>Cutting / grinding discs 4 inch</td><td class="num">4</td><td>pc</td><td class="num">9</td><td class="num">36</td><td><span class="cost-badge cost-estimated">Estimated</span></td></tr>
+            </tbody>
+            <tfoot>
+              <tr><th scope="row">Actual subtotal</th><td class="num cost-total" colspan="5">₹3,210</td></tr>
+              <tr><th scope="row">Estimated subtotal</th><td class="num cost-total" colspan="5">₹1,583</td></tr>
+              <tr class="cost-grand"><th scope="row">Grand total</th><td class="num cost-total" colspan="5">₹4,793</td></tr>
+            </tfoot>
+          </table>
+          <p class="cost-note"><strong>Built for about ₹4,793 in materials; far below the purchase cost of a room AC.</strong> Labour and machine time are not included: the frame, laser cutting and 3D printing used the Tinkerers' Lab facility.</p>
+          
+<!-- COST-TABLE:END -->
+        </div>
       </div>
     </section>
 

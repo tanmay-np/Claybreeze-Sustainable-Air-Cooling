@@ -1,0 +1,20 @@
+Item,Qty,Unit,Rate (INR),Amount (INR),Basis,Note
+Clay pots,1,lot (30 pots),1000,1000,Actual,Given by the team
+Water pump,1,pc,250,250,Actual,Given by the team
+Tubing,1,lot,110,110,Actual,Given by the team
+Exhaust fans,2,pc,750,1500,Actual,Given by the team
+Spray paint,1,lot,200,200,Actual,Given by the team
+Water tray / tub,1,pc,150,150,Actual,Given by the team
+MS square pipe 20 × 20 mm (1.2 mm wall assumed),5.4,kg,60.0,324,Estimated,"7.63 m (6.93 m from the CAD model + 10 % wastage) × 0.708 kg/m; market rate, 28 Nov 2026, OfBusiness — MS pipe prices (MS pipes ₹55–65/kg)"
+"MS round rod Ø12 mm, 6 × 480 mm",2.81,kg,60.0,169,Estimated,"3.17 m (2.88 m + 10 % wastage) × 0.888 kg/m; market rate, 28 Nov 2026, same MS rate assumed"
+ESP32 development board (38-pin),1,pc,455,455,Estimated,"Market rate, 28 Nov 2026, Robocraze"
+DHT11 sensor module,1,pc,62,62,Estimated,"Market rate, 28 Nov 2026, Robocraze"
+3-channel 5 V relay module,1,pc,227,227,Estimated,"Market rate, 28 Nov 2026, Robocraze (ACEBOTT 3-channel)"
+"Breadboard, 830 points",1,pc,68,68,Estimated,"Market rate, 28 Nov 2026, Robocraze (MB102)"
+"Jumper wire set (M-M, M-F, F-F)",1,set,142,142,Estimated,"Market rate, 28 Nov 2026, Robocraze"
+3 mm MDF for the enclosure,1.28,sq ft,13.55,17,Estimated,"Nested DXF area 426 × 253 mm + 10 %; market rate, 28 Nov 2026, materialdepot.in — Greenply 8 × 4 ft interior plain MDF, 3 mm (₹13.55/sq ft)"
+Welding electrodes 2.5 mm,0.5,kg,165,83,Estimated,"Quantity assumed; market rate, 28 Nov 2026, TradeIndia — 2.5 mm arc welding electrode (₹165/kg)"
+Cutting / grinding discs 4 inch,4,pc,9,36,Estimated,"Quantity assumed; market rate, 28 Nov 2026, IndiaMART, Yash Traders — 4 inch cutting wheel (₹9/piece)"
+Actual subtotal,,,,3210,Actual,
+Estimated subtotal,,,,1583,Estimated,
+Grand total,,,,4793,,Labour and machine time not included (Tinkerers' Lab facility)
